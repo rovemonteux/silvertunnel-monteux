@@ -9,4 +9,4 @@ The original _silvertunnel Netlib_ can be found here : [silvertunnel.org](http:/
 
 The original _silvertunnel-ng Netlib_ can be found here: [http://sourceforge.net/projects/silvertunnel-ng/](http://sourceforge.net/projects/silvertunnel-ng/)
 
-This fork contains fixes and improvements over the original library, and is being used as a dependency in the development of the secure peer to peer messenger '_Tor Messenger_'.
+This fork contains fixes and improvements over the original library, and is being used as a dependency in the development of the secure peer to peer instant messenger '_Tor Messenger_'.
