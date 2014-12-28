@@ -5,8 +5,14 @@
 
 This is a fork of the _SilverTunnel-NG Netlib_, which in its turn is a fork of the original _SilverTunnel Netlib_.
 
-The original _silvertunnel Netlib_ can be found here : [silvertunnel.org](http://silvertunnel.org/)
+The original _silvertunnel Netlib_ can be found here: [silvertunnel.org](http://silvertunnel.org/)
 
 The original _silvertunnel-ng Netlib_ can be found here: [http://sourceforge.net/projects/silvertunnel-ng/](http://sourceforge.net/projects/silvertunnel-ng/)
 
 This fork contains fixes and improvements over the original library, and is being used as a dependency in the development of the secure peer to peer instant messenger '_Tor Messenger_'.
+
+**Project Information**
+[http://rovemonteux.github.io/silvertunnel-monteux/project-info.html](http://rovemonteux.github.io/silvertunnel-monteux/project-info.html)
+
+**Project Wiki**
+[https://github.com/rovemonteux/silvertunnel-monteux/wiki](https://github.com/rovemonteux/silvertunnel-monteux/wiki)
