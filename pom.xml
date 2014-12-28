@@ -23,6 +23,23 @@ The original silvertunnel-ng Netlib can be found here: http://sourceforge.net/pr
 		</developer>
 	</developers>
   <build>
+  <extensions>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-provider-gitexe</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-manager-plexus</artifactId>
+        <version>1.3</version>
+      </extension>
+      <extension>
+        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+        <artifactId>wagon-gitsite</artifactId>
+        <version>0.3.1</version>
+      </extension>
+    </extensions>
 		<plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
@@ -126,6 +143,30 @@ The original silvertunnel-ng Netlib can be found here: http://sourceforge.net/pr
 					</formats>
 				</configuration>
 			</plugin>
+			<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>license-maven-plugin</artifactId>
+    <version>1.8</version>
+    <configuration>
+        <header>com/mycila/maven/plugin/license/templates/LGPL-3.txt</header>
+        <properties>
+            <owner>Rove Monteux</owner>
+            <email>rmonteux@centrum.cz</email>
+        </properties>
+        <excludes>
+            <exclude>**/README</exclude>
+            <exclude>src/test/resources/**</exclude>
+            <exclude>src/main/resources/**</exclude>
+        </excludes>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>check-file-header</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -193,9 +234,36 @@ The original silvertunnel-ng Netlib can be found here: http://sourceforge.net/pr
 			<version>6.8.8</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+             <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+             <artifactId>wagon-gitsite</artifactId>
+             <version>0.3.1</version>
+        </dependency>
 	</dependencies>
+	<scm> 
+    <connection>scm:git:git@github.com:rovemonteux/silvertunnel-monteux.git</connection> 
+    <url>scm:git:git@github.com:rovemonteux/silvertunnel-monteux.git</url> 
+    <developerConnection>scm:git:git@github.com:rovemonteux/silvertunnel-monteux.git</developerConnection>  
+  </scm> 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+	<distributionManagement>
+	<repository>
+    <id>local-repository</id>
+    <url>file:///usr/local-repository</url>
+  </repository>
+    <site>
+      <id>github-project-site</id>
+      <url>gitsite:git@github.com/rovemonteux/silvertunnel-monteux.git</url>
+    </site>
+  </distributionManagement>
+  <licenses>
+        <license>
+          <name>GNU Lesser General Public License</name>
+          <url>http://www.gnu.org/licenses/lgpl.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
 </project>
