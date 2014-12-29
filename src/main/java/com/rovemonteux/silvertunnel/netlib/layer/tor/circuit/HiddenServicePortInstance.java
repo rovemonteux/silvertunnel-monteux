@@ -34,6 +34,16 @@ public interface HiddenServicePortInstance
 	int getPort();
 
 	/**
+	 * @return hidden service hostname 
+	 */
+	String getHostname();
+	
+	/**
+	 * @return short hidden service hostname, ie. without the onion postfix
+	 */
+	String getShortHostname();
+	
+	/**
 	 * Create a new (TCP)Stream and assign it to the circuit+streamId specified.
 	 * 
 	 * @param circuit
