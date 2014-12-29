@@ -7,7 +7,11 @@ What is _Tor_?
 
 _Tor_ is free software and an open network that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security.
 
-![How Tor works](https://www.torproject.org/images/htw1.png)
+![How Tor works 1](https://www.torproject.org/images/htw1.png)
+
+![How Tor works 2](https://www.torproject.org/images/htw2.png)
+
+![How Tor works 3](https://www.torproject.org/images/htw3.png)
 
 Learn more about _Tor_: [https://www.torproject.org/about/overview.html.en](https://www.torproject.org/about/overview.html.en)
 
