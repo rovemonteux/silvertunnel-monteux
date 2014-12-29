@@ -7,6 +7,8 @@ What is _Tor_?
 
 _Tor_ is free software and an open network that helps you defend against traffic analysis, a form of network surveillance that threatens personal freedom and privacy, confidential business activities and relationships, and state security.
 
+![How Tor works](https://www.torproject.org/images/htw1.png)
+
 Learn more about _Tor_: [https://www.torproject.org/about/overview.html.en](https://www.torproject.org/about/overview.html.en)
 
 This is a fork of the _SilverTunnel-NG Netlib_, which in its turn is a fork of the original _SilverTunnel Netlib_.
