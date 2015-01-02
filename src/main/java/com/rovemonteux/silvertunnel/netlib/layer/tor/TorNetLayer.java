@@ -120,7 +120,6 @@ public class TorNetLayer implements NetLayer
 	public TorNetLayer(final Tor tor) throws IOException
 	{
 		this.tor = tor;
-
 		// initialize thisTorNetLayerWithTimeoutControl,
 		// use configuration parameters of Tor directory component
 		final ControlParameters cp = ControlParameters.createTypicalFileTransferParameters();

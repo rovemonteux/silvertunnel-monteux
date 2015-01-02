@@ -58,6 +58,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 public class SocketGlobalUtil
 {
@@ -142,7 +143,7 @@ public class SocketGlobalUtil
 			LOG.debug("createOriginalSocket() called here:",
 					new Throwable("stacktrace for debugging - not an error"));
 		}
-
+		
 		if (netlibSocketImplFactory == null)
 		{
 			// SocketImplFactory not yet set (by this class) in class Socket:

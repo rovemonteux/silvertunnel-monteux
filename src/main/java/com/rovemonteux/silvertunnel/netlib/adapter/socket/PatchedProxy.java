@@ -26,10 +26,11 @@ import java.net.SocketAddress;
  * See class SocketUtil.
  * 
  * @author hapke
+ * @author Rove Monteux
  */
 class PatchedProxy extends Proxy
 {
-	private static final int SOCKS_DEFAULT_PORT = 1080;
+	private static final int SOCKS_DEFAULT_PORT = 8080;
 
 	public PatchedProxy()
 	{

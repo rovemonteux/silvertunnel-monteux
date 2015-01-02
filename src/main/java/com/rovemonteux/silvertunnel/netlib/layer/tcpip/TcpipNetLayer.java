@@ -55,7 +55,7 @@ public class TcpipNetLayer implements NetLayer
 	public static final String BACKLOG = "TcpipNetLayer.backlog";
 	public static final String TIMEOUT_IN_MS = "TcpipNetLayer.timeoutInMs";
 	/** default time to wait till timeout. */
-	private static final int DEFAULT_TIMEOUT = 5000;
+	private static final int DEFAULT_TIMEOUT = 60000;
 	static
 	{
 		// trigger silvertunnel-ng.org Netlib start logging
@@ -87,24 +87,22 @@ public class TcpipNetLayer implements NetLayer
 
 		// create connection and open socket
 		final Socket socket = SocketGlobalUtil.createOriginalSocket();
-		if (r.getIpaddress() != null)
+		/*if (r.getIpaddress() != null)
 		{
-			// use IP address (preferred over host name)
 			final InetAddress remoteInetAddress = InetAddress.getByAddress(r.getIpaddress());
 			final InetSocketAddress remoteInetSocketAddress = new InetSocketAddress(remoteInetAddress, r.getPort());
 			socket.connect(remoteInetSocketAddress, timeoutInMs);
 		}
 		else
-		{
+		{ */
 			// use host name
-			final InetSocketAddress remoteInetSocketAddress = new InetSocketAddress(
-					r.getHostname(), r.getPort());
+			final InetSocketAddress remoteInetSocketAddress = new InetSocketAddress(r.getHostname(), r.getPort());
 			if (remoteInetSocketAddress.getAddress() == null)
 			{
 				throw new UnknownHostException("hostlookup didnt worked. for Hostname : " + r.getHostname());
 			}
 			socket.connect(remoteInetSocketAddress, timeoutInMs);
-		}
+		//}
 
 		// convert and return result
 		return new Socket2NetSocket(socket);

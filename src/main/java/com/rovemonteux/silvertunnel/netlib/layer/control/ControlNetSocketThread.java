@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 public class ControlNetSocketThread extends Thread
 {
@@ -166,7 +167,7 @@ public class ControlNetSocketThread extends Thread
 			final ControlParameters parameters)
 	{
 		// check overall timeout
-		if (parameters.getOverallTimeoutMillis() > 0
+		/*if (parameters.getOverallTimeoutMillis() > 0
 				&& socket.getOverallMillis() > parameters
 						.getOverallTimeoutMillis())
 		{
@@ -176,16 +177,14 @@ public class ControlNetSocketThread extends Thread
 				&& socket.getCurrentTimeframeMillis() >= parameters
 						.getThroughputTimeframeMillis())
 		{
-			// current time frame is over
 			final long bytes = socket
 					.getCurrentTimeframeStartInputOutputBytesAndStartNewTimeframe();
 			if (parameters.getThroughputTimeframeMinBytes() > 0
 					&& bytes < parameters.getThroughputTimeframeMinBytes())
 			{
-				// timeout!!!
 				return "throughput is too low";
 			}
-		}
+		}*/
 
 		// no timeout
 		return null;

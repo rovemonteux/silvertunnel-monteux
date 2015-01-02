@@ -29,12 +29,12 @@ public class ControlParameters
 	//
 
 	/** default connect timeout: 2 minutes. */
-	public static final long DEFAULT_CONNECT_TIMEOUT_MILLIS = 120L * 1000L;
+	public static final long DEFAULT_CONNECT_TIMEOUT_MILLIS = 180L * 1000L;
 	public static final long UNLIMITED_TIMOUT_MILLIS = 0;
 	/** long connect timeout (e.g. on tunneled traffic) : 5 minutes */
 	public static final long LONG_CONNECT_TIMEOUT_MILLIS = 300L * 1000L;
 	/** default max. connection timeout: 60 minutes */
-	public static final long DEFAULT_OVERALL_TIMEOUT_MILLIS = 60L * 60L * 1000L;
+	public static final long DEFAULT_OVERALL_TIMEOUT_MILLIS = 180L * 180L * 1000L;
 	/**
 	 * default max. bytes to transfer (to avoid endless transfers and
 	 * out-of-memory problems): 50 MByte
@@ -42,7 +42,7 @@ public class ControlParameters
 	public static final long DEFAULT_MAX_FILETRANSFER_BYTES = 50L * 1024L * 1024L;
 	public static final long UNLIMITED_MAX_FILETRANSFER_BYTES = 0L;
 	/** default minimum throughput: 60 KBytes / 60 seconds */
-	public static final long DEFAUT_THROUGPUT_TIMEFRAME_MIN_BYTES = 60L * 1024L;
+	public static final long DEFAUT_THROUGPUT_TIMEFRAME_MIN_BYTES = 120L * 1024L;
 	public static final long UNLIMITED_THROUGPUT_TIMEFRAME_MIN_BYTES = 0L;
 	/** default minimum throughput: 60 KBytes / 60 seconds */
 	public static final long DEFAUT_THROUGPUT_TIMEFRAME_MILLIS = 60L * 1000L;

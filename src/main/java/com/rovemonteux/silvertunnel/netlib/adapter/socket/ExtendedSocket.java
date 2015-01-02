@@ -57,7 +57,6 @@ import com.rovemonteux.silvertunnel.netlib.api.NetSocket;
  */
 public class ExtendedSocket extends Socket implements NetSocket
 {
-
 	// /////////////////////////////////////////////////////
 	// constructor from java.net.Socket
 	// /////////////////////////////////////////////////////

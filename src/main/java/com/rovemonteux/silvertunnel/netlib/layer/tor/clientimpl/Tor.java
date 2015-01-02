@@ -100,6 +100,7 @@ import org.slf4j.LoggerFactory;
  * @author Michael Koellejan
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 
 public class Tor implements NetLayerStatusAdmin
@@ -162,7 +163,7 @@ public class Tor implements NetLayerStatusAdmin
 			// org.bouncycastle.jce.provider.BouncyCastleProvider(),2);
 		}
 		// logger and config
-		LOG.info("Tor implementation of silvertunnel-ng.org is starting up");
+		LOG.info("Tor implementation of silvertunnel-monteux.org is starting up");
 		// determine end of startup-Phase
 		startupPhaseWithoutConnects = System.currentTimeMillis() + TorConfig.getStartupDelay() * 1000L;
 		// init event-handler
@@ -246,6 +247,9 @@ public class Tor implements NetLayerStatusAdmin
 				}
 				continue;
 			}
+			
+			
+			
 			if (TorConfig.isVeryAggressiveStreamBuilding())
 			{
 
