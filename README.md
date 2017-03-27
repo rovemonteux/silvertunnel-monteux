@@ -1,6 +1,8 @@
 **SilverTunnel-Monteux Netlib**
 ====================
 
+[![Build Status](https://api.travis-ci.org/rovemonteux/silvertunnel-monteux.svg?branch=master)](https://travis-ci.org/rovemonteux/silvertunnel-monteux/)
+
 **SilverTunnel-Monteux Netlib** is a free library for the Java programming language that implements and encapsulates all the complex network protocol logic needed for anonymous communication over the Tor anonymity network. Netlib can be easily integrated in almost every existing and new Java application. The library requires Java 1.6/Java SE 6 or a newer version.
 
 What is _Tor_?
