@@ -42,6 +42,32 @@
         </extensions>
         <plugins>
             <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>cf.monteux.silvertunnel.netlib.tool.TorTest</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <mode>development</mode>
+                            <url>${project.url}</url>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                </executions>
+     </plugin>
+            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <version>1.6.3</version>
@@ -262,7 +288,7 @@
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <url>https://www.gnu.org/licenses/lgpl.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
