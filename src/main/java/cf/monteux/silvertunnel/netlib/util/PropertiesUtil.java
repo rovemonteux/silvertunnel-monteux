@@ -1,6 +1,7 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * Support for handling (local)properties.
  * 
  * @author hapke
+ * @author Rove Monteux
  */
 public class PropertiesUtil
 {
@@ -43,7 +45,7 @@ public class PropertiesUtil
 	 *            not null
 	 * @param defaultValue
 	 *            can be null
-	 * @return
+	 * @return  Object  the requested resource as an Object.
 	 */
 	public static Object getAsObject(Map<String, Object> properties,
 			String key, Object defaultValue)

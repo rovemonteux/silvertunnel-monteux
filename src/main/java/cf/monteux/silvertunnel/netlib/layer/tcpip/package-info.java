@@ -1,6 +1,7 @@
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,6 +17,6 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Contains the TCP/IP {@link com.rovemonteux.silvertunnel.netlib.api.NetLayer}.
+ * Contains the TCP/IP {@link cf.monteux.silvertunnel.netlib.api.NetLayer}.
  */
 package cf.monteux.silvertunnel.netlib.layer.tcpip;

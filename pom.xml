@@ -2,8 +2,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rovemonteux.silvertunnel.netlib</groupId>
     <artifactId>silvertunnel-monteux</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
-    <name>SilverTunnel-Monteux</name>
+    <version>0.0.3-SNAPSHOT</version>
+    <name>SilverTunnel-Monteux Netlib</name>
     <description>Fork of the SilverTunnel-NG Netlib.
 
         SilverTunnel-Monteux Netlib is a free library for the Java programming language that implements and encapsulates all the complex network protocol stuff needed for anonymous communication over the Tor anonymity network. Netlib can be easily integrated in almost every existing and new Java application. The library requires Java 1.6/Java SE 6 or a newer version.
@@ -13,7 +13,7 @@
         The original silvertunnel-ng Netlib can be found here: http://sourceforge.net/projects/silvertunnel-ng/</description>
     <organization>
         <name>Rove Monteux</name>
-        <url>http://rmonteux.wordpress.com/</url>
+	<url>http://monteux.cf//</url>
     </organization>
     <developers>
         <developer>
@@ -86,7 +86,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.4</version>
@@ -99,7 +99,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
