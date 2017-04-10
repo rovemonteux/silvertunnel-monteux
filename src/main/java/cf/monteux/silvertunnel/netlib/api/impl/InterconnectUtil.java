@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class contains methods to support interconnection of streams.
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class InterconnectUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(InterconnectUtil.class);
+	private static final Logger logger = LogManager.getLogger(InterconnectUtil.class);
 
 	private static final int SLEEP_ON_INACTIVITY_MS = 10;
 	private static final int DEFAULT_BUFFER_SIZE = 2048;
@@ -144,7 +144,7 @@ public class InterconnectUtil
 					{
 						final int cc = in1.read(buffer);
 						byteCounterForLog1 += cc;
-						LOG.info(" > " + cc + " bytes (" + byteCounterForLog1
+						logger.info(" > " + cc + " bytes (" + byteCounterForLog1
 								+ " bytes total)");
 						out1.write(buffer, 0, cc);
 						out1.flush();
@@ -153,7 +153,7 @@ public class InterconnectUtil
 				}
 				catch (final IOException e)
 				{
-					LOG.debug("relay1: {}", e.toString(), e);
+					logger.debug("relay1: {}", e.toString(), e);
 					tryToClose = true;
 				}
 
@@ -164,7 +164,7 @@ public class InterconnectUtil
 					{
 						final int cc = in2.read(buffer);
 						byteCounterForLog2 += cc;
-						LOG.info(" < " + cc + " bytes (" + byteCounterForLog2
+						logger.info(" < " + cc + " bytes (" + byteCounterForLog2
 								+ " bytes total)");
 						out2.write(buffer, 0, cc);
 						out2.flush();
@@ -173,7 +173,7 @@ public class InterconnectUtil
 				}
 				catch (final IOException e)
 				{
-					LOG.debug("relay2: {}", e.toString(), e);
+					logger.debug("relay2: {}", e.toString(), e);
 					tryToClose = true;
 				}
 
@@ -197,7 +197,7 @@ public class InterconnectUtil
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("connection interrupted", e);
+			logger.warn("connection interrupted", e);
 		}
 	}
 
@@ -275,7 +275,7 @@ public class InterconnectUtil
 						byteCounterForLog += cc;
 						if (logMsg != null)
 						{
-							LOG.info(logMsg + " " + cc + " bytes ("
+							logger.info(logMsg + " " + cc + " bytes ("
 									+ byteCounterForLog + " bytes total)");
 						}
 						out.write(buffer, 0, cc);
@@ -285,7 +285,7 @@ public class InterconnectUtil
 				}
 				catch (final IOException e)
 				{
-					LOG.debug("relay: {}", e.toString(), e);
+					logger.debug("relay: {}", e.toString(), e);
 					tryToClose.value = true;
 				}
 
@@ -307,7 +307,7 @@ public class InterconnectUtil
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("connection interrupted", e);
+			logger.warn("connection interrupted", e);
 		}
 	}
 
@@ -340,7 +340,7 @@ public class InterconnectUtil
 					if (cc <= 0)
 					{
 						// input stream closed
-						LOG.info(logMsg
+						logger.info(logMsg
 								+ " input stream closed - close the rest");
 						break;
 					}
@@ -349,7 +349,7 @@ public class InterconnectUtil
 						byteCounterForLog += cc;
 						if (logMsg != null)
 						{
-							LOG.info(logMsg + " " + cc + " bytes ("
+							logger.info(logMsg + " " + cc + " bytes ("
 									+ byteCounterForLog + " bytes total)");
 						}
 						out.write(buffer, 0, cc);
@@ -360,7 +360,7 @@ public class InterconnectUtil
 			catch (final IOException e)
 			{
 				// e.g. output stream closed
-				LOG.info(logMsg + " close all because of " + e.toString());
+				logger.info(logMsg + " close all because of " + e.toString());
 			}
 
 			// close
@@ -372,7 +372,7 @@ public class InterconnectUtil
 			catch (final IOException e)
 			{
 				// no problem
-				LOG.debug("got IOException : {}", e.getMessage(), e);
+				logger.debug("got IOException : {}", e.getMessage(), e);
 			}
 			try
 			{
@@ -381,12 +381,12 @@ public class InterconnectUtil
 			catch (final IOException e)
 			{
 				// no problem
-				LOG.debug("got IOException : {}", e.getMessage(), e);
+				logger.debug("got IOException : {}", e.getMessage(), e);
 			}
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("connection interrupted", e);
+			logger.warn("connection interrupted", e);
 		}
 	}
 

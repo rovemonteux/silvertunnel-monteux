@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -60,8 +60,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.CircuitHistory;
 import cf.monteux.silvertunnel.netlib.layer.tor.directory.FingerprintImpl;
 import cf.monteux.silvertunnel.netlib.util.SystemPropertiesHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 // TODO : implement bridge connect
 // TODO : implement ExcludeSingleHopRelays (torrc)
 
@@ -76,7 +76,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class TorConfig {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorConfig.class);
+	private static final Logger logger = LogManager.getLogger(TorConfig.class);
 
 	/** instance to {@link TorConfig}. */
 	private static TorConfig instance;
@@ -217,11 +217,11 @@ public final class TorConfig {
 	 */
 	public static void setRetriesConnect(final int retries) {
 		if (retries <= 0) {
-			LOG.warn("setRetriesConnect : wrong value for retriesConnect found!");
+			logger.warn("setRetriesConnect : wrong value for retriesConnect found!");
 			return; // keep the old value
 		}
 		if (retries > 20) {
-			LOG.warn("setRetriesConnect : number of retries could be to high.");
+			logger.warn("setRetriesConnect : number of retries could be to high.");
 		}
 		getInstance().retriesConnect = retries;
 	}
@@ -243,11 +243,11 @@ public final class TorConfig {
 	 */
 	public static void setReconnectCircuit(final int reconnects) {
 		if (reconnects <= 0) {
-			LOG.warn("setReconnectCircuit : wrong value for reconnectCircuit found!");
+			logger.warn("setReconnectCircuit : wrong value for reconnectCircuit found!");
 			return; // keep the old value
 		}
 		if (reconnects > 10) {
-			LOG.warn("setReconnectCircuit : number of reconnects could be to high.");
+			logger.warn("setReconnectCircuit : number of reconnects could be to high.");
 		}
 		getInstance().reconnectCircuit = reconnects;
 	}
@@ -280,11 +280,11 @@ public final class TorConfig {
 	 */
 	public static void setMinimumIdleCircuits(final int nrOfCircuits) {
 		if (nrOfCircuits < 0) {
-			LOG.warn("setMinimumIdleCircuits : value should not be lower than 0. setting minimumIdleCircuits to 0!");
+			logger.warn("setMinimumIdleCircuits : value should not be lower than 0. setting minimumIdleCircuits to 0!");
 			setMinimumIdleCircuits(0);
 		}
 		if (nrOfCircuits > MAXIMUM_IDLE_CIRCUITS) {
-			LOG.warn("setMinimumIdleCircuits : value should not be greater than " + MAXIMUM_IDLE_CIRCUITS + ". setting minimumIdleCircuits to "
+			logger.warn("setMinimumIdleCircuits : value should not be greater than " + MAXIMUM_IDLE_CIRCUITS + ". setting minimumIdleCircuits to "
 					+ MAXIMUM_IDLE_CIRCUITS + "!");
 			setMinimumIdleCircuits(MAXIMUM_IDLE_CIRCUITS);
 		}
@@ -430,11 +430,11 @@ public final class TorConfig {
 	 */
 	public static void setStreamsPerCircuit(final int streams) {
 		if (streams <= 0) {
-			LOG.error("it is not allowed to set the number of streams in a circuit lower than 1!");
+			logger.error("it is not allowed to set the number of streams in a circuit lower than 1!");
 		} else if (streams >= 65536) {
-			LOG.error("the maximum allowed number of streams per circuit is 2^16 = 65536");
+			logger.error("the maximum allowed number of streams per circuit is 2^16 = 65536");
 		} else {
-			LOG.debug("setting streamsPerCircuit from {} to {}", new Object[] { getInstance().streamsPerCircuit, streams });
+			logger.debug("setting streamsPerCircuit from {} to {}", new Object[] { getInstance().streamsPerCircuit, streams });
 			getInstance().streamsPerCircuit = streams;
 		}
 	}
@@ -493,15 +493,15 @@ public final class TorConfig {
 	 */
 	public static void setRouteMinLength(final int length) {
 		if (length < MINIMUM_ROUTE_LENGTH) {
-			LOG.warn("route length has to be at least {}", MINIMUM_ROUTE_LENGTH);
+			logger.warn("route length has to be at least {}", MINIMUM_ROUTE_LENGTH);
 			return;
 		}
 		if (length > MAXIMUM_ROUTE_LENGTH) {
-			LOG.warn("route length should not exceed {}", MAXIMUM_ROUTE_LENGTH);
+			logger.warn("route length should not exceed {}", MAXIMUM_ROUTE_LENGTH);
 			return;
 		}
 		if (length > getInstance().routeMaxLength) {
-			LOG.info("setRouteMinLength: length ({}) is smaller than current maxlen ({}). Setting maxlen to given value.", new Object[] { length,
+			logger.info("setRouteMinLength: length ({}) is smaller than current maxlen ({}). Setting maxlen to given value.", new Object[] { length,
 					getInstance().routeMaxLength });
 			getInstance().routeMaxLength = length;
 		}
@@ -553,15 +553,15 @@ public final class TorConfig {
 	 */
 	public static void setRouteMaxLength(final int length) {
 		if (length < MINIMUM_ROUTE_LENGTH) {
-			LOG.warn("route length has to be at least " + MINIMUM_ROUTE_LENGTH + "!");
+			logger.warn("route length has to be at least " + MINIMUM_ROUTE_LENGTH + "!");
 			return;
 		}
 		if (length > MAXIMUM_ROUTE_LENGTH) {
-			LOG.warn("route length should not exceed " + MAXIMUM_ROUTE_LENGTH);
+			logger.warn("route length should not exceed " + MAXIMUM_ROUTE_LENGTH);
 			return;
 		}
 		if (length < getInstance().routeMinLength) {
-			LOG.info("setRouteMaxLength: length (" + length + ") is smaller than current minlen. Setting minlen to given value.");
+			logger.info("setRouteMaxLength: length (" + length + ") is smaller than current minlen. Setting minlen to given value.");
 			getInstance().routeMinLength = length;
 		}
 		getInstance().routeMaxLength = length;
@@ -592,10 +592,10 @@ public final class TorConfig {
 	public static void setMinDescriptorsPercentage(final double percent) {
 		if (percent < 0.0 || percent > 100.0) // check if it is in range
 		{
-			LOG.warn("setMinDescriptorsPercentage: value {} out of range (0.0 - 100.0)", percent);
+			logger.warn("setMinDescriptorsPercentage: value {} out of range (0.0 - 100.0)", percent);
 		}
 		if (percent == 0.0) {
-			LOG.warn("setMinDescriptorsPercentage: setting this value to 0 is discouraged");
+			logger.warn("setMinDescriptorsPercentage: setting this value to 0 is discouraged");
 		}
 		getInstance().minDescriptorsPercentage = percent;
 	}
@@ -820,7 +820,7 @@ public final class TorConfig {
 			maxAllowedSetupDurationMs = SystemPropertiesHelper.getSystemProperty(SYSTEMPROPERTY_TOR_MAX_ALLOWED_SETUP_DURATION_MS,
 					(int) maxAllowedSetupDurationMs);
 		} catch (final Exception e) {
-			LOG.error("config could not be loaded from properties", e);
+			logger.error("config could not be loaded from properties", e);
 		}
 	}
 
@@ -898,7 +898,7 @@ public final class TorConfig {
 	 */
 	public static void setParallelCircuitBuilds(final int number) {
 		if (number < 1) {
-			LOG.error("setParallelCircuitBuilds should not be less than 1");
+			logger.error("setParallelCircuitBuilds should not be less than 1");
 		} else {
 			getInstance().parallelCircuitBuilds = number;
 		}

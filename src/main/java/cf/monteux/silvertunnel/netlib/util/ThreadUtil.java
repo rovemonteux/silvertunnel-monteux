@@ -17,8 +17,8 @@
  */
 package cf.monteux.silvertunnel.netlib.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class contains methods to log running threads.
@@ -28,18 +28,18 @@ import org.slf4j.LoggerFactory;
  * @author Michael Koellejan
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 public class ThreadUtil
 {
-	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ThreadUtil.class);
+	private static final Logger logger = LogManager.getLogger("TorTest");
 
 	/**
 	 * This method recursively visits (logs with INFO level) all threads.
 	 */
 	public static void logAllRunningThreads()
 	{
-		logAllRunningThreads(LOG);
+		logAllRunningThreads(logger);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ThreadUtil
 	}
 
 	/**
-	 * This method recursively visits (LOG.info()) all thread groups under
+	 * This method recursively visits (logger.info()) all thread groups under
 	 * `group'.
 	 * 
 	 * @param log the {@link Logger}to be used for logging
@@ -77,7 +77,7 @@ public class ThreadUtil
 		{
 			// Get thread/
 			final Thread thread = threads[i];
-			log.info(thread.toString());
+			logger.info(thread.toString());
 		}
 
 		// Get thread subgroups of `group'

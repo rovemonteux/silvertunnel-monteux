@@ -63,7 +63,8 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import cf.monteux.silvertunnel.netlib.api.NetLayer;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class to represent an HTTP connection to a remote object.
@@ -72,7 +73,7 @@ import org.slf4j.LoggerFactory;
 public class HttpURLConnection extends java.net.HttpURLConnection
 {
 	/** */
-	private static final org.slf4j.Logger LOG = LoggerFactory.getLogger("sun.net.www.protocol.http.HttpURLConnection");
+	private static final Logger logger = LogManager.getLogger("sun.net.www.protocol.http.HttpURLConnection");
 
 	protected static final String HTTP_CONNECT = "CONNECT";
 
@@ -484,9 +485,9 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 
 			setRequests = true;
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug(requests.toString());
+			logger.debug(requests.toString());
 		}
 		http.writeRequests(requests, poster);
 		if (ps.checkError())
@@ -719,11 +720,11 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 						}
 						catch (final UnknownHostException e)
 						{
-							LOG.debug("got UnknownHostException : {}", e.getMessage(), e);
+							logger.debug("got UnknownHostException : {}", e.getMessage(), e);
 						}
 						catch (final SecurityException e)
 						{
-							LOG.debug("got SecurityException : {}", e.getMessage(), e);
+							logger.debug("got SecurityException : {}", e.getMessage(), e);
 						}
 						return null;
 					}
@@ -790,7 +791,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 			catch (final IOException ioex)
 			{
 				// ignore and commence normal connection
-				LOG.debug("got IOException : {}", ioex.getMessage(), ioex);
+				logger.debug("got IOException : {}", ioex.getMessage(), ioex);
 			}
 			if (cachedHeaders != null && cachedInputStream != null)
 			{
@@ -1094,7 +1095,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 							catch (final StringIndexOutOfBoundsException ignored)
 							{
 								// no-op
-								LOG.debug("got StringIndexOutOfBoundsException : {}"
+								logger.debug("got StringIndexOutOfBoundsException : {}"
 										, ignored.getMessage());
 							}
 						}
@@ -1224,9 +1225,9 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 					writeRequests();
 				}
 				http.parseHTTP(responses, pi, this);
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug(responses.toString());
+					logger.debug(responses.toString());
 				}
 				inputStream = http.getInputStream();
 
@@ -1453,7 +1454,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 							}
 							catch (final Exception e)
 							{
-								LOG.debug("got Exception : {}", e, e);
+								logger.debug("got Exception : {}", e, e);
 							}
 						}
 					}
@@ -1511,7 +1512,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 				}
 				catch (final Exception exc)
 				{
-//					LOG.debug("got Exception while parsing content-length : {}", exc, exc);
+//					logger.debug("got Exception while parsing content-length : {}", exc, exc);
 				}
 				
 
@@ -1556,14 +1557,14 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 								catch (final IllegalAccessException iae)
 								{
 									// ignored; use 'this'
-									LOG.debug("got IllegalAccessException : {}"
+									logger.debug("got IllegalAccessException : {}"
 											, iae.getMessage()
 											, iae);
 								}
 								catch (final NoSuchFieldException nsfe)
 								{
 									// ignored; use 'this'
-									LOG.debug("got NoSuchFieldException : {}"
+									logger.debug("got NoSuchFieldException : {}"
 											, nsfe.getMessage()
 											, nsfe);
 								}
@@ -1796,7 +1797,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 				http.parseHTTP(responses, null, this);
 
 				/* Log the response to the CONNECT */
-				LOG.debug(responses.toString());
+				logger.debug(responses.toString());
 
 				statusLine = responses.getValue(0);
 				final StringTokenizer st = new StringTokenizer(statusLine);
@@ -1947,7 +1948,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 		setPreemptiveProxyAuthentication(requests);
 
 		/* Log the CONNECT request */
-		LOG.debug(requests.toString());
+		logger.debug(requests.toString());
 
 		http.writeRequests(requests, null);
 		// remove CONNECT header
@@ -2047,7 +2048,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 					catch (final java.security.PrivilegedActionException ignored)
 					{
 						// User will have an unknown host.
-						LOG.debug("got PrivilegedActionException : {}", ignored.getMessage(), ignored);
+						logger.debug("got PrivilegedActionException : {}", ignored.getMessage(), ignored);
 					}
 					final PasswordAuthentication a = privilegedRequestPasswordAuthentication(
 							host, addr, port, "http", realm, scheme, url,
@@ -2172,7 +2173,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 				catch (final java.net.UnknownHostException ignored)
 				{
 					// User will have addr = null
-					LOG.debug("got UnknownHostException : {}", ignored.getMessage(), ignored);
+					logger.debug("got UnknownHostException : {}", ignored.getMessage(), ignored);
 				}
 			}
 			// replacing -1 with default port for a protocol
@@ -2505,7 +2506,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 					}
 					catch (final Exception e)
 					{
-						LOG.debug("got Exception while parsing content-length : {}", e, e);
+						logger.debug("got Exception while parsing content-length : {}", e, e);
 					}
 					for (int i = 0; i < cl;)
 					{
@@ -2536,7 +2537,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 			}
 			catch (final IOException e)
 			{
-				LOG.debug("got IOException : {}", e.getMessage(), e);
+				logger.debug("got IOException : {}", e.getMessage(), e);
 			}
 		}
 		responseCode = -1;
@@ -2616,7 +2617,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 				}
 				catch (final IOException ioe)
 				{
-					LOG.debug("got IOException : {}", ioe.getMessage(), ioe);
+					logger.debug("got IOException : {}", ioe.getMessage(), ioe);
 				}
 
 				// if the connection is persistent it may have been closed
@@ -2676,7 +2677,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("got IOException : {}", e.getMessage(), e);
+			logger.debug("got IOException : {}", e.getMessage(), e);
 		}
 
 		if (cachedHeaders != null)
@@ -2705,7 +2706,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("got IOException : {}", e.getMessage(), e);
+			logger.debug("got IOException : {}", e.getMessage(), e);
 		}
 
 		if (cachedHeaders != null)
@@ -2731,7 +2732,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("got IOException : {}", e.getMessage(), e);
+			logger.debug("got IOException : {}", e.getMessage(), e);
 		}
 
 		if (cachedHeaders != null)
@@ -2756,7 +2757,7 @@ public class HttpURLConnection extends java.net.HttpURLConnection
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("got IOException : {}", e.getMessage(), e);
+			logger.debug("got IOException : {}", e.getMessage(), e);
 		}
 
 		if (cachedHeaders != null)

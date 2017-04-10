@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -59,8 +59,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.hiddenservice.HiddenServiceDescr
 import cf.monteux.silvertunnel.netlib.layer.tor.stream.TCPStream;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Implementation of Hidden Service Client.
@@ -73,7 +73,7 @@ import org.slf4j.LoggerFactory;
 public final class HiddenServiceClient
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HiddenServiceClient.class);
+	private static final Logger logger = LogManager.getLogger(HiddenServiceClient.class);
 
 	/** a {@link RendezvousServiceDescriptorService} instance. */
 	private static RendezvousServiceDescriptorService rendezvousServiceDescriptorService = RendezvousServiceDescriptorService.getInstance();
@@ -118,7 +118,7 @@ public final class HiddenServiceClient
 		{
 			throw new IOException("connectToHiddenService(): couldn't retrieve RendezvousServiceDescriptor for z=" + z);
 		}
-		LOG.info("connectToHiddenService(): use RendezvousServiceDescriptor=" + sd);
+		logger.info("connectToHiddenService(): use RendezvousServiceDescriptor=" + sd);
 
 		//
 		// action
@@ -140,7 +140,7 @@ public final class HiddenServiceClient
 				rendezvousPointCircuit = rendezvousPointData.getMyRendezvousCirc();
 				rendezvousPointCircuit.setServiceDescriptor(sd);
 				establishedRendezvousPoint = true;
-				LOG.info("connectToHiddenService(): use circuit to rendezvous point=" + rendezvousPointData.getMyRendezvousCirc());
+				logger.info("connectToHiddenService(): use circuit to rendezvous point=" + rendezvousPointData.getMyRendezvousCirc());
 
 				//
 				// Introduction: from Alice's OP to Introduction Point (section
@@ -177,13 +177,13 @@ public final class HiddenServiceClient
 					}
 					catch (TorException exception)
 					{
-						LOG.debug("got Exception while rendezvous", exception);
+						logger.debug("got Exception while rendezvous", exception);
 					}
 				}
 			}
 			catch (final Exception e)
 			{
-				LOG.info("got Exception", e);
+				logger.info("got Exception", e);
 				// release resources
 				if (rendezvousPointCircuit != null)
 				{
@@ -221,7 +221,7 @@ public final class HiddenServiceClient
 		{
 			msg = "connectToHiddenService(): couldn't connect to remote server of " + z;
 		}
-		LOG.warn(msg);
+		logger.warn(msg);
 		throw new IOException(msg);
 	}
 
@@ -256,7 +256,7 @@ public final class HiddenServiceClient
 			}
 			final Router rendezvousPointRouter = myRendezvousCirc.getRouteNodes()[myRendezvousCirc.getRouteEstablished() - 1].getRouter();
 
-			LOG.info("getNewRendezvousPoint(): establishing rendezvous point for " + z + " at " + rendezvousPointRouter);
+			logger.info("getNewRendezvousPoint(): establishing rendezvous point for " + z + " at " + rendezvousPointRouter);
 			final SecureRandom rnd = new SecureRandom();
 			final byte[] rendezvousCookie = new byte[20];
 			rnd.nextBytes(rendezvousCookie);
@@ -273,7 +273,7 @@ public final class HiddenServiceClient
 			}
 
 			// success
-			LOG.info("getNewRendezvousPoint(): establishing rendezvous point for " + z + " at " + rendezvousPointRouter);
+			logger.info("getNewRendezvousPoint(): establishing rendezvous point for " + z + " at " + rendezvousPointRouter);
 			return new RendezvousPointData(rendezvousCookie, rendezvousPointRouter, myRendezvousCirc);
 		}
 		catch (final IOException e)
@@ -319,7 +319,7 @@ public final class HiddenServiceClient
 	                                          final String z) throws Throwable {
 
 		final Fingerprint introPointFingerprint = introPoint.getIdentifierAsFingerprint();
-		LOG.info("sendIntroduction1Cell(): contacting introduction point=" + introPointFingerprint + " for " + z);
+		logger.info("sendIntroduction1Cell(): contacting introduction point=" + introPointFingerprint + " for " + z);
 
 		// build new circuit where the last node is introduction point
 		final TCPStreamProperties spIntro = new TCPStreamProperties();
@@ -333,10 +333,10 @@ public final class HiddenServiceClient
 
 			if (!myIntroCirc.isEstablished())
 			{
-				LOG.debug("Circuit to Introductionpoint not successful.");
+				logger.debug("Circuit to Introductionpoint not successful.");
 				throw new TorException("Circuit to Introductionpoint " + introPointFingerprint + " not successful.");
 			}
-			LOG.info("sendIntroduction1Cell(): use Circuit to introduction point=" + myIntroCirc);
+			logger.info("sendIntroduction1Cell(): use Circuit to introduction point=" + myIntroCirc);
 
 			// send CellIntro1 data encrypted with PK of the introPoint
 			final Router introPointServicePublicKey = new RouterImpl(introPoint.getServicePublicKey());
@@ -354,7 +354,7 @@ public final class HiddenServiceClient
 				throw new TorException("sendIntroduction1Cell(): Got NACK from Introduction Point introACK=" + introACK);
 			}
 			// introduce ACK is received
-			LOG.info("sendIntroduction1Cell(): Got ACK from Intro Point");
+			logger.info("sendIntroduction1Cell(): Got ACK from Intro Point");
 
 			return introPointServicePublicKeyNode;
 		}
@@ -403,6 +403,6 @@ public final class HiddenServiceClient
 
 		myRendezvousCircuit.addNode(introPointServicePublicKeyNode);
 
-		LOG.info("doRendezvous(): succesfully established rendezvous with " + z);
+		logger.info("doRendezvous(): succesfully established rendezvous with " + z);
 	}
 }

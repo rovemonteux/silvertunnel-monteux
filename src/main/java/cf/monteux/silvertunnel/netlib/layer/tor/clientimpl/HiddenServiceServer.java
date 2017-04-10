@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -47,8 +47,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.directory.SDIntroductionPoint;
 import cf.monteux.silvertunnel.netlib.layer.tor.hiddenservice.HiddenServiceProperties;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provide a hidden service.
@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 public class HiddenServiceServer
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HiddenServiceServer.class);
+	private static final Logger logger = LogManager.getLogger(HiddenServiceServer.class);
 
 	/**
 	 * all NetServerSockets... key=hiddenServicePermanentIdBase32 (z part of
@@ -122,7 +122,7 @@ public class HiddenServiceServer
 		final ExecutorService executor = Executors.newCachedThreadPool();
 		while (hiddenServiceProps.getNumberOfIntroPoints() < hiddenServiceProps.getMinimumNumberOfIntroPoints())
 		{
-			LOG.debug("establish circuits to (randomly chosen) introduction points for {}", hiddenServicePortInstance);
+			logger.debug("establish circuits to (randomly chosen) introduction points for {}", hiddenServicePortInstance);
 
 			// define the tasks for later parallel execution
 			final Collection<Callable<Circuit>> allTasks = new ArrayList<Callable<Circuit>>();
@@ -137,7 +137,7 @@ public class HiddenServiceServer
 					@Override
 					public Circuit call() throws Exception
 					{
-						LOG.debug("Callable Started..");
+						logger.debug("Callable Started..");
 						final TCPStreamProperties spIntro = new TCPStreamProperties();
 						spIntro.setExitPolicyRequired(false);
 						// spIntro.setCustomExitpoint(new
@@ -155,9 +155,9 @@ public class HiddenServiceServer
                                                                               spIntro,
                                                                               hiddenServiceInstanceFinal);
                         } catch (Throwable throwable) {
-                            LOG.warn("got Exception", throwable);
+                            logger.warn("got Exception", throwable);
                         }
-                        LOG.debug("Callable Finished!");
+                        logger.debug("Callable Finished!");
 						return result;
 					}
 				};
@@ -165,7 +165,7 @@ public class HiddenServiceServer
 			}
 
 			// execute the tasks in parallel
-			LOG.debug("start to execute the tasks in parallel");
+			logger.debug("start to execute the tasks in parallel");
 			final int TIMEOUT_SECONDS = 120;
 			Collection<Future<Circuit>> allTaskResults = null;
 			try
@@ -174,7 +174,7 @@ public class HiddenServiceServer
 			}
 			catch (final Exception e)
 			{
-				LOG.info("Exception in background task", e);
+				logger.info("Exception in background task", e);
 			}
 
 			// check the results
@@ -182,12 +182,12 @@ public class HiddenServiceServer
 			{
 				try
 				{
-					LOG.debug("analyse taskResult={}", taskResult);
+					logger.debug("analyse taskResult={}", taskResult);
 					final Circuit c = taskResult.get();
 					if (c != null)
 					{
 						final Router introPointRouter = c.getRouteNodes()[c.getRouteEstablished() - 1].getRouter();
-						LOG.info("Tor.provideHiddenService: establish introduction point at " + introPointRouter.getNickname());
+						logger.info("Tor.provideHiddenService: establish introduction point at " + introPointRouter.getNickname());
 						hiddenServiceProps.addIntroPoint(new SDIntroductionPoint(Encoding.toBase32(introPointRouter.getFingerprint().getBytes()),
 						                                                         new TcpipNetAddress(introPointRouter.getAddress().getAddress(),
 						                                                                             introPointRouter.getOrPort()),
@@ -198,18 +198,18 @@ public class HiddenServiceServer
 				}
 				catch (final InterruptedException e)
 				{
-					LOG.debug("task interruped");
+					logger.debug("task interruped");
 				}
 				catch (final Exception e)
 				{
-					LOG.info("in background task", e);
+					logger.info("in background task", e);
 				}
 			}
-			LOG.info("(server side) circuit(s) to hidden service introduction point(s)==" + hiddenServiceProps.getIntroPoints() + " established for "
+			logger.info("(server side) circuit(s) to hidden service introduction point(s)==" + hiddenServiceProps.getIntroPoints() + " established for "
 					+ hiddenServicePortInstance);
 		}
 		executor.shutdown();
-		LOG.debug("establish circuits finished introduction points for {}", hiddenServicePortInstance);
+		logger.debug("establish circuits finished introduction points for {}", hiddenServicePortInstance);
 
 		//
 		// advertise introduction points/service descriptor
@@ -243,7 +243,7 @@ public class HiddenServiceServer
 				circuit = CircuitAdmin.provideSuitableExclusiveCircuit(tlsConnectionAdmin, directory, spIntro, torEventService);
 				if (circuit == null || !circuit.isEstablished())
 				{
-					LOG.warn("could not establish Circuit to introduction point with spIntro=" + spIntro);
+					logger.warn("could not establish Circuit to introduction point with spIntro=" + spIntro);
 					Thread.sleep(5000); // TODO : check if this timeout is really needed
 					continue;
 				}
@@ -251,7 +251,7 @@ public class HiddenServiceServer
 				// introduction point
 				circuit.setHiddenServiceInstanceForIntroduction(hiddenServiceInstance);
 
-				LOG.debug("Tor.provideHiddenService: send relay_establish_intro-Cell over {}", circuit.toString());
+				logger.debug("Tor.provideHiddenService: send relay_establish_intro-Cell over {}", circuit.toString());
 				circuit.sendCell(new CellRelayEstablishIntro(circuit, service));
 				circuit.receiveRelayCell(CellRelay.RELAY_INTRO_ESTABLISHED);
 				return circuit;
@@ -259,7 +259,7 @@ public class HiddenServiceServer
 			}
 			catch (final Exception e)
 			{
-				LOG.warn("Tor.provideHiddenService: " + e.getMessage(), e);
+				logger.warn("Tor.provideHiddenService: " + e.getMessage(), e);
 				if (circuit != null)
 				{
 					circuit.close(true);

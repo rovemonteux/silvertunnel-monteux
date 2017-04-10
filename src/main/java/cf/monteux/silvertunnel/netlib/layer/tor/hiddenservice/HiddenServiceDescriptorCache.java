@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 20132 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -41,8 +41,8 @@ import java.util.Map;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
 import cf.monteux.silvertunnel.netlib.layer.tor.directory.RendezvousServiceDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class takes care of caching the Hiddenservice descriptors.
@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public final class HiddenServiceDescriptorCache
 {
 	/** class logger. */
-	private static final Logger LOG = LoggerFactory.getLogger(HiddenServiceDescriptorCache.class);
+	private static final Logger logger = LogManager.getLogger(HiddenServiceDescriptorCache.class);
 	/**
 	 * 
 	 */
@@ -101,11 +101,11 @@ public final class HiddenServiceDescriptorCache
 						   							
 			}
             catch (FileNotFoundException exception) {
-                LOG.info("no cached hiddenservice descriptors found");
+                logger.info("no cached hiddenservice descriptors found");
             }
 			catch (Exception exception)
 			{
-				LOG.warn("could not load cached hiddenservice descriptors because of exception", exception);
+				logger.warn("could not load cached hiddenservice descriptors because of exception", exception);
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public final class HiddenServiceDescriptorCache
 		{
 			return; // dont save cache to disk
 		}
-		LOG.debug("saving {} cached hiddenservice descriptors to disk", cachedRendezvousServiceDescriptors.size());
+		logger.debug("saving {} cached hiddenservice descriptors to disk", cachedRendezvousServiceDescriptors.size());
 		try
 		{
 			FileOutputStream fileOutputStream = new FileOutputStream(TorConfig.getTempDirectory() 
@@ -131,7 +131,7 @@ public final class HiddenServiceDescriptorCache
 		}
 		catch (Exception exception)
 		{
-			LOG.warn("cant save hiddenservice descriptor cache due to exception", exception);
+			logger.warn("cant save hiddenservice descriptor cache due to exception", exception);
 		}
 	}
 	/**
@@ -141,7 +141,7 @@ public final class HiddenServiceDescriptorCache
 	 */
 	public void put(final String z, final RendezvousServiceDescriptor descriptor)
 	{
-		LOG.debug("adding {} to cache", z);
+		logger.debug("adding {} to cache", z);
 		cachedRendezvousServiceDescriptors.put(z, descriptor);
 		saveCacheToDisk();
 	}
@@ -160,11 +160,11 @@ public final class HiddenServiceDescriptorCache
 		}
 		if (result.isPublicationTimeValid())
 		{
-			LOG.debug("found cached descriptor for {}", z);
+			logger.debug("found cached descriptor for {}", z);
 			return result; // valid so return it
 		}
 		//not valid anymore so remove it
-		LOG.debug("removing {} because its too old", z);
+		logger.debug("removing {} because its too old", z);
 		synchronized (cachedRendezvousServiceDescriptors) 
 		{
 			cachedRendezvousServiceDescriptors.remove(z);

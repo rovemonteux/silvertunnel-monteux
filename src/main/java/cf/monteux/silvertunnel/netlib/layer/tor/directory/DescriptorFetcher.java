@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Router;
 import cf.monteux.silvertunnel.netlib.tool.SimpleHttpClientCompressed;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //TODO : modify DescriptorFetcher to download the and split (and process) the descriptors during download
 
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public final class DescriptorFetcher
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(DescriptorFetcher.class);
+	private static final Logger logger = LogManager.getLogger(DescriptorFetcher.class);
 	/** How many digests can be downloaded at once? */
 	public static final int MAXIMUM_ALLOWED_DIGESTS = 96;
 	/**
@@ -55,12 +55,12 @@ public final class DescriptorFetcher
 	{
 		if (nodesDigestsToLoad == null || nodesDigestsToLoad.isEmpty())
 		{
-			LOG.warn("executing downloadDescriptorsByDigest without descriptors doesnt make sense.");
+			logger.warn("executing downloadDescriptorsByDigest without descriptors doesnt make sense.");
 			return null;
 		}
 		if (nodesDigestsToLoad.size() > MAXIMUM_ALLOWED_DIGESTS)
 		{
-			LOG.error("only {} digests can be downloaded at once", MAXIMUM_ALLOWED_DIGESTS);
+			logger.error("only {} digests can be downloaded at once", MAXIMUM_ALLOWED_DIGESTS);
 			return null;
 		}
 		StringBuilder builder = new StringBuilder();
@@ -81,9 +81,9 @@ public final class DescriptorFetcher
 		}
 		catch (final Exception e)
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("downloadSingleDescriptor() from "
+				logger.debug("downloadSingleDescriptor() from "
 					+ directoryServer.getNickname() + " failed: "
 					+ e.getMessage(), e);
 			}
@@ -114,9 +114,9 @@ public final class DescriptorFetcher
 		}
 		catch (final Exception e)
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("downloadAllDescriptors() from "
+				logger.debug("downloadAllDescriptors() from "
 					+ directoryServer.getNickname() + " failed: "
 					+ e.getMessage(), e);
 			}

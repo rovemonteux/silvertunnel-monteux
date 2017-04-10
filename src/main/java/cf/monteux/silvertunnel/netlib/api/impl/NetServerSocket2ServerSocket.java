@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -27,8 +27,8 @@ import java.net.SocketException;
 import java.nio.channels.ServerSocketChannel;
 
 import cf.monteux.silvertunnel.netlib.api.NetServerSocket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Wrap a NetServerSocket to be a ServerSocket.
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class NetServerSocket2ServerSocket extends ServerSocket
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetServerSocket2ServerSocket.class);
+	private static final Logger logger = LogManager.getLogger(NetServerSocket2ServerSocket.class);
 
 	private final NetServerSocket netServerSocket;
 
@@ -64,21 +64,21 @@ public class NetServerSocket2ServerSocket extends ServerSocket
 	@Override
 	public InetAddress getInetAddress()
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return null;
 	}
 
 	@Override
 	public int getLocalPort()
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return -1;
 	}
 
 	@Override
 	public SocketAddress getLocalSocketAddress()
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return null;
 	}
 
@@ -97,7 +97,7 @@ public class NetServerSocket2ServerSocket extends ServerSocket
 	@Override
 	public ServerSocketChannel getChannel()
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return null;
 	}
 
@@ -110,40 +110,40 @@ public class NetServerSocket2ServerSocket extends ServerSocket
 	@Override
 	public boolean isClosed()
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return false;
 	}
 
 	@Override
 	public synchronized void setSoTimeout(int timeout) throws SocketException
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 	}
 
 	@Override
 	public synchronized int getSoTimeout() throws IOException
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return -1;
 	}
 
 	@Override
 	public void setReuseAddress(final boolean on) throws SocketException
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 	}
 
 	@Override
 	public synchronized void setReceiveBufferSize(final int size)
 			throws SocketException
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 	}
 
 	@Override
 	public synchronized int getReceiveBufferSize() throws SocketException
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 		return -1;
 	}
 
@@ -151,6 +151,6 @@ public class NetServerSocket2ServerSocket extends ServerSocket
 	public void setPerformancePreferences(final int connectionTime, final int latency,
 			final int bandwidth)
 	{
-		LOG.warn("method empty/not implemented");
+		logger.warn("method empty/not implemented");
 	}
 }

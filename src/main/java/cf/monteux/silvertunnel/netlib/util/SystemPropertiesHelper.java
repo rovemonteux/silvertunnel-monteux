@@ -1,5 +1,5 @@
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
  */
 package cf.monteux.silvertunnel.netlib.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helperclass for dealing with Systemproperties.
@@ -32,7 +32,7 @@ public final class SystemPropertiesHelper
 		
 	}
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SystemPropertiesHelper.class);
+	private static final Logger logger = LogManager.getLogger(SystemPropertiesHelper.class);
 	/**
 	 * Read a system property as integer.
 	 * 
@@ -87,7 +87,7 @@ public final class SystemPropertiesHelper
 			}
 			else
 			{
-				LOG.warn("incorrect value (" + value + ") for " + key
+				logger.warn("incorrect value (" + value + ") for " + key
 						+ " possible values are : 0,1,true,false,y,n");
 				return defaultValue;
 			}
@@ -111,7 +111,7 @@ public final class SystemPropertiesHelper
 			{
 				return true;
 			}
-			LOG.warn("incorrect value (" + value + ") for " + key
+			logger.warn("incorrect value (" + value + ") for " + key
 					+ " possible values are : 0,1,true,false,y,n");
 			return defaultValue;
 		}

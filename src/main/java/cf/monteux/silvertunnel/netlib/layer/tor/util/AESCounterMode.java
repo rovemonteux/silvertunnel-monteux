@@ -23,8 +23,8 @@ import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * implements AES in Countermode. This special mode turn the block cipher into a
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public final class AESCounterMode
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(AESCounterMode.class);
+	private static final Logger logger = LogManager.getLogger(AESCounterMode.class);
 
 	/** Algorithm used for crypt. */
 	private static final String ALGORITHM = "AES";
@@ -61,8 +61,8 @@ public final class AESCounterMode
 		if (key.getEncoded().length != 16)
 		{
 			final String msg = "AESCounterMode.<init>: HINT: key.length!=16 bytes/128 bits";
-			LOG.warn(msg);
-			LOG.debug(msg, new Exception("Exception to log a stack trace"));
+			logger.warn(msg);
+			logger.debug(msg, new Exception("Exception to log a stack trace"));
 		}
 
 		try

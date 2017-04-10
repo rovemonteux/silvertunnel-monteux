@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -35,8 +35,8 @@ import cf.monteux.silvertunnel.netlib.api.NetServerSocket;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.IpNetAddress;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetLayer that transparently forwards all traffic to a lower NetLayer -
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 public class ConditionalNetLayer implements NetLayer
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ConditionalNetLayer.class);
+	private static final Logger logger = LogManager.getLogger(ConditionalNetLayer.class);
 
 	/** patterns and its assigned lower NetLayers */
 	private List<Condition> conditions = new ArrayList<Condition>();
@@ -85,9 +85,9 @@ public class ConditionalNetLayer implements NetLayer
 		{
 			result = defaultLowerNetLayer;
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("netAddress={} matches with lowerNetLayer={}", netAddress, result);
+			logger.debug("netAddress={} matches with lowerNetLayer={}", netAddress, result);
 		}
 		return result;
 
@@ -171,9 +171,9 @@ public class ConditionalNetLayer implements NetLayer
 		{
 			result = defaultLowerNetLayer;
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("addressName={} matches with lowerNetLayer={}", addressName, result);
+			logger.debug("addressName={} matches with lowerNetLayer={}", addressName, result);
 		}
 		return result;
 	}

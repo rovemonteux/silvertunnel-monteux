@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -46,8 +46,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.api.util.JavaVersion;
 import cf.monteux.silvertunnel.netlib.layer.mock.NopNetLayer;
 import cf.monteux.silvertunnel.netlib.layer.tcpip.TcpipNetLayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class allows modification of the JVM global socket handling.
@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 public class SocketGlobalUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SocketGlobalUtil.class);
+	private static final Logger logger = LogManager.getLogger(SocketGlobalUtil.class);
 
 	private static NetlibSocketImplFactory netlibSocketImplFactory;
 
@@ -94,7 +94,7 @@ public class SocketGlobalUtil
 			}
 			catch (final IOException e)
 			{
-				LOG.warn("Socket.setSocketImplFactory() was already called before,"
+				logger.warn("Socket.setSocketImplFactory() was already called before,"
 						+ " but not from SocketUtil, i.e. maybe the wrong factory is set");
 			}
 		}
@@ -138,9 +138,9 @@ public class SocketGlobalUtil
 	@SuppressWarnings("unchecked")
 	public static ExtendedSocket createOriginalSocket() throws RuntimeException
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("createOriginalSocket() called here:",
+			logger.debug("createOriginalSocket() called here:",
 					new Throwable("stacktrace for debugging - not an error"));
 		}
 		
@@ -174,7 +174,7 @@ public class SocketGlobalUtil
 			{
 				String msg = "createOriginalSocket()#1st attempt: could not create a Socket for Java Version: "
 						+ JavaVersion.getJavaVersion();
-				LOG.error(msg, t1);
+				logger.error(msg, t1);
 
 				// 2nd attempt,
 				// this solution doen't work for Java 1.6, but it does not break
@@ -188,7 +188,7 @@ public class SocketGlobalUtil
 				{
 					msg = "createOriginalSocket()#2nd attempt: could not create a Socket for Java Version: "
 							+ JavaVersion.getJavaVersion();
-					LOG.error(msg + ", " + t2, t2);
+					logger.error(msg + ", " + t2, t2);
 
 					throw new RuntimeException(msg + ", " + t2);
 				}

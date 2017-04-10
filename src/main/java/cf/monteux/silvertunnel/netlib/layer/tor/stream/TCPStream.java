@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -61,8 +61,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorEvent;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorNoAnswerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * handles the features of single TCP streams on top of circuits through the tor
@@ -77,7 +77,7 @@ import org.slf4j.LoggerFactory;
 public class TCPStream implements Stream, NetSocket
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TCPStream.class);
+	private static final Logger logger = LogManager.getLogger(TCPStream.class);
 
 	/** used for stream level flow control. (as described in tor-spec.txt 7.4)*/
 	private static final int STREAM_LEVEL_FLOW_WINDOW = 500;
@@ -157,9 +157,9 @@ public class TCPStream implements Stream, NetSocket
 		queue = new Queue(queueTimeout);
 		closed = false;
 		closedForReason = 0;
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TCPStream: building new stream " + toString());
+			logger.debug("TCPStream: building new stream " + toString());
 		}
 
 		startSetupTime = System.currentTimeMillis();
@@ -177,16 +177,16 @@ public class TCPStream implements Stream, NetSocket
 		CellRelay relay = null;
 		try
 		{
-			LOG.debug("TCPStream: Waiting for Relay-Connected Cell...");
+			logger.debug("TCPStream: Waiting for Relay-Connected Cell...");
 			relay = queue.receiveRelayCell(CellRelay.RELAY_CONNECTED);
-			LOG.debug("TCPStream: Got Relay-Connected Cell");
+			logger.debug("TCPStream: Got Relay-Connected Cell");
 		}
 		catch (final TorException e)
 		{
 			if (!closed)
 			{
 				// only msg, if closing was unintentionally
-				LOG.warn("TCPStream: Closed: " + toString()
+				logger.warn("TCPStream: Closed: " + toString()
 						+ " due to TorException:" + e.getMessage());
 			}
 			closed = true;
@@ -205,7 +205,7 @@ public class TCPStream implements Stream, NetSocket
 		catch (final IOException e)
 		{
 			closed = true;
-			LOG.warn("TCPStream: Closed:" + toString()
+			logger.warn("TCPStream: Closed:" + toString()
 					+ " due to IOException:" + e.getMessage());
 			throw e;
 		}
@@ -224,24 +224,24 @@ public class TCPStream implements Stream, NetSocket
 					resolvedAddress = InetAddress.getByAddress(ip);
 					sp.setAddr(resolvedAddress);
 					sp.setAddrResolved(true);
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("TCPStream: storing resolved IP "
+						logger.debug("TCPStream: storing resolved IP "
 							+ resolvedAddress.toString());
 					}
 				}
 				catch (final IOException e)
 				{
-					LOG.info("unexpected for resolved ip={}", Arrays.toString(ip), e);
+					logger.info("unexpected for resolved ip={}", Arrays.toString(ip), e);
 				}
 				break;
 			case 4 + 1 + 16 + 4:
 				// IPv6 address
 				// TODO: not yet implemented
-                LOG.warn("IPv6 not implemented yet");
+                logger.warn("IPv6 not implemented yet");
 				break;
 			default:
-				LOG.error("this should not happen, unexpected length received : {}", relay.getLength());
+				logger.error("this should not happen, unexpected length received : {}", relay.getLength());
 				break;
 		}
 
@@ -252,9 +252,9 @@ public class TCPStream implements Stream, NetSocket
 		this.queue.addHandler(qhT2J);
 		outputStream = new TCPStreamOutputStream(this);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TCPStream: build stream " + toString() + " within " + setupDuration + " ms");
+			logger.debug("TCPStream: build stream " + toString() + " within " + setupDuration + " ms");
 		}
 		// attach stream to history
 		circuit.registerStream(sp, setupDuration);
@@ -297,22 +297,22 @@ public class TCPStream implements Stream, NetSocket
 		queue = new Queue(QUEUE_TIMEOUNT2);
 		closed = false;
 		closedForReason = 0;
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TCPStream(2): building new stream " + toString());
+			logger.debug("TCPStream(2): building new stream " + toString());
 		}
 
 		startSetupTime = System.currentTimeMillis();
 		/*
 		 * TODO remove because not needed any more? while (true) { // wait for
 		 * RELAY-BEGIN CellRelay relay = null; try {
-		 * LOG.info("TCPStream(2): Waiting for Relay-Begin Cell..."); relay =
+		 * logger.info("TCPStream(2): Waiting for Relay-Begin Cell..."); relay =
 		 * queue.receiveRelayCell(CellRelay.RELAY_BEGIN);
-		 * LOG.info("TCPStream(2): Got Relay-Begin Cell"); } catch (TorException
+		 * logger.info("TCPStream(2): Got Relay-Begin Cell"); } catch (TorException
 		 * e) { // only msg, if closing was unintentionally
-		 * LOG.warn("TCPStream(2): Closed: " + toString() +
+		 * logger.warn("TCPStream(2): Closed: " + toString() +
 		 * " due to TorException:" + e.getMessage()); //TODO: continue; throw e;
-		 * } catch (IOException e) { LOG.warn("TCPStream(2): Closed:" +
+		 * } catch (IOException e) { logger.warn("TCPStream(2): Closed:" +
 		 * toString() + " due to IOException:" + e.getMessage()); //TODO:
 		 * continue; throw e; } break; }
 		 */
@@ -329,7 +329,7 @@ public class TCPStream implements Stream, NetSocket
 		this.queue.addHandler(qhT2J);
 		outputStream = new TCPStreamOutputStream(this);
 
-		LOG.info("TCPStream: build stream " + toString() + " within "
+		logger.info("TCPStream: build stream " + toString() + " within "
 				+ setupDuration + " ms");
 		// attach stream to history
 		final TCPStreamProperties sp = new TCPStreamProperties();
@@ -359,10 +359,10 @@ public class TCPStream implements Stream, NetSocket
 			if (cell.isTypeRelay() && cell instanceof CellRelayData)
 			{
 				streamLevelFlowControlSend--;
-				LOG.debug("STREAM_FLOW_CONTROL_SEND = {}", streamLevelFlowControlSend);
+				logger.debug("STREAM_FLOW_CONTROL_SEND = {}", streamLevelFlowControlSend);
 				if (streamLevelFlowControlSend == 0)
 				{
-					LOG.debug("waiting for SENDME cell");
+					logger.debug("waiting for SENDME cell");
 					try
 					{
 						waitForSendme.wait();
@@ -397,7 +397,7 @@ public class TCPStream implements Stream, NetSocket
 		}
 		catch (final TorException e)
 		{
-			LOG.debug("got TorException while trying to send a keep alive", e);
+			logger.debug("got TorException while trying to send a keep alive", e);
 		}
 	}
 
@@ -408,9 +408,9 @@ public class TCPStream implements Stream, NetSocket
 		// gracefully close stream
 		close(false);
 		// remove from circuit
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TCPStream.close(): removing stream " + toString());
+			logger.debug("TCPStream.close(): removing stream " + toString());
 		}
 		circuit.removeStream(streamId);
 	}
@@ -425,9 +425,9 @@ public class TCPStream implements Stream, NetSocket
 	@Override
 	public void close(final boolean force)
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TCPStream.close(): closing stream " + toString());
+			logger.debug("TCPStream.close(): closing stream " + toString());
 		}
 		circuit.getTorEventService().fireEvent(
 				new TorEvent(TorEvent.STREAM_CLOSED, this, "Stream closed: "
@@ -443,7 +443,7 @@ public class TCPStream implements Stream, NetSocket
 			}
 			catch (final TorException e)
 			{
-				LOG.debug("got TorException while trying to close the stream", e);
+				logger.debug("got TorException while trying to close the stream", e);
 			}
 		}
 		// terminate threads gracefully
@@ -460,7 +460,7 @@ public class TCPStream implements Stream, NetSocket
 			}
 			catch (final Exception e)
 			{
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 		}
 		// close queue (also removes handlers)
@@ -542,7 +542,7 @@ public class TCPStream implements Stream, NetSocket
 		{
 			// replace id
 			this.streamId = id;
-			LOG.warn("replaced TCPStream.ID " + this.streamId + " by " + id);
+			logger.warn("replaced TCPStream.ID " + this.streamId + " by " + id);
 		}
 	}
 
@@ -584,7 +584,7 @@ public class TCPStream implements Stream, NetSocket
 			if (relay.isTypeData())
 			{
 				streamLevelFlowControlRecv--;
-				LOG.debug("STREAM_FLOW_CONTROL_RECV = {}", streamLevelFlowControlRecv);
+				logger.debug("STREAM_FLOW_CONTROL_RECV = {}", streamLevelFlowControlRecv);
 				circuit.reduceCircWindowRecv(); // also reduce the circuits receive window.
 				if (streamLevelFlowControlRecv <= STREAM_LEVEL_FLOW_WINDOW - STREAM_LEVEL_FLOW_INCREMENT)
 				{
@@ -596,7 +596,7 @@ public class TCPStream implements Stream, NetSocket
 						}
 						catch (TorException exception)
 						{
-							LOG.warn("problems with sending RELAY_SENDME for stream {}", getId(), exception);
+							logger.warn("problems with sending RELAY_SENDME for stream {}", getId(), exception);
 							throw new TorException("problems with sending RELAY_SENDME for stream " + getId(), exception);
 						}
 				}
@@ -605,7 +605,7 @@ public class TCPStream implements Stream, NetSocket
 			{
 				streamLevelFlowControlSend += STREAM_LEVEL_FLOW_INCREMENT;
 				waitForSendme.notifyAll();
-				LOG.debug("got RELAY_SENDME cell, increasing stream {} flow send window to {}", getId(), streamLevelFlowControlRecv);
+				logger.debug("got RELAY_SENDME cell, increasing stream {} flow send window to {}", getId(), streamLevelFlowControlRecv);
 			}
 		}
 		queue.add(cell);

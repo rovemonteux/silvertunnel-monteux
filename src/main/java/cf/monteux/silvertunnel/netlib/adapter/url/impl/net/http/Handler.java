@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.net.URL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /** open an http input stream given a URL. */
 public class Handler extends java.net.URLStreamHandler
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Handler.class);
+	private static final Logger logger = LogManager.getLogger(Handler.class);
 
 	protected String proxy;
 	protected int proxyPort;
@@ -62,7 +62,7 @@ public class Handler extends java.net.URLStreamHandler
 	protected java.net.URLConnection openConnection(final URL u, final Proxy p)
 			throws IOException
 	{
-		LOG.warn("Handler.openConnection(URL u, Proxy p): not implemented - must be overwritten");
+		logger.warn("Handler.openConnection(URL u, Proxy p): not implemented - must be overwritten");
 		throw new UnsupportedOperationException("Method not implemented.");
 	}
 }

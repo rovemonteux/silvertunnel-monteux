@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -46,8 +46,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Stream;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.util.ByteArrayUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * the general form of a RELAY cell in the Tor Protocol. This class also calls
@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
 public class CellRelay extends Cell
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CellRelay.class);
+	private static final Logger logger = LogManager.getLogger(CellRelay.class);
 
 	public static final int RELAY_BEGIN = 1;
 	public static final int RELAY_DATA = 2;
@@ -214,9 +214,9 @@ public class CellRelay extends Cell
 	 */
 	void initFromData() throws TorException
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelay.initFromData() for "
+			logger.debug("CellRelay.initFromData() for "
 					+ outCircuit.getRouteEstablished() + " layers");
 		}
 		// decrypt forwards, take keys from route
@@ -224,7 +224,7 @@ public class CellRelay extends Cell
 		boolean digestVerified = false;
 		if (outCircuit.getRouteEstablished() == 0)
 		{
-			LOG.warn("CellRelay.initFromData() for zero layers on "
+			logger.warn("CellRelay.initFromData() for zero layers on "
 					+ outCircuit.toString());
 		}
 		for (encryptingRouter = 0; encryptingRouter <= outCircuit
@@ -239,9 +239,9 @@ public class CellRelay extends Cell
 			}
 			// decrypt payload
 			outCircuit.getRouteNodes()[encryptingRouter].symDecrypt(payload);
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.info("CellRelay.initFromDate with encryptingRouter="
+				logger.info("CellRelay.initFromDate with encryptingRouter="
 						+ encryptingRouter + " has decrypted payload="
 						+ ByteArrayUtil.showAsStringDetails(payload));
 			}
@@ -269,9 +269,9 @@ public class CellRelay extends Cell
 				 && digest[2] == digestCalc[2]
 				 && digest[3] == digestCalc[3])
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("CellRelay.initFromData(): backward digest from "
+						logger.debug("CellRelay.initFromData(): backward digest from "
 								+ outCircuit.getRouteNodes()[encryptingRouter]
 										.getRouter().getNickname() + " is OK");
 					}
@@ -280,9 +280,9 @@ public class CellRelay extends Cell
 				}
 				else
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("didn't verified digest="
+						logger.debug("didn't verified digest="
 								+ Encoding.toHexString(digest)
 								+ ", digestCalc="
 								+ Encoding.toHexString(digestCalc));
@@ -293,7 +293,7 @@ public class CellRelay extends Cell
 		// check if digest verified
 		if (!digestVerified)
 		{
-			LOG.warn("CellRelay.initFromData(): Received "
+			logger.warn("CellRelay.initFromData(): Received "
 					+ Encoding.toHexString(digest)
 					+ " as backward digest but couldn't verify");
 			throw new TorException("wrong digest");
@@ -305,9 +305,9 @@ public class CellRelay extends Cell
 		length = Encoding.byteArrayToInt(payload, CellRelay.RELAY_LENGTH_POS, CellRelay.RELAY_LENGTH_SIZE);
 		System.arraycopy(payload, CellRelay.RELAY_DATA_POS, data, 0, CellRelay.RELAY_DATA_SIZE);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelay.initFromData(): " + toString());
+			logger.debug("CellRelay.initFromData(): " + toString());
 		}
 	}
 
@@ -335,9 +335,9 @@ public class CellRelay extends Cell
 	public
 	byte[] toByteArray()
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelay.toByteArray() for " + outCircuit.getRouteEstablished() + " layers");
+			logger.debug("CellRelay.toByteArray() for " + outCircuit.getRouteEstablished() + " layers");
 		}
 		// put everything in payload
 		payload[CellRelay.RELAY_COMMAND_POS] = relayCommand;
@@ -361,16 +361,16 @@ public class CellRelay extends Cell
 		digest = outCircuit.getRouteNodes()[i0].calcForwardDigest(payload);
 		System.arraycopy(digest, 0, payload, CellRelay.RELAY_DIGEST_POS, CellRelay.RELAY_DIGEST_SIZE);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelay.toByteArray(): " + toString());
+			logger.debug("CellRelay.toByteArray(): " + toString());
 		}
 		// encrypt backwards, take keys from route
 		for (int i = i0; i >= 0; --i)
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("CellRelay.toByteArray with encryptingRouter=" + i
+				logger.debug("CellRelay.toByteArray with encryptingRouter=" + i
 						+ " has unencrypted payload="
 						+ ByteArrayUtil.showAsStringDetails(payload));
 			}
@@ -484,9 +484,9 @@ public class CellRelay extends Cell
 			}
 			catch (final UnknownHostException e)
 			{
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("got UnknownHostException : ip = "
+					logger.debug("got UnknownHostException : ip = "
 						+ Arrays.toString(ip) 
 						+ " exception : " + e + " "
 						+ e.getMessage(), e);

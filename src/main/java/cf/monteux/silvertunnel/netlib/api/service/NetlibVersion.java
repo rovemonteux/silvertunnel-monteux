@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -38,8 +38,8 @@ package cf.monteux.silvertunnel.netlib.api.service;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Create log output while starting silvertunnel-monteux Netlib.
@@ -50,14 +50,12 @@ import org.slf4j.LoggerFactory;
  */
 public final class NetlibVersion
 {
-	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetlibVersion.class);
-	/** */
-	private static final Logger LOGNETLIB = LoggerFactory.getLogger("com.rovemonteux.silvertunnel.netlib");
+    
+	private static final Logger logger = LogManager.getLogger(NetlibVersion.class);
 
 	private static NetlibVersion instance;
 
-	private static final String VERSION_PROPERTIES = "/com/rovemonteux/silvertunnel/netlib/version.properties";
+	private static final String VERSION_PROPERTIES = "/cf/monteux/silvertunnel/netlib/version.properties";
 
 	private String netlibVersionInfo = "unknown";
 
@@ -105,11 +103,11 @@ public final class NetlibVersion
 		}
 		catch (final Exception e)
 		{
-			LOG.error("error while initializing NetlibStartInfo", e);
+			logger.error("error while initializing NetlibStartInfo", e);
 		}
 
 		// log version info
-		LOGNETLIB.info("Welcome to silvertunnel-monteux Netlib (version " + netlibVersionInfo + ")");
+		logger.info("Welcome to silvertunnel-monteux Netlib (version " + netlibVersionInfo + ")");
 	}
 
 	/**

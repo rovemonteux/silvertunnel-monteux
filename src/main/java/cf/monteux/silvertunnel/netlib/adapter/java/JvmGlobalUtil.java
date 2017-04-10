@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -39,14 +39,14 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.adapter.nameservice.NameServiceGlobalUtil;
 import cf.monteux.silvertunnel.netlib.adapter.socket.SocketGlobalUtil;
 import cf.monteux.silvertunnel.netlib.adapter.url.URLGlobalUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class allows JVM global redirection of everything, in detail: * (DNS)
  * name service requests * TCP/IP socket/connections * URL requests
  * 
- * Internally, all other com.rovemonteux.silvertunnel.netlib.adapter.adapter packages are
+ * Internally, all other cf.monteux.silvertunnel.netlib.adapter.adapter packages are
  * used.
  * 
  * Detailed description: TODO wiki page
@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 public final class JvmGlobalUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(JvmGlobalUtil.class);
+	private static final Logger logger = LogManager.getLogger(JvmGlobalUtil.class);
 	/**
 	 * Prevent instantiation.
 	 */
@@ -99,7 +99,7 @@ public final class JvmGlobalUtil
 		catch (final IllegalStateException e)
 		{
 			firstException = e;
-			LOG.error("initialization (1/3) failed", e);
+			logger.error("initialization (1/3) failed", e);
 		}
 
 		try
@@ -112,7 +112,7 @@ public final class JvmGlobalUtil
 			{
 				firstException = e;
 			}
-			LOG.error("initialization (2/3) failed", e);
+			logger.error("initialization (2/3) failed", e);
 		}
 		try
 		{
@@ -124,9 +124,9 @@ public final class JvmGlobalUtil
 			{
 				firstException = e;
 			}
-			LOG.error("initialization (3/3) failed", e);
+			logger.error("initialization (3/3) failed", e);
 		}
-		LOG.info("init() ongoing");
+		logger.info("init() ongoing");
 
 		/*
 		 * set first services: is not needed because this is already done in the
@@ -145,12 +145,12 @@ public final class JvmGlobalUtil
 		if (firstException == null)
 		{
 			// normal end
-			LOG.info("init() end");
+			logger.info("init() end");
 		}
 		else
 		{
 			// end with Exception
-			LOG.info("init() end with exception");
+			logger.info("init() end with exception");
 
 			// throw delayed Exception now
 			throw firstException;
@@ -174,7 +174,7 @@ public final class JvmGlobalUtil
 	                                                                    final NetAddressNameService nextNetAddressNameService,
 	                                                                    final boolean waitUntilReady) throws IllegalStateException
 	{
-		LOG.info("setNetLayerAndNetAddressNameService(nextNetLayer={}"
+		logger.info("setNetLayerAndNetAddressNameService(nextNetLayer={}"
 				+ ", nextNetAddressNameService={})", nextNetLayer, nextNetAddressNameService);
 
 		// action
@@ -207,7 +207,7 @@ public final class JvmGlobalUtil
 			catch (final InterruptedException e)
 			{
 				// ignore exception
-				LOG.debug("got InterruptedException : {}", e.getMessage(), e);
+				logger.debug("got InterruptedException : {}", e.getMessage(), e);
 			}
 		}
 	}
@@ -227,7 +227,7 @@ public final class JvmGlobalUtil
 	public static synchronized void setNetLayerAndNetAddressNameService(final NetLayer nextNetLayer, final boolean waitUntilReady)
 			throws IllegalStateException
 	{
-		LOG.info("setNetLayerAndNetAddressNameService(nextNetLayer={})", nextNetLayer);
+		logger.info("setNetLayerAndNetAddressNameService(nextNetLayer={})", nextNetLayer);
 
 		if (nextNetLayer != null)
 		{

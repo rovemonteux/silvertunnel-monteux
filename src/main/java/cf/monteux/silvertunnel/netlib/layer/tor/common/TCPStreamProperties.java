@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -41,8 +41,8 @@ import java.net.UnknownHostException;
 import org.apache.http.conn.util.InetAddressUtils;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Compound data structure.
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 public final class TCPStreamProperties
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TCPStreamProperties.class);
+	private static final Logger logger = LogManager.getLogger(TCPStreamProperties.class);
 
 	/** The host which we want to connect to. */
 	private String hostname;
@@ -131,7 +131,7 @@ public final class TCPStreamProperties
 			}
 			catch (final UnknownHostException e)
 			{
-				LOG.warn("invalid address=" + address, e);
+				logger.warn("invalid address=" + address, e);
 			}
 
 			this.port = address.getPort();

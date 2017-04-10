@@ -1,6 +1,7 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -24,25 +25,25 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class stores String in text files in the temp directory of the operating
  * system. Filenames are: st-[key]
  * 
  * @author hapke
+ * @author Rove Monteux
  */
 public final class TempfileStringStorage implements StringStorage
 {
-	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TempfileStringStorage.class);
+	private static final Logger logger = LogManager.getLogger("TorTest");
 
 	private static final Pattern KEY_PATTERN = Pattern.compile("[a-z0-9\\_\\-\\.]+");
 
 	static
 	{
-		LOG.debug("TempfileStringStorage directory={}", TorConfig.getTempDirectory());
+		logger.debug("TempfileStringStorage directory={}", TorConfig.getTempDirectory());
 	}
 
 	private static TempfileStringStorage instance = new TempfileStringStorage();
@@ -95,7 +96,7 @@ public final class TempfileStringStorage implements StringStorage
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("could not write value for key=" + key, e);
+			logger.warn("could not write value for key=" + key, e);
 		}
 	}
 
@@ -131,7 +132,7 @@ public final class TempfileStringStorage implements StringStorage
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("could not read value for key=" + key, e);
+			logger.warn("could not read value for key=" + key, e);
 			return null;
 		}
 	}

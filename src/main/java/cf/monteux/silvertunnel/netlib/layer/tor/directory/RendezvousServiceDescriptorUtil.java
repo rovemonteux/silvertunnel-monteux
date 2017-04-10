@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import java.util.Arrays;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.util.ByteArrayUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Simple helper methods to use RendezvousServiceDescriptor.
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class RendezvousServiceDescriptorUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(RendezvousServiceDescriptorUtil.class);
+	private static final Logger logger = LogManager.getLogger(RendezvousServiceDescriptorUtil.class);
 
 	/** one day in seconds. */
 	private static final int TIMEPERIOD_V2_DESC_VALIDITY_SECONDS = 24 * 60 * 60;
@@ -75,7 +75,7 @@ public class RendezvousServiceDescriptorUtil
 		final byte[] unhashedDescriptorId = ByteArrayUtil.concatByteArrays(hiddenServicePermanentId, result.getSecretIdPart());
 		if (hiddenServicePermanentId.length != 10)
 		{
-			LOG.warn("wrong length of hiddenServicePermanentId=" + Arrays.toString(hiddenServicePermanentId));
+			logger.warn("wrong length of hiddenServicePermanentId=" + Arrays.toString(hiddenServicePermanentId));
 		}
 		result.setDescriptorId(Encryption.getDigest(unhashedDescriptorId));
 

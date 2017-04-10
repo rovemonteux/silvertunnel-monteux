@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.X509TrustManager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Trust manager for TLS connections.
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class TorX509TrustManager implements X509TrustManager
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorX509TrustManager.class);
+	private static final Logger logger = LogManager.getLogger(TorX509TrustManager.class);
 
 	public static final Pattern cnPattern = Pattern.compile(".*CN=(.*?)(,.*)*",
 			Pattern.UNIX_LINES + Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
@@ -68,7 +68,7 @@ public class TorX509TrustManager implements X509TrustManager
 
 		if (!dnName0Match.matches() || !dnName1Match.matches())
 		{
-			LOG.warn("TorX509TrustManager.checkServerTrusted(): not matched"
+			logger.warn("TorX509TrustManager.checkServerTrusted(): not matched"
 					+ " dnName0=" + dnName0 + ", dnName1=" + dnName1);
 			throw new CertificateException(
 					"Name field of Certificate does not have the right format");
@@ -85,7 +85,7 @@ public class TorX509TrustManager implements X509TrustManager
 
 		// XXX: It seems that the string has changed to <signing>, though
 		// the second chapter of main-tor-spec still says <identity>
-		LOG.debug("dnName0 = {}, dnName1 = {}", dnName0.toString(), dnName1.toString());
+		logger.debug("dnName0 = {}, dnName1 = {}", dnName0.toString(), dnName1.toString());
 		if (dnName1.indexOf("<identity>") != -1
 				&& dnName1.indexOf("<signing>") != -1)
 		{
@@ -110,7 +110,7 @@ public class TorX509TrustManager implements X509TrustManager
 	@Override
 	public X509Certificate[] getAcceptedIssuers()
 	{
-		LOG.debug("X509Certificate[] getAcceptedIssuers()");
+		logger.debug("X509Certificate[] getAcceptedIssuers()");
 		return new X509Certificate[0];
 	}
 

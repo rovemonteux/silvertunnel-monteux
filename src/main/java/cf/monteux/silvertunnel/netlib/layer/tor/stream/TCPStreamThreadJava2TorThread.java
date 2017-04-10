@@ -24,8 +24,8 @@ import java.io.PipedOutputStream;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelayData;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 class TCPStreamThreadJava2TorThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TCPStreamThreadJava2TorThread.class);
+	private static final Logger logger = LogManager.getLogger(TCPStreamThreadJava2TorThread.class);
 
 	private final TCPStream stream;
 	/** read from this, and forward to tor. */
@@ -55,7 +55,7 @@ class TCPStreamThreadJava2TorThread extends Thread
 		}
 		catch (final IOException e)
 		{
-			LOG.error("TCPStreamThreadJava2Tor: caught IOException "
+			logger.error("TCPStreamThreadJava2Tor: caught IOException "
 					+ e.getMessage());
 		}
 		this.start();
@@ -77,7 +77,7 @@ class TCPStreamThreadJava2TorThread extends Thread
 				int readBytes = fromjava.available();
 				while (readBytes > 0 && !this.stopped)
 				{
-					LOG.debug("TCPStreamThreadJava2Tor.run(): read {} bytes from application", readBytes);
+					logger.debug("TCPStreamThreadJava2Tor.run(): read {} bytes from application", readBytes);
 					final CellRelayData cell = new CellRelayData(stream);
 					cell.setLength(readBytes);
 					if (cell.getLength() > cell.getData().length)
@@ -89,7 +89,7 @@ class TCPStreamThreadJava2TorThread extends Thread
 					readBytes -= b0;
 					if (b0 < cell.getLength())
 					{
-						LOG.warn("TCPStreamThreadJava2Tor.run(): read " + b0
+						logger.warn("TCPStreamThreadJava2Tor.run(): read " + b0
 								+ " bytes where " + cell.getLength()
 								+ " were advertised");
 						cell.setLength(b0);
@@ -103,7 +103,7 @@ class TCPStreamThreadJava2TorThread extends Thread
 						}
 						catch (TorException exception)
 						{
-							LOG.warn("got exception while tring to send RELAY_DATA cell", exception);
+							logger.warn("got exception while tring to send RELAY_DATA cell", exception);
 						}
 					}
 				}
@@ -112,7 +112,7 @@ class TCPStreamThreadJava2TorThread extends Thread
 			}
 			catch (final IOException e)
 			{
-				LOG.warn("TCPStreamThreadJava2Tor.run(): caught IOException "
+				logger.warn("TCPStreamThreadJava2Tor.run(): caught IOException "
 						+ e.getMessage());
 			}
 		}

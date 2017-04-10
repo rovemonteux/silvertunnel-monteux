@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -37,8 +37,8 @@ package cf.monteux.silvertunnel.netlib.adapter.nameservice;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.mock.NopNetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.redirect.SwitchingNetAddressNameService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import sun.net.spi.nameservice.NameService;
 import sun.net.spi.nameservice.NameServiceDescriptor;
@@ -61,7 +61,7 @@ import sun.net.spi.nameservice.NameServiceDescriptor;
 public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetlibNameServiceDescriptor.class);
+	private static final Logger logger = LogManager.getLogger(NetlibNameServiceDescriptor.class);
 
 	public static final String DNS_PROVIDER_NAME = "NetlibNameService";
 
@@ -77,10 +77,10 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 	{
 		try
 		{
-			LOG.info("NetlibNameServiceDescriptor#static called");
+			logger.info("NetlibNameServiceDescriptor#static called");
 
 			NetAddressNameService firstNetAddressNameService = null;
-			final String firstNetAddressNameServiceName = System.getProperty("com.rovemonteux.silvertunnel.netlib.nameservice");
+			final String firstNetAddressNameServiceName = System.getProperty("cf.monteux.silvertunnel.netlib.nameservice");
 			if (firstNetAddressNameServiceName != null)
 			{
 				try
@@ -91,7 +91,7 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 				}
 				catch (final Exception e)
 				{
-					LOG.warn("could not instantiate com.rovemonteux.silvertunnel.netlib.nameservice={}"
+					logger.warn("could not instantiate cf.monteux.silvertunnel.netlib.nameservice={}"
 							, firstNetAddressNameServiceName
 							, e);
 				}
@@ -119,7 +119,7 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 		}
 		catch (final Throwable t)
 		{
-			LOG.error("NetlibNameServiceDescriptor initialization failed", t);
+			logger.error("NetlibNameServiceDescriptor initialization failed", t);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 	@Override
 	public String getType()
 	{
-		LOG.debug("NetlibNameServiceDescriptor.getType() called");
+		logger.debug("NetlibNameServiceDescriptor.getType() called");
 		return "dns";
 	}
 
@@ -143,7 +143,7 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 	@Override
 	public String getProviderName()
 	{
-		LOG.debug("NetlibNameServiceDescriptor.getProviderName() called");
+		logger.debug("NetlibNameServiceDescriptor.getProviderName() called");
 		return DNS_PROVIDER_NAME;
 	}
 
@@ -156,7 +156,7 @@ public class NetlibNameServiceDescriptor implements NameServiceDescriptor
 	@Override
 	public NameService createNameService()
 	{
-		LOG.debug("NetlibNameServiceDescriptor.createNameService() called");
+		logger.debug("NetlibNameServiceDescriptor.createNameService() called");
 		return nameService;
 	}
 

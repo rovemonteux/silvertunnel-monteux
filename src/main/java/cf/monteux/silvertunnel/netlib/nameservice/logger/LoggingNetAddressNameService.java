@@ -1,6 +1,7 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -25,8 +26,8 @@ import java.util.logging.Level;
 import cf.monteux.silvertunnel.netlib.api.NetAddress;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.util.LogHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Log name service requests and forward the requests to the lower name service.
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class LoggingNetAddressNameService implements NetAddressNameService
 {
 	/** */
-	private static Logger defaultLog = LoggerFactory.getLogger(LoggingNetAddressNameService.class);
+	private static Logger defaultLog = LogManager.getLogger(LoggingNetAddressNameService.class);
 
 	private final NetAddressNameService lowerNetAddressNameService;
 	private final Logger log;
@@ -137,7 +138,7 @@ public class LoggingNetAddressNameService implements NetAddressNameService
 		}
 	}
 
-	/** @see NetAddressNameService#getNamesByAddress(com.rovemonteux.silvertunnel.netlib.api.NetAddress)  */
+	/** @see NetAddressNameService#getNamesByAddress(cf.monteux.silvertunnel.netlib.api.NetAddress)  */
 	@Override
 	public String[] getNamesByAddress(NetAddress address)
 			throws UnknownHostException

@@ -21,8 +21,8 @@ package cf.monteux.silvertunnel.netlib.util;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Support for handling (local)properties.
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class PropertiesUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(PropertiesUtil.class);
+	private static final Logger logger = LogManager.getLogger(PropertiesUtil.class);
 	private static final String LIST_SEPARATOR = ",";
 
 	/**
@@ -167,7 +167,7 @@ public class PropertiesUtil
 			catch (final Exception e)
 			{
 				// ignore it
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 		}
 
@@ -220,7 +220,7 @@ public class PropertiesUtil
 			catch (final Exception e)
 			{
 				// ignore it
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 		}
 

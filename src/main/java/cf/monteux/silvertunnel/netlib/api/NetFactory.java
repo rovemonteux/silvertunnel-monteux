@@ -1,6 +1,6 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
- * Copyright (c) 2009-2012 silvertunnel.org
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,25 +16,8 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, see <http://www.gnu.org/licenses/>.
- */
-/*
- * silvertunnel-monteux Netlib - Java library to easily access anonymity networks
- * Copyright (c) 2014 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -57,9 +40,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Manage a repository of NetLayer objects.
@@ -71,9 +52,9 @@ import org.slf4j.LoggerFactory;
 public class NetFactory implements NetLayerFactory
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetFactory.class);
+	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger("NetFactory");
 
-	public static final String NETFACTORY_MAPPING_PROPERTIES = "/com/rovemonteux/silvertunnel/netlib/api/netfactory_mapping.properties";
+	public static final String NETFACTORY_MAPPING_PROPERTIES = "/cf/monteux/silvertunnel/netlib/api/netfactory_mapping.properties";
 
 	/** repository cache. */
 	private final Map<NetLayerIDs, NetLayer> netLayerRepository = new HashMap<NetLayerIDs, NetLayer>();
@@ -94,7 +75,7 @@ public class NetFactory implements NetLayerFactory
 	public final synchronized void registerNetLayer(final NetLayerIDs netLayerId, final NetLayer netLayer)
 	{
 		netLayerRepository.put(netLayerId, netLayer);
-		LOG.debug("registerNetLayer with netLayerId={}", netLayerId);
+		logger.debug("registerNetLayer with netLayerId={}", netLayerId);
 	}
 
 	/**
@@ -105,7 +86,7 @@ public class NetFactory implements NetLayerFactory
 		netLayerRepository.clear();
 	}
 	/**
-	 * @see NetLayerFactory#getNetLayerById(com.rovemonteux.silvertunnel.netlib.api.NetLayerIDs)
+	 * @see NetLayerFactory#getNetLayerById(cf.monteux.silvertunnel.netlib.api.NetLayerIDs)
 	 */
 	@Override
 	public synchronized NetLayer getNetLayerById(final NetLayerIDs netLayerId)
@@ -130,7 +111,7 @@ public class NetFactory implements NetLayerFactory
 			}
 			catch (final Exception e)
 			{
-				LOG.error("could not create NetLayer of {}", netLayerId, e);
+				logger.error("could not create NetLayer of {}", netLayerId, e);
 			}
 		}
 
@@ -147,7 +128,7 @@ public class NetFactory implements NetLayerFactory
 	{
 		try
 		{
-			LOG.info("Net layer "+netLayerId.getValue());
+			logger.info("Net layer "+netLayerId.getValue());
 			// load properties, read class factory name
 			final InputStream in = getClass().getResourceAsStream(NETFACTORY_MAPPING_PROPERTIES);
 			final Properties mapping = new Properties();
@@ -165,7 +146,7 @@ public class NetFactory implements NetLayerFactory
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not create NetLayerFactory of {}", netLayerId, e);
+			logger.error("could not create NetLayerFactory of {}", netLayerId, e);
 			return null;
 		}
 	}

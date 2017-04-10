@@ -32,8 +32,8 @@ import java.net.URL;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * BasicAuthentication: Encapsulate an http server authentication using the
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 class BasicAuthentication extends AuthenticationInfo
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(BasicAuthentication.class);
+	private static final Logger logger = LogManager.getLogger(BasicAuthentication.class);
 	private static final long serialVersionUID = 100L;
 
 	static final char BASIC_AUTH = 'B';
@@ -249,7 +249,7 @@ class BasicAuthentication extends AuthenticationInfo
 		catch (final URISyntaxException e)
 		{
 			/* ignore error and use the old value */
-			LOG.debug("got URISyntaxException : ", e.getMessage(), e);
+			logger.debug("got URISyntaxException : ", e.getMessage(), e);
 		}
 
 		while (index < opath.length())

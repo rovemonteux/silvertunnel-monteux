@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -37,8 +37,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * used to create a CREATE_FAST cell.
@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public class CellCreateFast extends Cell
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CellCreateFast.class);
+	private static final Logger logger = LogManager.getLogger(CellCreateFast.class);
 
 	/**
 	 * creates a CREATE_FAST-CELL.

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -58,7 +58,7 @@ public class ConditionalNetAddressNameService implements NetAddressNameService
 	}
 
 	/**
-	 * @see NetAddressNameService#getNamesByAddress(com.rovemonteux.silvertunnel.netlib.api.NetAddress)
+	 * @see NetAddressNameService#getNamesByAddress(cf.monteux.silvertunnel.netlib.api.NetAddress)
 	 * 
 	 * @param address
 	 *            IP address to lookup

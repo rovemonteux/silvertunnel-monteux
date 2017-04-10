@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -43,8 +43,8 @@ import cf.monteux.silvertunnel.netlib.api.NetAddress;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.api.util.IpNetAddress;
 import cf.monteux.silvertunnel.netlib.nameservice.redirect.SwitchingNetAddressNameService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class that merges the implementations of
@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 class NameServiceNetlibAdapter implements NameServiceNetlibGenericAdapter
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NameServiceNetlibAdapter.class);
+	private static final Logger logger = LogManager.getLogger(NameServiceNetlibAdapter.class);
 
 	/** {@link NetAddressNameService} to be used. */
 	private final NetAddressNameService netAddressNameService;
@@ -79,7 +79,7 @@ class NameServiceNetlibAdapter implements NameServiceNetlibGenericAdapter
 	@Override
 	public String getHostByAddr(final byte[] ip) throws UnknownHostException
 	{
-		LOG.info("getHostByAddr(ip={})", Arrays.toString(ip));
+		logger.info("getHostByAddr(ip={})", Arrays.toString(ip));
 
 		// action
 		final String[] result = netAddressNameService.getNamesByAddress(new IpNetAddress(ip));
@@ -101,7 +101,7 @@ class NameServiceNetlibAdapter implements NameServiceNetlibGenericAdapter
 		{
 			netAddressNS = ((SwitchingNetAddressNameService) netAddressNameService).getLowerNetAddressNameServiceClass();
 		}
-		LOG.info("InetAddress[] lookupAllHostAddrJava6(name={} netAddressNameService={})", name, netAddressNS);
+		logger.info("InetAddress[] lookupAllHostAddrJava6(name={} netAddressNameService={})", name, netAddressNS);
 
 		// action
 		final NetAddress[] result = netAddressNameService.getAddressesByName(name);

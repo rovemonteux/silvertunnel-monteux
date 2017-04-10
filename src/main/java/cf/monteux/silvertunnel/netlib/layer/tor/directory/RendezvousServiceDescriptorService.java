@@ -17,7 +17,7 @@
  */
 
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -34,7 +34,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -68,8 +68,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.tool.SimpleHttpClient;
 import cf.monteux.silvertunnel.netlib.util.HttpUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Logic to handle Service Descriptors of hidden services.
@@ -88,7 +88,7 @@ import org.slf4j.LoggerFactory;
 public class RendezvousServiceDescriptorService
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(RendezvousServiceDescriptorService.class);
+	private static final Logger logger = LogManager.getLogger(RendezvousServiceDescriptorService.class);
 
 	private static RendezvousServiceDescriptorService instance = new RendezvousServiceDescriptorService();
 
@@ -143,7 +143,7 @@ public class RendezvousServiceDescriptorService
 				{
 					TcpipNetAddress dirAddress = r.getDirAddress();
 					dirAddress = new TcpipNetAddress(dirAddress.getHostnameOrIpaddress() + ":" + dirAddress.getPort());
-					LOG.info(PRE + "try fetching service descriptor for " + z + " with descriptorID base32/hex=" + descriptorIdBase32 + "/"
+					logger.info(PRE + "try fetching service descriptor for " + z + " with descriptorID base32/hex=" + descriptorIdBase32 + "/"
 							+ descriptorIdHex + " (with replica=" + replica + ") from " + r);
 
 					// try to load from one router/hidden service directory
@@ -155,14 +155,14 @@ public class RendezvousServiceDescriptorService
 					}
 					catch (final Exception e)
 					{
-						LOG.warn("unable to connect to or to load data from directory server " + r + "(" + e.getMessage() + ")", e);
+						logger.warn("unable to connect to or to load data from directory server " + r + "(" + e.getMessage() + ")", e);
 						continue;
 					}
 
 					// response: OK
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug(PRE + "found descriptorIdBase32=" + descriptorIdBase32 + " with result(plain)=" + response);
+						logger.debug(PRE + "found descriptorIdBase32=" + descriptorIdBase32 + " with result(plain)=" + response);
 					}
 					try
 					{
@@ -172,14 +172,14 @@ public class RendezvousServiceDescriptorService
 					}
 					catch (final TorException e)
 					{
-						LOG.info(PRE + "problem parsing Service Descriptor for " + z, e);
+						logger.info(PRE + "problem parsing Service Descriptor for " + z, e);
 						continue;
 					}
 				}
 				--attempts;
 			}
 		}
-		LOG.warn(PRE + "unable to fetch service descriptor for " + z);
+		logger.warn(PRE + "unable to fetch service descriptor for " + z);
 		throw new IOException("unable to fetch service descriptor for " + z);
 	}
 
@@ -236,7 +236,7 @@ public class RendezvousServiceDescriptorService
 						{
 							TcpipNetAddress dirAddress = r.getDirAddress();
 							dirAddress = new TcpipNetAddress(dirAddress.getHostnameOrIpaddress() + ":" + dirAddress.getPort());
-							LOG.info(PRE + "try putting service descriptor for " + hiddenServicePermanentIdBase32 + " with descriptorID base32/hex="
+							logger.info(PRE + "try putting service descriptor for " + hiddenServicePermanentIdBase32 + " with descriptorID base32/hex="
 									+ descriptorIdBase32 + "/" + descriptorIdHex + " (with replica=" + replicaFinal + ") from " + r);
 
 							// try to post
@@ -251,7 +251,7 @@ public class RendezvousServiceDescriptorService
 								}
 								catch (final Exception e)
 								{
-									LOG.warn(PRE + "unable to connect to directory server " + dirAddress + "(" + e.getMessage() + ")");
+									logger.warn(PRE + "unable to connect to directory server " + dirAddress + "(" + e.getMessage() + ")");
 									continue;
 								}
 							}
@@ -261,7 +261,7 @@ public class RendezvousServiceDescriptorService
 			}
 			catch (final TorException e1)
 			{
-				LOG.warn("unexpected exception", e1);
+				logger.warn("unexpected exception", e1);
 			}
 		}
 
@@ -277,7 +277,7 @@ public class RendezvousServiceDescriptorService
 			}
 			catch (final InterruptedException e)
 			{ /* do nothing */
-				LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+				logger.debug("got IterruptedException : {}", e.getMessage(), e);
 			}
 		}
 
@@ -306,17 +306,17 @@ public class RendezvousServiceDescriptorService
 		// download descriptor
 		try
 		{
-			LOG.debug("retrieveServiceDescriptor() from {}", dirNetAddress);
-			LOG.debug("descriptorId : {}", descriptorIdBase32);
+			logger.debug("retrieveServiceDescriptor() from {}", dirNetAddress);
+			logger.debug("descriptorId : {}", descriptorIdBase32);
 			final String path = "/tor/rendezvous2/" + descriptorIdBase32;
 
 			return SimpleHttpClient.getInstance().get(torNetLayer, dirNetAddress, path);
 		}
 		catch (final Exception e)
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("retrieveServiceDescriptor() from {} failed", dirNetAddress, e);
+				logger.debug("retrieveServiceDescriptor() from {} failed", dirNetAddress, e);
 			}
 			throw e;
 		}

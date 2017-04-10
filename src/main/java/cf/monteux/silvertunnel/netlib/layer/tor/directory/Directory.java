@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -97,8 +97,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Parsing;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.util.StringStorage;
 import cf.monteux.silvertunnel.netlib.util.TempfileStringStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class maintains a list of the currently known Tor routers. It has the
@@ -115,7 +115,7 @@ import org.slf4j.LoggerFactory;
 public final class Directory
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Directory.class);
+	private static final Logger logger = LogManager.getLogger(Directory.class);
 
 	/**
 	 * Number of retries to find a route on one recursive stap before falling
@@ -298,19 +298,19 @@ public final class Directory
 		// prefer non-authorities
 		if (cacheDirs.size() >= MIN_NUM_OF_CACHE_DIRS)
 		{
-			LOG.debug("using non-authorities");
+			logger.debug("using non-authorities");
 			return cacheDirs;
 		}
 
 		// try authorities
 		if (authorityDirs.size() + cacheDirs.size() >= MIN_NUM_OF_DIRS)
 		{
-			LOG.debug("using authorities");
+			logger.debug("using authorities");
 			final Collection<Router> result = cacheDirs;
 			result.addAll(authorityDirs);
 			return result;
 		}
-		LOG.debug("using hard-coded authorities");
+		logger.debug("using hard-coded authorities");
 		// try predefined/hard-coded authorities
 		return AuthorityServers.getAuthorityRouters();
 	}
@@ -331,7 +331,7 @@ public final class Directory
 		{
 			if (updateRunning)
 			{
-				LOG.debug("Directory.refreshListOfServers: update already running...");
+				logger.debug("Directory.refreshListOfServers: update already running...");
 				return 0;
 			}
 			updateRunning = true;
@@ -349,7 +349,7 @@ public final class Directory
 			}
 			catch (final Exception e)
 			{
-				LOG.warn("Directory.refreshListOfServers", e);
+				logger.warn("Directory.refreshListOfServers", e);
 				return 0;
 
 			}
@@ -374,7 +374,7 @@ public final class Directory
 		final Date now = new Date();
 		if (directoryConsensus != null && !directoryConsensus.needsToBeRefreshed(now))
 		{
-			LOG.debug("no consensus update necessary ...");
+			logger.debug("no consensus update necessary ...");
 		}
 		else
 		{
@@ -383,7 +383,7 @@ public final class Directory
 			//
 			// first initialization attempt: use cached consensus
 			//
-			LOG.debug("consensus first initialization attempt: try to use document from local cache ...");
+			logger.debug("consensus first initialization attempt: try to use document from local cache ...");
 			DirectoryConsensus newDirectoryConsensus = null;
 			if (directoryConsensus == null || directoryConsensus.getFingerprintsNetworkStatusDescriptors().size() == 0)
 			{
@@ -398,35 +398,35 @@ public final class Directory
 						{
 							// cache result was not acceptable
 							newDirectoryConsensus = null;
-							LOG.debug("consensus from local cache (is too small and) could not be used");
+							logger.debug("consensus from local cache (is too small and) could not be used");
 						}
 						else
 						{
-							LOG.debug("use consensus from local cache");
+							logger.debug("use consensus from local cache");
 						}
 					}
 					catch (final TorException e)
 					{
 						newDirectoryConsensus = null;
-						LOG.debug("consensus from local cache is not valid (e.g. too old) and could not be used");
+						logger.debug("consensus from local cache is not valid (e.g. too old) and could not be used");
 					}
 					catch (final Exception e)
 					{
 						newDirectoryConsensus = null;
-						LOG.debug("error while loading consensus from local cache: {}", e, e);
+						logger.debug("error while loading consensus from local cache: {}", e, e);
 					}
 				}
 				else
 				{
 					newDirectoryConsensus = null;
-					LOG.debug("consensus from local cache (is null or invalid and) could not be used");
+					logger.debug("consensus from local cache (is null or invalid and) could not be used");
 				}
 			}
 
 			//
 			// ordinary update: load consensus from Tor network
 			//
-			LOG.debug("load consensus from Tor network");
+			logger.debug("load consensus from Tor network");
 			if (newDirectoryConsensus == null)
 			{
 				// all v3 directory servers
@@ -437,9 +437,9 @@ public final class Directory
 				{
 					final int index = rnd.nextInt(dirRouters.size());
 					final Router dirRouter = dirRouters.get(index);
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("Directory.updateNetworkStatusNew: Randomly chosen dirRouter to fetch consensus document: " 
+						logger.debug("Directory.updateNetworkStatusNew: Randomly chosen dirRouter to fetch consensus document: " 
 								+ dirRouter.getFingerprint()
 								+ " (" + dirRouter.getNickname() + ")");
 					}
@@ -455,7 +455,7 @@ public final class Directory
                         }
                         catch (ZipException e)
                         {
-                            LOG.debug("got ZipException while downloading DirectoryConsensus trying to fetch it uncompressed.");
+                            logger.debug("got ZipException while downloading DirectoryConsensus trying to fetch it uncompressed.");
                             newDirectoryConsensusStr = SimpleHttpClient.getInstance().get(lowerDirConnectionNetLayer, dirRouter.getDirAddress(), path);
                         }
 
@@ -464,7 +464,7 @@ public final class Directory
 						if (!newDirectoryConsensus.needsToBeRefreshed(now))
 						{
 							// result is acceptable
-							LOG.debug("use new consensus");
+							logger.debug("use new consensus");
 							// save the directoryConsensus for later
 							// Tor-startups
 							stringStorage.put(STORAGEKEY_DIRECTORY_CACHED_CONSENSUS_TXT, newDirectoryConsensusStr);
@@ -474,7 +474,7 @@ public final class Directory
 					}
 					catch (final Exception e)
 					{
-						LOG.warn("Directory.updateNetworkStatusNew Exception", e);
+						logger.warn("Directory.updateNetworkStatusNew Exception", e);
 						dirRouters.remove(index);
 						newDirectoryConsensus = null;
 					}
@@ -490,7 +490,7 @@ public final class Directory
 		// final check whether a new or at least an old consensus is available
 		if (directoryConsensus == null)
 		{
-			LOG.error("no old or new directory consensus available");
+			logger.error("no old or new directory consensus available");
 			return;
 		}
 	}
@@ -559,14 +559,14 @@ public final class Directory
 			// TODO : exchange to incremental updating the list (now we have to wait until all routers are parsed)
 			numOfRunningRoutersInDirectoryConsensus = newNumOfRunningRoutersInDirectoryConsensus;
 
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("updated torServers, new size=" + validRoutersByFingerprint.size());
-				LOG.debug("number of exit routers : " + newExitnodeRouters.size());
-				LOG.debug("number of fast routers : " + newFastRouters.size());
-				LOG.debug("number of stable routers : " + newStableRouters.size());
-				LOG.debug("number of stable&fast routers : " + newStableAndFastRouters.size());
-				LOG.debug("number of guard routers : " + newGuardRouters.size());
+				logger.debug("updated torServers, new size=" + validRoutersByFingerprint.size());
+				logger.debug("number of exit routers : " + newExitnodeRouters.size());
+				logger.debug("number of fast routers : " + newFastRouters.size());
+				logger.debug("number of stable routers : " + newStableRouters.size());
+				logger.debug("number of stable&fast routers : " + newStableAndFastRouters.size());
+				logger.debug("number of guard routers : " + newGuardRouters.size());
 			}
 			// write server descriptors to local cache
 			try
@@ -581,11 +581,11 @@ public final class Directory
                     router.save(convenientStreamWriter);
 				}
 				fileOutputStream.close();
-				LOG.debug("wrote router descriptors to local cache in {} ms", System.currentTimeMillis() - startWriteCache);
+				logger.debug("wrote router descriptors to local cache in {} ms", System.currentTimeMillis() - startWriteCache);
 			}
 			catch (Exception exception)
 			{
-				LOG.warn("Could not cache routers due to exception {}", exception, exception);
+				logger.warn("Could not cache routers due to exception {}", exception, exception);
 			}
 		}		
 	}
@@ -612,7 +612,7 @@ public final class Directory
 		{
 			// loading is needed - try to load authority key certificates from
 			// cache first
-			LOG.debug("getAuthorityKeyCertificates(): try to load from local cache ...");
+			logger.debug("getAuthorityKeyCertificates(): try to load from local cache ...");
 			final String authorityKeyCertificatesStr = stringStorage.get(STORAGEKEY_AUTHORITY_KEY_CERTIFICATES_TXT);
 			if (authorityKeyCertificatesStr != null && authorityKeyCertificatesStr.length() > MIN_LENGTH_OF_AUTHORITY_KEY_CERTS_STR)
 			{
@@ -625,7 +625,7 @@ public final class Directory
 					// no exception thrown: certificates are OK
 					if (newAuthorityKeyCertificates.isValid(minValidUntil))
 					{
-						LOG.debug("getAuthorityKeyCertificates(): successfully loaded from local cache");
+						logger.debug("getAuthorityKeyCertificates(): successfully loaded from local cache");
 						authorityKeyCertificates = newAuthorityKeyCertificates;
 						return authorityKeyCertificates;
 					}
@@ -633,25 +633,25 @@ public final class Directory
 					{
 						// do not use outdated or invalid certificates from
 						// local cache
-						LOG.debug("getAuthorityKeyCertificates(): loaded from local cache - but not valid: try (re)load from remote site now");
+						logger.debug("getAuthorityKeyCertificates(): loaded from local cache - but not valid: try (re)load from remote site now");
 					}
 
 				}
 				catch (final TorException e)
 				{
-					LOG.warn("getAuthorityKeyCertificates(): could not parse from local cache: try (re)load from remote site now", e);
+					logger.warn("getAuthorityKeyCertificates(): could not parse from local cache: try (re)load from remote site now", e);
 				}
 			}
 			else
 			{
-				LOG.debug("getAuthorityKeyCertificates(): no data in cache: try (re)load from remote site now");
+				logger.debug("getAuthorityKeyCertificates(): no data in cache: try (re)load from remote site now");
 			}
 		}
 
 		if (authorityKeyCertificates == null || !authorityKeyCertificates.isValid(minValidUntil))
 		{
 			// (re)load is needed
-			LOG.debug("getAuthorityKeyCertificates(): load and parse authorityKeyCertificates...");
+			logger.debug("getAuthorityKeyCertificates(): load and parse authorityKeyCertificates...");
 			final List<String> authServerIpAndPorts = new ArrayList<String>(AuthorityServers.getAuthorityIpAndPorts());
 			Collections.shuffle(authServerIpAndPorts);
 			String httpResponse = null;
@@ -668,7 +668,7 @@ public final class Directory
                     }
                     catch (ZipException e)
                     {
-                        LOG.debug("got ZipException trying to get data uncompressed");
+                        logger.debug("got ZipException trying to get data uncompressed");
                         httpResponse = SimpleHttpClient.getInstance().get(lowerDirConnectionNetLayer, hostAndPort, path);
                     }
 					// parse loaded result
@@ -677,7 +677,7 @@ public final class Directory
 					// no exception thrown: certificates are OK
 					if (newAuthorityKeyCertificates.isValid(minValidUntil))
 					{
-						LOG.debug("getAuthorityKeyCertificates(): successfully loaded from {}", authServerIpAndPort);
+						logger.debug("getAuthorityKeyCertificates(): successfully loaded from {}", authServerIpAndPort);
 						// save in cache
 						stringStorage.put(STORAGEKEY_AUTHORITY_KEY_CERTIFICATES_TXT, httpResponse);
 						// use as result
@@ -686,23 +686,23 @@ public final class Directory
 					}
 					else
 					{
-						LOG.debug("getAuthorityKeyCertificates(): loaded from {} - but not valid: try next",  authServerIpAndPort);
+						logger.debug("getAuthorityKeyCertificates(): loaded from {} - but not valid: try next",  authServerIpAndPort);
 					}
 				}
 				catch (final TorException e)
 				{
-					LOG.warn("getAuthorityKeyCertificates(): could not parse from " + authServerIpAndPort + " result=" + httpResponse
+					logger.warn("getAuthorityKeyCertificates(): could not parse from " + authServerIpAndPort + " result=" + httpResponse
 							+ ", try next", e);
 				}
 				catch (final Exception e)
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("getAuthorityKeyCertificates(): error while loading from {}, try next", authServerIpAndPort, e);
+						logger.debug("getAuthorityKeyCertificates(): error while loading from {}, try next", authServerIpAndPort, e);
 					}
 				}
 			}
-			LOG.error("getAuthorityKeyCertificates(): could NOT load and parse authorityKeyCertificates");
+			logger.error("getAuthorityKeyCertificates(): could NOT load and parse authorityKeyCertificates");
 			// use outdated certificates if no newer could be retrieved
 		}
 
@@ -745,7 +745,7 @@ public final class Directory
 		}
 		catch (InterruptedException exception)
 		{
-			LOG.warn("error while parsing the router descriptors in parallel", exception);
+			logger.warn("error while parsing the router descriptors in parallel", exception);
 		}
 		if (results != null && !results.isEmpty())
 		{
@@ -758,11 +758,11 @@ public final class Directory
 				}
 				catch (InterruptedException exception)
 				{
-					LOG.warn("error while parsing the router descriptors in parallel", exception);
+					logger.warn("error while parsing the router descriptors in parallel", exception);
 				}
 				catch (ExecutionException exception)
 				{
-					LOG.warn("error while parsing the router descriptors in parallel", exception);
+					logger.warn("error while parsing the router descriptors in parallel", exception);
 				}
 				if (router != null)
 				{
@@ -770,9 +770,9 @@ public final class Directory
 				}
 			}
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("parseRouterDescriptors took " + (System.currentTimeMillis() - timeStart) + " ms");
+			logger.debug("parseRouterDescriptors took " + (System.currentTimeMillis() - timeStart) + " ms");
 		}
 		return result;
 	}
@@ -841,28 +841,28 @@ public final class Directory
 						fingerprintsOfRoutersToLoad.remove(fingerprint);
 					}
 				}
-				LOG.debug("loaded {} routers from local cache in {} ms", 
+				logger.debug("loaded {} routers from local cache in {} ms", 
 				          new Object[] {fingerprintsRouters.size(), System.currentTimeMillis() - startLoadCached});
 			}
 			catch (FileNotFoundException exception)
 			{
-				LOG.debug("no cached routers found");
+				logger.debug("no cached routers found");
 			}
 			catch (Exception exception)
 			{
-				LOG.warn("could not load cached routers due to exception {}", exception, exception);
+				logger.warn("could not load cached routers due to exception {}", exception, exception);
 			}
 		}
 
 		// load from directory server
-		LOG.debug("load {} routers from dir server(s) - start", fingerprintsOfRoutersToLoad.size());
+		logger.debug("load {} routers from dir server(s) - start", fingerprintsOfRoutersToLoad.size());
 		int successes = 0;
 		if (fingerprintsOfRoutersToLoad.size() <= THRESHOLD_TO_LOAD_SINGE_ROUTER_DESCRITPTORS)
 		{
 			// load the descriptors separately
 			// TODO: implement it
 			final int attempts = fingerprintsOfRoutersToLoad.size();
-			LOG.debug("loaded {} of {} missing routers from directory server(s) with multiple requests", successes, attempts);
+			logger.debug("loaded {} of {} missing routers from directory server(s) with multiple requests", successes, attempts);
 		}
 		else
 		{
@@ -897,9 +897,9 @@ public final class Directory
 							successes++;
 						}
 					}
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("loaded " + successes + " of " 
+						logger.debug("loaded " + successes + " of " 
 								+ attempts + " missing routers from directory server \"" 
 								+ directoryServer.getNickname()
 								+ "\" with single request");
@@ -908,7 +908,7 @@ public final class Directory
 				}
 			}
 		}
-		LOG.debug("load routers from dir server(s), loaded {} routers - finished", successes);
+		logger.debug("load routers from dir server(s), loaded {} routers - finished", successes);
 	}
 
 	/**
@@ -1256,11 +1256,11 @@ public final class Directory
 	 */
 	void print()
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
 			for (final Router r : validRoutersByFingerprint.values())
 			{
-				LOG.debug(r.toString());
+				logger.debug(r.toString());
 			}
 		}
 	}
@@ -1314,7 +1314,7 @@ public final class Directory
 				}
 			}
 		}
-        LOG.debug("routers found for given flags (" + flags.toString() + ") {}", result.size());
+        logger.debug("routers found for given flags (" + flags.toString() + ") {}", result.size());
 		return result;
 	}
 

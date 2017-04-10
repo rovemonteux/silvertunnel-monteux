@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -43,8 +43,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetSocket of transparent NetLayer that tracks the time stamp of the last
@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
 public class ControlNetSocketThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ControlNetSocketThread.class);
+	private static final Logger logger = LogManager.getLogger(ControlNetSocketThread.class);
 
 	private static ControlNetSocketThread instance;
 
@@ -74,12 +74,12 @@ public class ControlNetSocketThread extends Thread
 			instance.setName("ControlNetSocketThread");
 			instance.setDaemon(true);
 			instance.start();
-			LOG.info("ControlNetSocketThread instance started");
+			logger.info("ControlNetSocketThread instance started");
 
 		}
 		catch (final Throwable t)
 		{
-			LOG.error("could not construct class ControlNetSocketThread", t);
+			logger.error("could not construct class ControlNetSocketThread", t);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class ControlNetSocketThread extends Thread
 			}
 			catch (final InterruptedException e)
 			{ /* ignore it */
-				LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+				logger.debug("got IterruptedException : {}", e.getMessage(), e);
 			}
 		}
 	}
@@ -192,7 +192,7 @@ public class ControlNetSocketThread extends Thread
 
 	private void sendTimeoutToSingleSocket(final ControlNetSocket socket, final String msg)
 	{
-		LOG.info("send timeout to " + socket + ": " + msg);
+		logger.info("send timeout to " + socket + ": " + msg);
 		try
 		{
 			final InterruptedIOException exceptionToBeThrownBySockets = new InterruptedIOException(
@@ -202,11 +202,11 @@ public class ControlNetSocketThread extends Thread
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("IOException while calling close() (want to close because of: {})", msg, e);
+			logger.debug("IOException while calling close() (want to close because of: {})", msg, e);
 		}
 		catch (final Exception e)
 		{
-			LOG.info("Exception while calling close() (want to close because of: {})", msg, e);
+			logger.info("Exception while calling close() (want to close because of: {})", msg, e);
 		}
 	}
 }

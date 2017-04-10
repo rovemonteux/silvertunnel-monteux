@@ -23,8 +23,8 @@ import java.io.PipedOutputStream;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.Cell;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelay;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this class contains a background thread that waits for incoming cells in a
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 class TCPStreamThreadTor2JavaThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TCPStreamThreadTor2JavaThread.class);
+	private static final Logger logger = LogManager.getLogger(TCPStreamThreadTor2JavaThread.class);
 
 	private final TCPStream stream;
 	/** read from tor and output to this stream. */
@@ -57,7 +57,7 @@ class TCPStreamThreadTor2JavaThread extends Thread
 		}
 		catch (final IOException e)
 		{
-			LOG.error("TCPStreamThreadTor2Java: caught IOException "
+			logger.error("TCPStreamThreadTor2Java: caught IOException "
 					+ e.getMessage());
 		}
 		this.start();
@@ -79,7 +79,7 @@ class TCPStreamThreadTor2JavaThread extends Thread
 			{
 				if (!cell.isTypeRelay())
 				{
-					LOG.error("TCPStreamThreadTor2Java.run(): stream "
+					logger.error("TCPStreamThreadTor2Java.run(): stream "
 							+ stream.getId() + " received NON-RELAY cell:\n"
 							+ cell.toString());
 				}
@@ -88,22 +88,22 @@ class TCPStreamThreadTor2JavaThread extends Thread
 					final CellRelay relay = (CellRelay) cell;
 					if (relay.isTypeData())
 					{
-						LOG.debug("TCPStreamThreadTor2Java.run(): stream {} received data", stream.getId());
+						logger.debug("TCPStreamThreadTor2Java.run(): stream {} received data", stream.getId());
 						try
 						{
 							fromtor.write(relay.getData(), 0, relay.getLength());
 						}
 						catch (final IOException e)
 						{
-							LOG.error("TCPStreamThreadTor2Java.run(): caught IOException "
+							logger.error("TCPStreamThreadTor2Java.run(): caught IOException "
 									+ e.getMessage());
 						}
 					}
 					else if (relay.isTypeEnd())
 					{
-						if (LOG.isDebugEnabled())
+						if (logger.isDebugEnabled())
 						{
-							LOG.debug("TCPStreamThreadTor2Java.run(): stream "
+							logger.debug("TCPStreamThreadTor2Java.run(): stream "
 								+ stream.getId() + " is closed: "
 								+ relay.getReasonForClosing());
 						}
@@ -113,7 +113,7 @@ class TCPStreamThreadTor2JavaThread extends Thread
 					}
 					else
 					{
-						LOG.error("TCPStreamThreadTor2Java.run(): stream "
+						logger.error("TCPStreamThreadTor2Java.run(): stream "
 								+ stream.getId() + " received strange cell:\n"
 								+ relay.toString());
 					}

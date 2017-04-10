@@ -1,6 +1,7 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -36,19 +37,20 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Parsing;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * An object of this class stores a parsed directory protocol V3 network-status
  * consensus document of Tor.
  * 
  * @author hapke
+ * @author Rove Monteux
  */
 public class DirectoryConsensus
 {
 	/** */
-	public static final Logger LOG = LoggerFactory.getLogger(DirectoryConsensus.class);
+	public static final Logger logger = LogManager.getLogger(DirectoryConsensus.class);
 
 	private Date validAfter;
 	private Date freshUntil;
@@ -89,9 +91,9 @@ public class DirectoryConsensus
 		setValidAfter(Parsing.parseTimestampLine("valid-after", consensusStr));
 		setFreshUntil(Parsing.parseTimestampLine("fresh-until", consensusStr));
 		setValidUntil(Parsing.parseTimestampLine("valid-until", consensusStr));
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Directory.parseDirV3NetworkStatus: Consensus document validAfter="
+			logger.debug("Directory.parseDirV3NetworkStatus: Consensus document validAfter="
 				+ getValidAfter()
 				+ ", freshUntil="
 				+ getFreshUntil()
@@ -105,7 +107,7 @@ public class DirectoryConsensus
 		}
 
 		final byte[] signedData = Parsing.parseStringByRE(consensusStr,	SIGNEDDATA_PATTERN, "").getBytes();
-		LOG.debug("consensus: extracted signed data (length)={}", signedData.length);
+		logger.debug("consensus: extracted signed data (length)={}", signedData.length);
 
 		// Parse signatures
 		final Pattern pSignature = Pattern
@@ -125,13 +127,13 @@ public class DirectoryConsensus
 				sigBase64 += "="; // add missing padding
 			}
 			final byte[] signature = DatatypeConverter.parseBase64Binary(sigBase64);
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("Directory.parseDirV3NetworkStatus: Extracted identityKeyDigest(hex)="
+				logger.debug("Directory.parseDirV3NetworkStatus: Extracted identityKeyDigest(hex)="
 						+ Encoding.toHexString(identityKeyDigest));
-				LOG.debug("Directory.parseDirV3NetworkStatus: Extracted signingKeyDigest(hex)="
+				logger.debug("Directory.parseDirV3NetworkStatus: Extracted signingKeyDigest(hex)="
 						+ Encoding.toHexString(signingKeyDigest));
-				LOG.debug("Directory.parseDirV3NetworkStatus: Found signature(base64)="
+				logger.debug("Directory.parseDirV3NetworkStatus: Found signature(base64)="
 						+ DatatypeConverter.printBase64Binary(signature));
 			}
 
@@ -141,34 +143,34 @@ public class DirectoryConsensus
 					                       new FingerprintImpl(signingKeyDigest));
 			if (authorityKeyCertificate == null)
 			{
-				LOG.debug("No authorityKeyCertificate found");
+				logger.debug("No authorityKeyCertificate found");
 				continue;
 			}
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("authorityKeyCertificate signingKeyDigest(hex)="
+				logger.debug("authorityKeyCertificate signingKeyDigest(hex)="
 						+ Encoding.toHexString(authorityKeyCertificate
 								.getDirSigningKeyDigest().getBytes()));
 			}
 			if (signature.length < 1)
 			{
-				LOG.debug("No signature found in network status");
+				logger.debug("No signature found in network status");
 				continue;
 			}
 			if (!Encryption.verifySignature(signature, authorityKeyCertificate.getDirSigningKey(), signedData))
 			{
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("Directory signature verification failed for identityKeyDigest(hex)="
+					logger.debug("Directory signature verification failed for identityKeyDigest(hex)="
 						+ Encoding.toHexString(identityKeyDigest));
 				}
 				continue;
 			}
 			// verification successful for this signature
 			dirIdentityKeyDigestOfMatchingSignatures.add(authorityKeyCertificate.getDirIdentityKeyDigest());
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("single signature verification ok for identityKeyDigest(hex)="
+				logger.debug("single signature verification ok for identityKeyDigest(hex)="
 					+ Encoding.toHexString(identityKeyDigest));
 			}
 		}
@@ -180,7 +182,7 @@ public class DirectoryConsensus
 					"Directory signature verification failed: only " + sigNum
 							+ " (different) signatures found");
 		}
-		LOG.debug("signature verification accepted");
+		logger.debug("signature verification accepted");
 
 		// Parse the single routers
 		final Pattern pRouter = Pattern
@@ -226,7 +228,7 @@ public class DirectoryConsensus
 		if (fingerprintsNetworkStatusDescriptors.size() < TorConfig.MIN_NUMBER_OF_ROUTERS_IN_CONSENSUS)
 		{
 			// too few
-			LOG.warn("too few number of routers="
+			logger.warn("too few number of routers="
 					+ fingerprintsNetworkStatusDescriptors.size());
 			return false;
 		}
@@ -250,20 +252,20 @@ public class DirectoryConsensus
 		if (validAfter == null || validAfter.after(now))
 		{
 			// too new
-			LOG.warn("validAfter=" + validAfter
+			logger.warn("validAfter=" + validAfter
 					+ " is too new  for currentDate=" + now
 					+ " - this should never occur with consistent data");
 			return false;
 		}
 		if (freshUntil == null /* || freshUntil.before(currentDate) */)
 		{
-			LOG.info("freshUntil=" + freshUntil
+			logger.info("freshUntil=" + freshUntil
 					+ " is invalid for currentDate=" + now);
 		}
 		if (validUntil == null || validUntil.before(now))
 		{
 			// too old
-			LOG.info("validUntil=" + validUntil
+			logger.info("validUntil=" + validUntil
 					+ " is too old for currentDate=" + now);
 			return false;
 		}
@@ -282,7 +284,7 @@ public class DirectoryConsensus
 		if (validUntil.before(now))
 		{
 			// too old
-			LOG.warn("must be refrehed - but it is actually to late; validUntil="
+			logger.warn("must be refrehed - but it is actually to late; validUntil="
 					+ validUntil);
 			return true;
 		}
@@ -293,7 +295,7 @@ public class DirectoryConsensus
 		{
 			// should be refreshed soon
 			// TODO: return true;
-			LOG.debug("should be refreshed soon");
+			logger.debug("should be refreshed soon");
 		}
 
 		// default check

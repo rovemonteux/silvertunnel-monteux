@@ -18,6 +18,7 @@
 package cf.monteux.silvertunnel.netlib.tool;
 
 import cf.monteux.silvertunnel.netlib.api.NetFactory;
+import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
@@ -27,18 +28,35 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  *
  * @author Rove Monteux
  */
 public class TorClient {
 
-    public static String GET(final String address) throws MalformedURLException, IOException {
+    private static final Logger logger = LogManager.getLogger("TorClient");
+    public NetLayer netLayer = null;
+    
+    public TorClient() {
+        connect();
+    }
+    
+    public void connect() {
+        logger.info("Trying to connect to the TOR network.");
+        NetLayer netLayer = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP);
+        netLayer.waitUntilReady();
+        logger.info("Connected to the TOR network");
+    }
+    public String GET(final String address) throws MalformedURLException, IOException {
         URL url = new URL(address);
-        final TcpipNetAddress netAddress = new TcpipNetAddress(url.getHost(), url.getPort());
-        final NetSocket topSocket = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP).createNetSocket(null, null, netAddress);
+        TcpipNetAddress netAddress = new TcpipNetAddress(url.getHost(), url.getPort());
+        NetSocket netSocket = netLayer.createNetSocket(null, null, netAddress);
         HttpUtil.getInstance();
-        final byte[] httpResponse = HttpUtil.get(topSocket, netAddress, url.getPath(), 5000);
+        final byte[] httpResponse = HttpUtil.get(netSocket, netAddress, url.getPath(), 5000);
+        netSocket.close();
         return ByteArrayUtil.showAsString(httpResponse);
     }
 }

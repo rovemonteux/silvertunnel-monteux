@@ -331,8 +331,8 @@ public class HeaderParser
 	 * DataInputStream dis = new DataInputStream(System.in); String line =
 	 * dis.readLine(); HeaderParser p = new HeaderParser(line); for (int i = 0;
 	 * i < asize; ++i) { if (p.findKey(i) == null) break; String v =
-	 * p.findValue(i); LOG.info(i + ") " +p.findKey(i) + "="+v); }
-	 * LOG.info("Done!");
+	 * p.findValue(i); logger.info(i + ") " +p.findKey(i) + "="+v); }
+	 * logger.info("Done!");
 	 * 
 	 * }
 	 */

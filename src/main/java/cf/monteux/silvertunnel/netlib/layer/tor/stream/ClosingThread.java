@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
  */
 package cf.monteux.silvertunnel.netlib.layer.tor.stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this background thread closes all streams that have been build by
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class ClosingThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ClosingThread.class);
+	private static final Logger logger = LogManager.getLogger(ClosingThread.class);
 
 	private final StreamThread[] threads;
 	private final int chosenOne;
@@ -60,7 +60,7 @@ public class ClosingThread extends Thread
 					}
 					catch (final Exception e)
 					{
-						LOG.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
+						logger.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
 					}
 					try
 					{
@@ -68,7 +68,7 @@ public class ClosingThread extends Thread
 					}
 					catch (final Exception e)
 					{
-						LOG.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
+						logger.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
 					}
 				}
 				try
@@ -77,7 +77,7 @@ public class ClosingThread extends Thread
 				}
 				catch (final Exception e)
 				{
-					LOG.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
+					logger.warn("Tor.ClosingThread.run(): " + e.getMessage(), e);
 				}
 			}
 		}

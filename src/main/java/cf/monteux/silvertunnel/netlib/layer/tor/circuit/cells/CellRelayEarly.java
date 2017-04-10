@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -47,7 +47,7 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 public class CellRelayEarly extends CellRelay
 {
 	/** */
-	//private static final Logger LOG = LoggerFactory.getLogger(CellRelayEarly.class);
+	//private static final Logger logger = LogManager.getLogger(CellRelayEarly.class);
 
 
 	/**

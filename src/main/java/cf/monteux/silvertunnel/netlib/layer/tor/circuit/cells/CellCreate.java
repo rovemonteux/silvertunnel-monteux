@@ -19,8 +19,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * used to create a CREATE cell.
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class CellCreate extends Cell
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CellCreate.class);
+	private static final Logger logger = LogManager.getLogger(CellCreate.class);
 
 	/**
 	 * creates a CREATE-CELL.
@@ -57,7 +57,7 @@ public class CellCreate extends Cell
 
 		if (payload.length < temp.length)
 		{
-			LOG.warn("encrypted data longer than max payload length.\n possible unwanted truncation.");
+			logger.warn("encrypted data longer than max payload length.\n possible unwanted truncation.");
 			System.arraycopy(temp, 0, payload, 0, payload.length);
 		}
 		else

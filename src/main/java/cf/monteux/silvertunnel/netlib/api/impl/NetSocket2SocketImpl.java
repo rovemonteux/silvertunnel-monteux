@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,8 +33,8 @@ import java.util.Map;
 import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Wrap a NetSocket to be a SocketImpl.
@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public class NetSocket2SocketImpl extends SocketImpl
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetSocket2SocketImpl.class);
+	private static final Logger logger = LogManager.getLogger(NetSocket2SocketImpl.class);
 
 	public static final String TCPIP_NET_LAYER_TIMEOUT_IN_MS = "TcpipNetLayer.timeoutInMs";
 
@@ -100,14 +100,14 @@ public class NetSocket2SocketImpl extends SocketImpl
 	@Override
 	protected void accept(final SocketImpl arg0) throws IOException
 	{
-		LOG.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
+		logger.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	protected int available() throws IOException
 	{
-		LOG.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
+		logger.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
 		return 0;
 	}
 
@@ -127,7 +127,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 		}
 		else
 		{
-			LOG.info("close() with netSocket=null", new Throwable("Just to dump a trace"));
+			logger.info("close() with netSocket=null", new Throwable("Just to dump a trace"));
 		}
 	}
 
@@ -177,7 +177,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 		{
 			throw new IllegalStateException("netLayer not set");
 		}
-		LOG.debug("method empty implemented");
+		logger.debug("method empty implemented");
 		if (remoteAddress == null
 				|| !(remoteAddress instanceof InetSocketAddress))
 		{
@@ -237,14 +237,14 @@ public class NetSocket2SocketImpl extends SocketImpl
 	@Override
 	protected void listen(final int arg0) throws IOException
 	{
-		LOG.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
+		logger.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	protected void sendUrgentData(final int arg0) throws IOException
 	{
-		LOG.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
+		logger.warn("method empty/not implemented", new Throwable("method empty/not implemented"));
 		// TODO Auto-generated method stub
 	}
 
@@ -269,13 +269,13 @@ public class NetSocket2SocketImpl extends SocketImpl
 		// unsupported option
 		final String msg = "no implementation for getOption(" + key
 				+ "). List of all options in java.net.SocketOptions.";
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug(msg, new Throwable("method not completely implemented"));
+			logger.debug(msg, new Throwable("method not completely implemented"));
 		}
 		else
 		{
-			LOG.info(msg + " - Log with level=debug to get call hierarchy.");
+			logger.info(msg + " - Log with level=debug to get call hierarchy.");
 		}
 		return null;
 	}
@@ -284,7 +284,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 	public synchronized void setOption(final int key, final Object value)
 			throws SocketException
 	{
-		LOG.debug("setOption(key={},value={})", key, value);
+		logger.debug("setOption(key={},value={})", key, value);
 		if (key == SocketOptions.SO_TIMEOUT)
 		{
 			// set timeout
@@ -298,7 +298,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 			}
 			else
 			{
-				LOG.warn("ignored value of wrong type of setOption(key={}"
+				logger.warn("ignored value of wrong type of setOption(key={}"
 						+ ",value={}"
 						+ "). List of all options in java.net.SocketOptions.", key, value);
 			}
@@ -313,7 +313,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 			}
 			else
 			{
-				LOG.warn("ignored value of wrong type of setOption(key={}"
+				logger.warn("ignored value of wrong type of setOption(key={}"
 						+ ",value={}). List of all options in java.net.SocketOptions.", key, value);
 			}
 			return;
@@ -327,7 +327,7 @@ public class NetSocket2SocketImpl extends SocketImpl
 			}
 			else
 			{
-				LOG.warn("ignored value of wrong type of setOption(key={}"
+				logger.warn("ignored value of wrong type of setOption(key={}"
 						+ ",value={}). List of all options in java.net.SocketOptions.", key, value);
 			}
 			return;
@@ -337,13 +337,13 @@ public class NetSocket2SocketImpl extends SocketImpl
 		final String msg = "no implementation for setOption(key=" + key
 				+ ",value=" + value
 				+ "). List of all options in java.net.SocketOptions.";
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug(msg, new Throwable("method not completely implemented"));
+			logger.debug(msg, new Throwable("method not completely implemented"));
 		}
 		else
 		{
-			LOG.warn(msg + " Log with level=debug to get call hierarchy.");
+			logger.warn(msg + " Log with level=debug to get call hierarchy.");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -65,8 +65,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.stream.TCPStream;
 import cf.monteux.silvertunnel.netlib.nameservice.cache.CachingNetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.tor.TorNetAddressNameService;
 import cf.monteux.silvertunnel.netlib.util.StringStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Layer over Tor network: tunnels (TCP/IP) network traffic through the Tor
@@ -78,7 +78,7 @@ import org.slf4j.LoggerFactory;
 public class TorNetLayer implements NetLayer
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorNetLayer.class);
+	private static final Logger logger = LogManager.getLogger(TorNetLayer.class);
 
 	/** the instance of tor used by this layer instance. */
 	private final transient Tor tor;
@@ -107,7 +107,7 @@ public class TorNetLayer implements NetLayer
 		}
 		catch (final Exception e)
 		{
-			LOG.info("problem during static construction", e);
+			logger.info("problem during static construction", e);
 		}
 	}
 
@@ -193,16 +193,16 @@ public class TorNetLayer implements NetLayer
 			{
 				// this looks like a .exit host name: extract the parts of this
 				// special host name now
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("hostname with .exit pattern={}", hostname);
+					logger.debug("hostname with .exit pattern={}", hostname);
 				}
 				final String originalHostname = m.group(1);
 				final String exitNodeNameOrDigest = m.group(2);
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("originalHostname=" + originalHostname);
-					LOG.debug("exitNodeNameOrDigest=" + exitNodeNameOrDigest);
+					logger.debug("originalHostname=" + originalHostname);
+					logger.debug("exitNodeNameOrDigest=" + exitNodeNameOrDigest);
 				}
 
 				// reset the hostname
@@ -237,7 +237,7 @@ public class TorNetLayer implements NetLayer
 		catch (final Exception e)
 		{
 			final String msg = "could not create NetServerSocket for localListenAddress=" + localListenAddress;
-			LOG.error("could not create NetServerSocket", e);
+			logger.error("could not create NetServerSocket", e);
 			throw new IOException(msg);
 		}
 	}
@@ -263,9 +263,9 @@ public class TorNetLayer implements NetLayer
 	@Override
 	public void clear() throws IOException
 	{
-		LOG.info("clear() started");
+		logger.info("clear() started");
 		tor.clear();
-		LOG.info("clear() finished");
+		logger.info("clear() finished");
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,8 +26,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cf.monteux.silvertunnel.netlib.api.NetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * IP address.
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class IpNetAddress implements NetAddress
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(IpNetAddress.class);
+	private static final Logger logger = LogManager.getLogger(IpNetAddress.class);
 
 	/** 4 bytes for IPv4 or 16bytes for IPv6. */
 	private byte[] ipaddress;
@@ -60,7 +60,7 @@ public class IpNetAddress implements NetAddress
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not initialze class AuthorityKeyCertificate", e);
+			logger.error("could not initialze class AuthorityKeyCertificate", e);
 		}
 	}
 
@@ -212,7 +212,7 @@ public class IpNetAddress implements NetAddress
 			}
 			catch (final UnknownHostException e)
 			{
-				LOG.warn("could not convert into InetAddress: {}", toString(), e);
+				logger.warn("could not convert into InetAddress: {}", toString(), e);
 				return null;
 			}
 		}

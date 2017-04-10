@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -47,8 +47,8 @@ import cf.monteux.silvertunnel.netlib.adapter.url.NetlibURLStreamHandlerFactory;
 import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class provides methods for easy HTTP GET and HTTP POST requests.
@@ -62,7 +62,7 @@ import org.slf4j.LoggerFactory;
 public final class SimpleHttpClient
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SimpleHttpClient.class);
+	private static final Logger logger = LogManager.getLogger(SimpleHttpClient.class);
 
 	private static SimpleHttpClient instance = new SimpleHttpClient();
 
@@ -101,9 +101,9 @@ public final class SimpleHttpClient
 		try
 		{
 
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("start download with hostAndPort=" + hostAndPort
+				logger.debug("start download with hostAndPort=" + hostAndPort
 						+ " and path=" + path);
 			}
 
@@ -159,9 +159,9 @@ public final class SimpleHttpClient
 			}
 
 			// result
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("end download with hostAndPort=" + hostAndPort
+				logger.debug("end download with hostAndPort=" + hostAndPort
 						+ " and path=" + path
 						+ " finished with result of length="
 						+ response.length() + " time : "
@@ -172,7 +172,7 @@ public final class SimpleHttpClient
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("end download with hostAndPort=" + hostAndPort
+			logger.debug("end download with hostAndPort=" + hostAndPort
 					+ " and path=" + path + " with " + e);
 			throw e;
 		}
@@ -187,7 +187,7 @@ public final class SimpleHttpClient
 				}
 				catch (final IOException e)
 				{
-					LOG.warn("Exception while closing InputStream from url="
+					logger.warn("Exception while closing InputStream from url="
 							+ urlStr);
 				}
 			}

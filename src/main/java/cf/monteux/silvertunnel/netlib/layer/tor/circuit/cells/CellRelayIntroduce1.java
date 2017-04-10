@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -43,8 +43,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.util.ByteArrayUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this cell is used to establish a connection to the introduction point.
@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
 public class CellRelayIntroduce1 extends CellRelay
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CellRelayIntroduce1.class);
+	private static final Logger logger = LogManager.getLogger(CellRelayIntroduce1.class);
 
 	/**
 	 * CellRelayIntroduce1: from Alice's OP to Introduction Point (section 1.8
@@ -126,19 +126,19 @@ public class CellRelayIntroduce1 extends CellRelay
 				// g^x Diffie-Hellman data, part 1 [128 octets]
 				introPointServicePublicKeyNode.getDhXBytes());
 		final byte[] encryptedData = introPointServicePublicKeyNode.asymEncrypt(unencryptedData);
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelayIntroduce1: unencryptedData=" + Encoding.toHexString(unencryptedData));
-			LOG.debug("CellRelayIntroduce1: encryptedData=" + Encoding.toHexString(encryptedData));
+			logger.debug("CellRelayIntroduce1: unencryptedData=" + Encoding.toHexString(unencryptedData));
+			logger.debug("CellRelayIntroduce1: encryptedData=" + Encoding.toHexString(encryptedData));
 		}
 
 		// set encrypted part
 		System.arraycopy(encryptedData, 0, data, clearText.length, encryptedData.length);
 		setLength(clearText.length + encryptedData.length);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelayIntroduce1: cell=" + toString());
+			logger.debug("CellRelayIntroduce1: cell=" + toString());
 		}
 	}
 }

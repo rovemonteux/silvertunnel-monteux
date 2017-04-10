@@ -27,8 +27,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.AESCounterMode;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * represents a server as part of a specific circuit. Stores the additional data
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class Node
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Node.class);
+	private static final Logger logger = LogManager.getLogger(Node.class);
 
 	/** length of SHA-1 digest in bytes. */
 	private static final int DIGEST_LEN = 20;
@@ -99,9 +99,9 @@ public class Node
 			final byte[] singleDigest = Encryption.getDigest(sha1Input);
 			System.arraycopy(singleDigest, 0, k, i * DIGEST_LEN, DIGEST_LEN);
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.<init>: dhX = \n"
+			logger.debug("Node.<init>: dhX = \n"
 					+ Encoding.toHexString(dhXBytes, 100) + "\n" + "dhY = \n"
 					+ Encoding.toHexString(dhYBytes, 100) + "\n"
 					+ "dhXY = keymaterial:\n"
@@ -132,9 +132,9 @@ public class Node
 		System.arraycopy(k, 76, keyBackward, 0, 16);
 		aesEncrypt = new AESCounterMode(keyBackward);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.<init>: dhX = \n" + Encoding.toHexString(dhXBytes, 100)
+			logger.debug("Node.<init>: dhX = \n" + Encoding.toHexString(dhXBytes, 100)
 				+ "\n" + "dhY = \n" + Encoding.toHexString(dhYBytes, 100)
 				+ "\n" + "dhXY = keymaterial:\n"
 				+ Encoding.toHexString(dhXYBytes, 100) + "\n" + "Key Data:\n"
@@ -179,7 +179,7 @@ public class Node
 			}
 			catch (TorException e)
 			{
-				LOG.error("Error while doing dh! Exception : ", e);
+				logger.error("Error while doing dh! Exception : ", e);
 				throw e;
 			}
 			dhXBytes = dhKeyAgreement.getPublicKeyBytes();
@@ -188,9 +188,9 @@ public class Node
 			secureRandom.nextBytes(symmetricKeyForCreate);
 
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.<init client>: dhX = \n"
+			logger.debug("Node.<init client>: dhX = \n"
 				+ Encoding.toHexString(dhXBytes, 100) + "\n" + "dhY = \n"
 				+ Encoding.toHexString(dhYBytes, 100));
 		}
@@ -251,7 +251,7 @@ public class Node
 			BigInteger otherPublicSecret = new BigInteger(1, dhYBytes);
 			if (!TorKeyAgreement.isValidPublicValue(otherPublicSecret))
 			{
-				LOG.warn("other DH public value is invalid!");
+				logger.warn("other DH public value is invalid!");
 				throw new TorException("other DH public value is invalid!");
 			}
 			dhXYBytes = dhKeyAgreement.getSharedSecret(otherPublicSecret);
@@ -268,9 +268,9 @@ public class Node
 			System.arraycopy(singleDigest, 0, keyData, i * DIGEST_LEN,
 					DIGEST_LEN);
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.finishDh: dhX = \n"
+			logger.debug("Node.finishDh: dhX = \n"
 					+ Encoding.toHexString(dhXBytes, 100) + "\n" + "dhY = \n"
 					+ Encoding.toHexString(dhYBytes, 100) + "\n"
 					+ "dhXY = keymaterial:\n"
@@ -314,9 +314,9 @@ public class Node
 		System.arraycopy(keyData, 76, keyBackward, 0, 16);
 		aesDecrypt = new AESCounterMode(keyBackward);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.finishDh: dhX = \n"
+			logger.debug("Node.finishDh: dhX = \n"
 				+ Encoding.toHexString(dhXBytes, 100) + "\n" + "dhY = \n"
 				+ Encoding.toHexString(dhYBytes, 100) + "\n"
 				+ "dhXY = keymaterial:\n"
@@ -337,16 +337,16 @@ public class Node
 	 */
 	public byte[] calcForwardDigest(final byte[] data)
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.calcForwardDigest() on:\n"
+			logger.debug("Node.calcForwardDigest() on:\n"
 					+ Encoding.toHexString(data, 100));
 		}
 		sha1Forward.update(data, 0, data.length);
 		final byte[] digest = Encryption.intermediateDigest(sha1Forward);
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug(" result:\n" + Encoding.toHexString(digest, 100));
+			logger.debug(" result:\n" + Encoding.toHexString(digest, 100));
 		}
 		final byte[] fourBytes = new byte[4];
 		System.arraycopy(digest, 0, fourBytes, 0, 4);
@@ -361,16 +361,16 @@ public class Node
 	 */
 	public byte[] calcBackwardDigest(final byte[] data)
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.calcBackwardDigest() on:\n"
+			logger.debug("Node.calcBackwardDigest() on:\n"
 					+ Encoding.toHexString(data, 100));
 		}
 		sha1Backward.update(data, 0, data.length);
 		final byte[] digest = Encryption.intermediateDigest(sha1Backward);
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug(" result:\n" + Encoding.toHexString(digest, 100));
+			logger.debug(" result:\n" + Encoding.toHexString(digest, 100));
 		}
 		final byte[] fourBytes = new byte[4];
 		System.arraycopy(digest, 0, fourBytes, 0, 4);
@@ -385,13 +385,13 @@ public class Node
 	 */
 	public void symEncrypt(final byte[] data)
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.symEncrypt for node " + router.getNickname());
+			logger.debug("Node.symEncrypt for node " + router.getNickname());
 		}
-//		if (LOG.isDebugEnabled())
+//		if (logger.isDebugEnabled())
 //		{
-//			LOG.debug("Node.symEncrypt in:\n" + Encoding.toHexString(data, 100));
+//			logger.debug("Node.symEncrypt in:\n" + Encoding.toHexString(data, 100));
 //		}
 
 		// encrypt data
@@ -406,9 +406,9 @@ public class Node
 			System.arraycopy(encrypted, 0, data, 0, encrypted.length);
 		}
 
-//		if (LOG.isDebugEnabled())
+//		if (logger.isDebugEnabled())
 //		{
-//			LOG.debug("Node.symEncrypt out:\n"
+//			logger.debug("Node.symEncrypt out:\n"
 //					+ Encoding.toHexString(data, 100));
 //		}
 	}
@@ -421,19 +421,19 @@ public class Node
 	 */
 	public void symDecrypt(byte[] data)
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.symDecrypt for node " + router.getNickname());
+			logger.debug("Node.symDecrypt for node " + router.getNickname());
 		}
 
 		// decrypt data
 		final byte[] decrypted = aesDecrypt.processStream(data);
 
-/*		if (LOG.isDebugEnabled())
+/*		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Node.symDecrypt in:\n"
+			logger.debug("Node.symDecrypt in:\n"
 					+ Encoding.toHexString(data, 100));
-			LOG.debug("Node.symDecrypt out:\n"
+			logger.debug("Node.symDecrypt out:\n"
 					+ Encoding.toHexString(decrypted, 100));
 		}
 */
@@ -459,12 +459,12 @@ public class Node
 		final byte[] result = new byte[128];
 		if (temp.length > 128)
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("convertBigIntegerTo128Bytes temp longer than 128!");
-				LOG.debug("Big Integer a = " + a);
-				LOG.debug("temp.length = " + temp.length);
-				LOG.debug("temp data :\n" + Encoding.toHexString(temp, 100));
+				logger.debug("convertBigIntegerTo128Bytes temp longer than 128!");
+				logger.debug("Big Integer a = " + a);
+				logger.debug("temp.length = " + temp.length);
+				logger.debug("temp data :\n" + Encoding.toHexString(temp, 100));
 			}
 			System.arraycopy(temp, temp.length - 128, result, 0, 128);
 		}

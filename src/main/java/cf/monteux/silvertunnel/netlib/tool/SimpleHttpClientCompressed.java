@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -39,8 +39,8 @@ import cf.monteux.silvertunnel.netlib.adapter.url.NetlibURLStreamHandlerFactory;
 import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +63,7 @@ import java.util.zip.InflaterInputStream;
  */
 public final class SimpleHttpClientCompressed {
     /** */
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleHttpClientCompressed.class);
+    private static final Logger logger = LogManager.getLogger(SimpleHttpClientCompressed.class);
 
     private static SimpleHttpClientCompressed instance = new SimpleHttpClientCompressed();
 
@@ -102,8 +102,8 @@ public final class SimpleHttpClientCompressed {
         final long startTime = System.currentTimeMillis();
         try {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("start download with hostAndPort=" + hostAndPort + " and path=" + path);
+            if (logger.isDebugEnabled()) {
+                logger.debug("start download with hostAndPort=" + hostAndPort + " and path=" + path);
             }
 
             // prepare URL handling on top of the lowerNetLayer
@@ -150,15 +150,15 @@ public final class SimpleHttpClientCompressed {
 
             final String response = new String(byteBuffer.toArray(), Util.UTF8);
             // result
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("end download with hostAndPort=" + hostAndPort + " and path=" + path + " finished with result of length="
+            if (logger.isDebugEnabled()) {
+                logger.debug("end download with hostAndPort=" + hostAndPort + " and path=" + path + " finished with result of length="
                         + response.length() + " timeReceived : " + (timeReceived - startTime) + " ms");
             }
             return response;
 
         } catch (final IOException e) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("end download with hostAndPort=" + hostAndPort + " and path=" + path + " with " + e, e);
+            if (logger.isDebugEnabled()) {
+                logger.debug("end download with hostAndPort=" + hostAndPort + " and path=" + path + " with " + e, e);
             }
             throw e;
         } finally {
@@ -167,7 +167,7 @@ public final class SimpleHttpClientCompressed {
                 try {
                     in.close();
                 } catch (final IOException e) {
-                    LOG.warn("Exception while closing InputStream from url=" + urlStr);
+                    logger.warn("Exception while closing InputStream from url=" + urlStr);
                 }
             }
         }

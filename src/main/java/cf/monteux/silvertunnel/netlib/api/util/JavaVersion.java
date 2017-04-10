@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,8 +18,8 @@
 
 package cf.monteux.silvertunnel.netlib.api.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represent and determine the version number of the current JVM.
@@ -34,7 +34,7 @@ public enum JavaVersion
 	private final String title;
 
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(JavaVersion.class);
+	private static final Logger logger = LogManager.getLogger(JavaVersion.class);
 	private static JavaVersion javaVersion;
 
 	private JavaVersion(String title)
@@ -57,7 +57,7 @@ public enum JavaVersion
 		{
 			// determine the version
 			final String jv = System.getProperty("java.specification.version");
-			LOG.debug("system prop jv={}", jv);
+			logger.debug("system prop jv={}", jv);
 			if ("1.5".equals(jv))
 			{
 				javaVersion = JavaVersion.JAVA_1_5;
@@ -79,7 +79,7 @@ public enum JavaVersion
 				javaVersion = JavaVersion.UNKNOWN;
 			}
 
-			LOG.debug("determined Java Version: {}", javaVersion);
+			logger.debug("determined Java Version: {}", javaVersion);
 		}
 
 		return javaVersion;

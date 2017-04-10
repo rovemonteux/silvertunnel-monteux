@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,8 +29,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.NetLayerStatus;
 import cf.monteux.silvertunnel.netlib.api.NetServerSocket;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetLayer that transparently forwards all traffic to switchable/exchangeable
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class SwitchingNetLayer implements NetLayer
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SwitchingNetLayer.class);
+	private static final Logger logger = LogManager.getLogger(SwitchingNetLayer.class);
 
 	/** beginning from this number of open (server)sockets log warn messages. */
 	private static int OPEN_SOCKETS_WARN_THRESHOLD = 100;
@@ -93,7 +93,7 @@ public class SwitchingNetLayer implements NetLayer
 			}
 			catch (final Exception e)
 			{
-				LOG.info("setLowerNetLayer(): exception while closing lower server socket: "
+				logger.info("setLowerNetLayer(): exception while closing lower server socket: "
 						+ e);
 			}
 		}
@@ -110,7 +110,7 @@ public class SwitchingNetLayer implements NetLayer
 				}
 				catch (final Exception e)
 				{
-					LOG.info("setLowerNetLayer(): exception while closing lower socket: "
+					logger.info("setLowerNetLayer(): exception while closing lower socket: "
 							+ e);
 				}
 			}
@@ -217,14 +217,14 @@ public class SwitchingNetLayer implements NetLayer
 			if (switchingNetSockets.size() == OPEN_SOCKETS_WARN_THRESHOLD)
 			{
 				// first (and maybe further) message: log with tread dump
-				LOG.warn(msg,
+				logger.warn(msg,
 						new Throwable(
 								"use thread dump to localize potential resource and memory leak"));
 			}
 			else
 			{
 				// log normally
-				LOG.warn(msg);
+				logger.warn(msg);
 			}
 		}
 	}
@@ -243,7 +243,7 @@ public class SwitchingNetLayer implements NetLayer
 			if (switchingNetServerSockets.size() == OPEN_SOCKETS_WARN_THRESHOLD)
 			{
 				// first (and maybe further) message: log with tread dump
-				LOG.warn(
+				logger.warn(
 						msg,
 						new Throwable(
 								"use thread dump to localize potential resource and memory leak"));
@@ -251,7 +251,7 @@ public class SwitchingNetLayer implements NetLayer
 			else
 			{
 				// log normally
-				LOG.warn(msg);
+				logger.warn(msg);
 			}
 		}
 	}

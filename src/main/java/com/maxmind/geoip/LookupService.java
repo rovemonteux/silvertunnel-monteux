@@ -18,7 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -40,10 +40,9 @@ package com.maxmind.geoip;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.maxmind.geoip.util.InMemoryRandomAccessFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provides a lookup service for information based on an IP address. The
@@ -76,11 +75,11 @@ import com.maxmind.geoip.util.InMemoryRandomAccessFile;
  * @author Matt Tucker (matt@jivesoftware.com)
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 public final class LookupService
 {
-	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(LookupService.class);
+	private static final Logger logger = LogManager.getLogger("TorTest");
 
 	/**
 	 * Database file.
@@ -285,7 +284,7 @@ public final class LookupService
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("got Exception : {}", e.getMessage(), e);
+			logger.debug("got Exception : {}", e.getMessage(), e);
 		}
 	}
 
@@ -364,7 +363,7 @@ public final class LookupService
 				}
 				catch (final IOException e)
 				{
-					LOG.warn("IO Exception", e);
+					logger.warn("IO Exception", e);
 				}
 			}
 			for (int i = 0; i < 2; i++)
@@ -400,7 +399,7 @@ public final class LookupService
 		}
 
 		// shouldn't reach here
-		LOG.error("Error seeking country while seeking {}", ipAddress);
+		logger.error("Error seeking country while seeking {}", ipAddress);
 		return 0;
 	}
 

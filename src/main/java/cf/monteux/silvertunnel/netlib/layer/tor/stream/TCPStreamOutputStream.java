@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -43,8 +43,8 @@ import java.io.PipedOutputStream;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelay;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelayData;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Output stream for connections tunneled through Tor.
@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 class TCPStreamOutputStream extends OutputStream
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TCPStreamOutputStream.class);
+	private static final Logger logger = LogManager.getLogger(TCPStreamOutputStream.class);
 
 	private final TCPStream stream;
 	/** read from this, and forward to tor. */
@@ -79,7 +79,7 @@ class TCPStreamOutputStream extends OutputStream
 		}
 		catch (final IOException e)
 		{
-			LOG.error("TCPStreamThreadJava2Tor: caught IOException "
+			logger.error("TCPStreamThreadJava2Tor: caught IOException "
 					+ e.getMessage(), e);
 		}
 	}

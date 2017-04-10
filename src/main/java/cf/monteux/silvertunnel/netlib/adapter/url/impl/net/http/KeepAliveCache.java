@@ -31,8 +31,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * A class that implements a cache of idle Http connections for keep-alive.
@@ -44,7 +44,7 @@ public class KeepAliveCache extends
 		ConcurrentHashMap<KeepAliveKey, ClientVector> implements Runnable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(KeepAliveCache.class);
+	private static final Logger logger = LogManager.getLogger(KeepAliveCache.class);
 	private static final long serialVersionUID = -2937172892064557949L;
 
 	/*
@@ -67,7 +67,7 @@ public class KeepAliveCache extends
 			}
 			catch (final Exception e)
 			{ /* ignore invalid property value */
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 			if (result <= 0)
 			{
@@ -216,7 +216,7 @@ public class KeepAliveCache extends
 			}
 			catch (final InterruptedException e)
 			{
-				LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+				logger.debug("got IterruptedException : {}", e.getMessage(), e);
 			}
 			synchronized (this)
 			{

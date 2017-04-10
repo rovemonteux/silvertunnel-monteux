@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,8 +28,8 @@ import java.net.UnknownHostException;
 import cf.monteux.silvertunnel.netlib.api.NetAddress;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.api.util.IpNetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Access to the JDK built-in name service (java.net.InetAddressImpl and Co.).
@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class DefaultIpNetAddressNameService implements NetAddressNameService
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(DefaultIpNetAddressNameService.class);
+	private static final Logger logger = LogManager.getLogger(DefaultIpNetAddressNameService.class);
 
 	/** reference to the underlying InetAddressImpl object used for reflection. */
 	private Object inetAddressImpl;
@@ -96,7 +96,7 @@ public class DefaultIpNetAddressNameService implements NetAddressNameService
 			catch (final NullPointerException e)
 			{
 				// NPE is expected here
-//				LOG.debug("got NullPointerException (expected)", e);
+//				logger.debug("got NullPointerException (expected)", e);
 			}
 
 			// prepare reflection
@@ -117,13 +117,13 @@ public class DefaultIpNetAddressNameService implements NetAddressNameService
 		}
 		catch (final UnsupportedOperationException e)
 		{
-			LOG.error("error during initialization (1)", e);
+			logger.error("error during initialization (1)", e);
 			throw e;
 
 		}
 		catch (final Throwable e)
 		{
-			LOG.error("error during initialization (2)", e);
+			logger.error("error during initialization (2)", e);
 			throw new UnsupportedOperationException(
 					"error during initialization (2)", e);
 		}
@@ -151,7 +151,7 @@ public class DefaultIpNetAddressNameService implements NetAddressNameService
 		{
 			// this exception can occur in unconventional environments:
 			// ignore it
-			LOG.debug("got UnknownHostException", e);
+			logger.debug("got UnknownHostException", e);
 		}
 	}
 
@@ -247,7 +247,7 @@ public class DefaultIpNetAddressNameService implements NetAddressNameService
 	}
 
 	/**
-	 * @see NetAddressNameService#getNamesByAddress(com.rovemonteux.silvertunnel.netlib.api.NetAddress)
+	 * @see NetAddressNameService#getNamesByAddress(cf.monteux.silvertunnel.netlib.api.NetAddress)
 	 * 
 	 * @param ipaddress
 	 *            IP address to lookup

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -47,7 +47,7 @@ import cf.monteux.silvertunnel.netlib.api.NetSocket;
  * This class is the same as java.net.Socket but with an additional public
  * constructor. See class SocketUtil.
  * 
- * In addition it implements the com.rovemonteux.silvertunnel.netlib.api.NetSocket
+ * In addition it implements the cf.monteux.silvertunnel.netlib.api.NetSocket
  * interface. This is used to unify handling of Sockets and NetSockets. Hint:
  * the connection must be established before an instance of this class can be
  * used as NetSocket.

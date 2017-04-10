@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -34,8 +34,8 @@ import cf.monteux.silvertunnel.netlib.api.impl.DataNetSocketUtil;
 import cf.monteux.silvertunnel.netlib.api.impl.DataNetSocketWrapper;
 import cf.monteux.silvertunnel.netlib.api.impl.InterconnectUtil;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class SocksServerNetSession implements Runnable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SocksServerNetSession.class);
+	private static final Logger logger = LogManager.getLogger(SocksServerNetSession.class);
 
 	private final NetLayer lowerNetLayer;
 
@@ -133,11 +133,11 @@ public class SocksServerNetSession implements Runnable
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("got Exception", e);
+			logger.warn("got Exception", e);
 		}
 		finally
 		{
-			LOG.debug("{} closing down", id);
+			logger.debug("{} closing down", id);
 			// TODO: try{ local.close(); }catch(Exception e){};
 		}
 
@@ -150,7 +150,7 @@ public class SocksServerNetSession implements Runnable
 
 	private void processSocks5Connection()
 	{
-		LOG.debug("processSocks5Connection(): start");
+		logger.debug("processSocks5Connection(): start");
 
 		byte[] methods;
 		byte[] command = new byte[8];
@@ -276,12 +276,12 @@ public class SocksServerNetSession implements Runnable
 			// copy the rest of the streams
 			InterconnectUtil.relay(socksIn, lowerOut, lowerIn, socksOut, BUFFER_SIZE);
 
-			LOG.debug("processSocks5Connection(): end");
+			logger.debug("processSocks5Connection(): end");
 
 		}
 		catch (final Exception e)
 		{
-			LOG.error("unexpected end", e);
+			logger.error("unexpected end", e);
 		}
 		finally
 		{
@@ -323,7 +323,7 @@ public class SocksServerNetSession implements Runnable
 		 * DataOutputStream(remote.getOutputStream()), remote); else
 		 * relay(local,new DataInputStream(remoteS.getInputStream()),new
 		 * DataOutputStream(remoteS.getOutputStream()), null); } catch(Exception
-		 * e) { LOG.error(e); } finally{ if(remote!=null) remote.close();
+		 * e) { logger.error(e); } finally{ if(remote!=null) remote.close();
 		 * if(remoteS!=null){ try{ remoteS.close(); } catch(Exception e){};} }
 		 */
 	}

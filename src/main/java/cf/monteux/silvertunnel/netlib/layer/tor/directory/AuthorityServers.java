@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2013 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,8 +28,8 @@ import javax.xml.bind.DatatypeConverter;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Router;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class manages the hard-coded Tor authorities.
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class AuthorityServers
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(AuthorityServers.class);
+	private static final Logger logger = LogManager.getLogger(AuthorityServers.class);
 
 	/**
 	 * it follows the list of official authorized authorityKeyCertificate
@@ -136,7 +136,7 @@ public class AuthorityServers
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not initialze class AuthorityKeyCertificate", e);
+			logger.error("could not initialze class AuthorityKeyCertificate", e);
 		}
 	}
 
@@ -193,12 +193,12 @@ public class AuthorityServers
 				}
 				else
 				{
-					LOG.warn("Did not match to pattern: \"" + singleRawData	+ "\"");
+					logger.warn("Did not match to pattern: \"" + singleRawData	+ "\"");
 				}
 			}
 			catch (final Exception e)
 			{
-				LOG.info("problem while parsing data, skip: "
+				logger.info("problem while parsing data, skip: "
 						+ singleRawData, e);
 			}
 		}

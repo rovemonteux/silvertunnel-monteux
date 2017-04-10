@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,8 +25,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.JavaVersion;
 import cf.monteux.silvertunnel.netlib.util.HttpUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Command line tool or test method that checks whether Java and Netlib can
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class CheckNetConnectivity
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CheckNetConnectivity.class);
+	private static final Logger logger = LogManager.getLogger(CheckNetConnectivity.class);
 
 	private static final long timeoutInMs = 5000;
 
@@ -51,7 +51,7 @@ public class CheckNetConnectivity
 	{
 		if (argv.length > 0)
 		{
-			LOG.error("CheckNetConnectivity: no command line arguments are supported");
+			logger.error("CheckNetConnectivity: no command line arguments are supported");
 			System.exit(1);
 			return;
 		}
@@ -73,7 +73,7 @@ public class CheckNetConnectivity
 	 */
 	public static boolean executeCheck(final boolean checkWithSocketGlobalUtil)
 	{
-		LOG.info("CheckNetConnectivity.executeCheck()");
+		logger.info("CheckNetConnectivity.executeCheck()");
 
 		// execute test 1
 		boolean test1Result = false;
@@ -87,7 +87,7 @@ public class CheckNetConnectivity
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("Exception while test1", e);
+			logger.warn("Exception while test1", e);
 		}
 
 		// execute test 2
@@ -104,7 +104,7 @@ public class CheckNetConnectivity
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("Exception while test2", e);
+			logger.warn("Exception while test2", e);
 		}
 
 		boolean test3Result;
@@ -129,7 +129,7 @@ public class CheckNetConnectivity
 			}
 			catch (final Exception e)
 			{
-				LOG.warn("Exception while test3", e);
+				logger.warn("Exception while test3", e);
 			}
 
 			// execute test 4
@@ -146,7 +146,7 @@ public class CheckNetConnectivity
 			}
 			catch (final Exception e)
 			{
-				LOG.warn("Exception while test4", e);
+				logger.warn("Exception while test4", e);
 			}
 
 		}

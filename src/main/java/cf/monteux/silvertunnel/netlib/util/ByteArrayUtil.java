@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Utilities to handle input streams, output streams and byte arrays.
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public final class ByteArrayUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ByteArrayUtil.class);
+	private static final Logger logger = LogManager.getLogger(ByteArrayUtil.class);
 
 	private static final char SPECIAL_CHAR = '?';
 
@@ -123,7 +123,7 @@ public final class ByteArrayUtil
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.error("", e);
+			logger.error("", e);
 		}
 		return new byte[0];
 	}
@@ -189,14 +189,14 @@ public final class ByteArrayUtil
 		{
 			if (len >= tempResultBuffer.length)
 			{
-				// LOG.info("result buffer is full");
+				// logger.info("result buffer is full");
 				break;
 			}
 			final int lastLen = is.read(tempResultBuffer, len,
 					tempResultBuffer.length - len);
 			if (lastLen < 0)
 			{
-				// LOG.info("end of result stream");
+				// logger.info("end of result stream");
 				break;
 			}
 			len += lastLen;

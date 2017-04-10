@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-monteux Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2014-2015 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -50,8 +50,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.HiddenServicePortInstanc
 import cf.monteux.silvertunnel.netlib.layer.tor.stream.TCPStream;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetServerSocket of Layer over Tor network to provide a hidden service.
@@ -63,7 +63,7 @@ public class TorNetServerSocket implements NetServerSocket,
 		HiddenServicePortInstance
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorNetServerSocket.class);
+	private static final Logger logger = LogManager.getLogger(TorNetServerSocket.class);
 
 	private static final int SERVER_QUEUE_MAX_SIZE = 10;
 	private final BlockingQueue<TCPStream> streams = new ArrayBlockingQueue<TCPStream>(
@@ -103,7 +103,7 @@ public class TorNetServerSocket implements NetServerSocket,
 	@Override
 	public NetSocket accept() throws IOException
 	{
-		LOG.info("accept() called");
+		logger.info("accept() called");
 
 		TCPStream nextStream = null;
 		try
@@ -112,9 +112,9 @@ public class TorNetServerSocket implements NetServerSocket,
 		}
 		catch (final InterruptedException e)
 		{
-			LOG.warn("waiting interrupted", e);
+			logger.warn("waiting interrupted", e);
 		}
-		LOG.info("accept() got stream from queue nextStream=" + nextStream);
+		logger.info("accept() got stream from queue nextStream=" + nextStream);
 
 		return new TorNetSocket(nextStream,
 				"TorNetLayer accepted server connection");
@@ -152,7 +152,7 @@ public class TorNetServerSocket implements NetServerSocket,
 	public void createStream(Circuit circuit, int streamId)
 			throws TorException, IOException
 	{
-		LOG.debug("addStream() called");
+		logger.debug("addStream() called");
 		final TCPStream newStream = new TCPStream(circuit, streamId);
 		try
 		{
@@ -160,7 +160,7 @@ public class TorNetServerSocket implements NetServerSocket,
 		}
 		catch (final InterruptedException e)
 		{
-			LOG.warn("waiting interrupted", e);
+			logger.warn("waiting interrupted", e);
 		}
 	}
 
@@ -179,7 +179,7 @@ public class TorNetServerSocket implements NetServerSocket,
 			this.hostname = new Scanner(new File("service"+File.separator+"hostname")).useDelimiter("\\Z").next();
 			this.shortHostname = this.hostname.replaceAll(".onion", "");
 		} catch (FileNotFoundException e) {
-			LOG.error(e.getMessage());
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 	}

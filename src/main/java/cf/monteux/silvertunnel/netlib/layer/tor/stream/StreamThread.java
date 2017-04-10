@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,8 +19,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.stream;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TCPStreamProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this class is used to build a TCPStream in the background.
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class StreamThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(StreamThread.class);
+	private static final Logger logger = LogManager.getLogger(StreamThread.class);
 
 	private TCPStream stream;
 	private final Circuit cs;
@@ -64,7 +64,7 @@ public class StreamThread extends Thread
 			if ((stream != null) && (stream.queue != null)
 					&& (!stream.queue.isClosed()))
 			{
-				LOG.warn("Tor.StreamThread.run(): " + e.getMessage());
+				logger.warn("Tor.StreamThread.run(): " + e.getMessage());
 			}
 			stream = null;
 		}

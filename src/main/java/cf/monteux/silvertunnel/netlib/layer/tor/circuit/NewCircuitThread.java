@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,8 +21,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TCPStreamProperties;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorEventService;
 import cf.monteux.silvertunnel.netlib.layer.tor.directory.Directory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Create Circuits in background.
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class NewCircuitThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NewCircuitThread.class);
+	private static final Logger logger = LogManager.getLogger(NewCircuitThread.class);
 
 	/** {@link TLSConnectionAdmin}. */
 	private final TLSConnectionAdmin fnh;
@@ -71,7 +71,7 @@ public class NewCircuitThread extends Thread
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("unexpected", e);
+			logger.warn("unexpected", e);
 		}
 	}
 }

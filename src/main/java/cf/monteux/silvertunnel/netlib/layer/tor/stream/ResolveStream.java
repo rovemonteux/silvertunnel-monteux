@@ -27,8 +27,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelayResolve;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.tool.DynByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.List;
  */
 public final class ResolveStream extends TCPStream {
     /** */
-    private static final Logger LOG = LoggerFactory.getLogger(ResolveStream.class);
+    private static final Logger logger = LogManager.getLogger(ResolveStream.class);
 
     /**
      * wait x seconds for answer.
@@ -66,8 +66,8 @@ public final class ResolveStream extends TCPStream {
         circuit.getStreamHistory().add(hostname);
         queue = new Queue(queueTimeoutS);
         setClosed(false);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("resolving hostname " + hostname + " on stream " + toString());
+        if (logger.isDebugEnabled()) {
+            logger.debug("resolving hostname " + hostname + " on stream " + toString());
         }
         // send RELAY-RESOLV
         sendCell(new CellRelayResolve(this, hostname));

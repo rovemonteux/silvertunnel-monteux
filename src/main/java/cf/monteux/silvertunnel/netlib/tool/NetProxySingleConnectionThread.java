@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -40,8 +40,8 @@ import cf.monteux.silvertunnel.netlib.api.NetFactory;
 import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.impl.InterconnectUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author hapke
@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 class NetProxySingleConnectionThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetProxySingleConnectionThread.class);
+	private static final Logger logger = LogManager.getLogger(NetProxySingleConnectionThread.class);
 
 	private final NetSocket upperLayerNetSocket;
 	private final NetLayerIDs lowerNetLayerId;
@@ -90,7 +90,7 @@ class NetProxySingleConnectionThread extends Thread
 		}
 		catch (final Exception e)
 		{
-			LOG.warn("connection abborted", e);
+			logger.warn("connection abborted", e);
 		}
 	}
 

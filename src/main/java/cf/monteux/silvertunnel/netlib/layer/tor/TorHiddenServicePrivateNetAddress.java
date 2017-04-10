@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,8 +24,8 @@ import java.security.interfaces.RSAPublicKey;
 import cf.monteux.silvertunnel.netlib.layer.tor.directory.RendezvousServiceDescriptorUtil;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.RSAKeyPair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Address information of a hidden service needed to create such service (server
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class TorHiddenServicePrivateNetAddress
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorHiddenServicePrivateNetAddress.class);
+	private static final Logger logger = LogManager.getLogger(TorHiddenServicePrivateNetAddress.class);
 
 	private final RSAPublicKey publicKey;
 	private final RSAPrivateCrtKey privateKey;

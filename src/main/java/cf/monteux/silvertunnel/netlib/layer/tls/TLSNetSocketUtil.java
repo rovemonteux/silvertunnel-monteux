@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -35,8 +35,8 @@ import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.impl.NetSocket2Socket;
 import cf.monteux.silvertunnel.netlib.api.impl.Socket2NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helper method to access the Java-internal TLS/SSL logic.
@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class TLSNetSocketUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TLSNetSocketUtil.class);
+	private static final Logger logger = LogManager.getLogger(TLSNetSocketUtil.class);
 
 	/**
 	 * Returns a socket layered over an existing socket connected to the named
@@ -109,17 +109,17 @@ public class TLSNetSocketUtil
 				lowerLayerSocket, hostname, port, autoClose);
 
 		// set properties
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("default enabledCipherSuites="
+			logger.debug("default enabledCipherSuites="
 				+ Arrays.toString(resultSocket.getEnabledCipherSuites()));
 		}
 		if (enabledCipherSuites != null)
 		{
 			resultSocket.setEnabledCipherSuites(enabledCipherSuites);
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("set enabledCipherSuites="
+				logger.debug("set enabledCipherSuites="
 					+ Arrays.toString(enabledCipherSuites));
 			}
 		}

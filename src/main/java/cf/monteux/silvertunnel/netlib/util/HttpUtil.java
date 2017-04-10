@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -48,8 +48,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
 import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class provides simple methods to access HTTP - they can be used for
@@ -67,7 +67,7 @@ import org.slf4j.LoggerFactory;
 public class HttpUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HttpUtil.class);
+	private static final Logger logger = LogManager.getLogger(HttpUtil.class);
 
 	public static final String HTTPTEST_SERVER_NAME = "httptest.silvertunnel-ng.org";
 	public static final int HTTPTEST_SERVER_PORT = 80;
@@ -108,16 +108,16 @@ public class HttpUtil
 				"/httptest/smalltest.php?id=" + id, timeoutInMs);
 
 		// check response
-		LOG.info("http response body: " + ByteArrayUtil.showAsString(httpResponse));
+		logger.info("http response body: " + ByteArrayUtil.showAsString(httpResponse));
 		final byte[] expectedResponse = ("<response><id>" + id + "</id></response>\n").getBytes(Util.UTF8);
 		final boolean testOK = Arrays.equals(expectedResponse, httpResponse);
 		if (testOK)
 		{
-			LOG.info("http response body = expected response body");
+			logger.info("http response body = expected response body");
 		}
 		else
 		{
-			LOG.info("expected http response body is different: "
+			logger.info("expected http response body is different: "
 					+ ByteArrayUtil.showAsString(expectedResponse));
 		}
 
@@ -200,7 +200,7 @@ public class HttpUtil
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.error("this exception may never occur", e);
+			logger.error("this exception may never occur", e);
 			throw new IOException(e.toString());
 		}
 	}
@@ -251,7 +251,7 @@ public class HttpUtil
 			final byte[] requestBytes = ByteArrayUtil.concatByteArrays(requestBytes1, dataToPost);
 
 			// TODO - remove?:
-			LOG.info("httpServerNetAddress=" + httpServerNetAddress + " with request=" + new String(requestBytes, Util.UTF8));
+			logger.info("httpServerNetAddress=" + httpServerNetAddress + " with request=" + new String(requestBytes, Util.UTF8));
 
 			// do the work
 			final byte[] response = request(lowerLayerNetSocket,
@@ -259,15 +259,15 @@ public class HttpUtil
 					timeoutInMs);
 
 			// result
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
 				try
 				{
-					LOG.debug("response=" + new String(response, Util.UTF8));
+					logger.debug("response=" + new String(response, Util.UTF8));
 				}
 				catch (final Exception e)
 				{
-					LOG.debug("response={}", Arrays.toString(response));
+					logger.debug("response={}", Arrays.toString(response));
 				}
 			}
 
@@ -275,7 +275,7 @@ public class HttpUtil
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.error("this exception may never occur", e);
+			logger.error("this exception may never occur", e);
 			throw new IOException(e.toString());
 		}
 	}
@@ -311,12 +311,12 @@ public class HttpUtil
 		final OutputStream os = s.getOutputStream();
 		try
 		{
-			LOG.info("send HTTP request now: " + ByteArrayUtil.showAsString(requestBytes));
+			logger.info("send HTTP request now: " + ByteArrayUtil.showAsString(requestBytes));
 			os.write(requestBytes);
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.error("this exception may never occur", e);
+			logger.error("this exception may never occur", e);
 		}
 		os.flush();
 
@@ -330,21 +330,21 @@ public class HttpUtil
 		catch (final InterruptedException e)
 		{
 			// to ignore
-			LOG.debug("got IterruptedException", e.getMessage());
+			logger.debug("got IterruptedException", e.getMessage());
 		}
 
 		// read the HTTP response from the other thread
 		final byte[] response = receiverThread.readCurrentResultAndStopThread();
 		s.close();
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
 			try
 			{
-				LOG.debug("response=" + new String(response, Util.UTF8));
+				logger.debug("response=" + new String(response, Util.UTF8));
 			}
 			catch (final Exception e)
 			{
-				LOG.debug("response=" + response);
+				logger.debug("response=" + response);
 			}
 		}
 
@@ -400,8 +400,8 @@ public class HttpUtil
 		}
 
 		// short log of results
-		LOG.info("received HTTP response header: " + responseHeadersAsString);
-		LOG.info("received HTTP response body of " + responseBody.length + " bytes");
+		logger.info("received HTTP response header: " + responseHeadersAsString);
+		logger.info("received HTTP response body of " + responseBody.length + " bytes");
 
 		// result
 		return responseBody;

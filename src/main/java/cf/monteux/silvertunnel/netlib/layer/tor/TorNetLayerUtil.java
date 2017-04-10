@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,8 +25,8 @@ import java.net.UnknownHostException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.RSAKeyPair;
 import cf.monteux.silvertunnel.netlib.util.FileUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Layer over Tor network: tunnels (TCP/IP) network traffic through the Tor
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public final class TorNetLayerUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorNetLayerUtil.class);
+	private static final Logger logger = LogManager.getLogger(TorNetLayerUtil.class);
 
 	private static final String FILENAME_HOSTNAME = "hostname";
 	private static final String FILENAME_PRIVATE_KEY = "private_key";
@@ -139,7 +139,7 @@ public final class TorNetLayerUtil
 			{
 				if (hostnameStr != null)
 				{
-					LOG.debug(msg);
+					logger.debug(msg);
 				}
 			}
 		}

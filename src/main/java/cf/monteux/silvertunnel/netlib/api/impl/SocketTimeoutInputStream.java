@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * InputStream wrapper needed by NetSocket2SocketImpl to handle timeout
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class SocketTimeoutInputStream extends FilterInputStream
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SocketTimeoutInputStream.class);
+	private static final Logger logger = LogManager.getLogger(SocketTimeoutInputStream.class);
 
 	/** timeout of all potentially blocking methods. */
 	private long timeout;
@@ -269,7 +269,7 @@ public class SocketTimeoutInputStream extends FilterInputStream
 		}
 		catch (final InterruptedException e)
 		{
-			LOG.debug("got InterruptedException : {}", e, e);
+			logger.debug("got InterruptedException : {}", e, e);
 			// unexpected
 			Thread.currentThread().interrupt();
 		}

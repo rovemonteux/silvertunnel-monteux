@@ -1,5 +1,5 @@
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2014 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,8 +24,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
 import cf.monteux.silvertunnel.netlib.tool.ConvenientStreamReader;
 import cf.monteux.silvertunnel.netlib.tool.DynByteBuffer;
 import cf.monteux.silvertunnel.netlib.util.TempfileStringStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,7 +37,7 @@ import java.util.*;
  * The GuardList is used for maintaining a list of Guard nodes.
  */
 public class GuardList {
-    private static final Logger LOG = LoggerFactory.getLogger(GuardList.class);
+    private static final Logger logger = LogManager.getLogger(GuardList.class);
     private static final String GUARDLIST_LOCATION = "guards.cache";
     private static final SecureRandom RND = new SecureRandom();
     private List<GuardEntry> guardNodes = new ArrayList<GuardEntry>(5);
@@ -67,13 +67,13 @@ public class GuardList {
             for (int i = 0; i < count; i++) {
                 GuardEntry entry = new GuardEntry(convenientStreamReader);
                 guardNodes.add(entry);
-                LOG.debug("guard loaded from cache {}", entry.fingerprint.getHex());
+                logger.debug("guard loaded from cache {}", entry.fingerprint.getHex());
             }
             fileInputStream.close();
         } catch (FileNotFoundException exception) {
-            LOG.debug("no guard nodes found");
+            logger.debug("no guard nodes found");
         } catch (Exception exception) {
-            LOG.warn("could not load guard nodes due to exception", exception);
+            logger.warn("could not load guard nodes due to exception", exception);
         }
     }
 
@@ -91,9 +91,9 @@ public class GuardList {
             }
             fileOutputStream.write(buffer.toArray());
             fileOutputStream.close();
-            LOG.debug("wrote guard list to local cache");
+            logger.debug("wrote guard list to local cache");
         } catch (Exception exception) {
-            LOG.warn("Could not write guard list due to exception", exception);
+            logger.warn("Could not write guard list due to exception", exception);
         }
     }
 
@@ -113,7 +113,7 @@ public class GuardList {
         if (!isGuardInList(candidate.getFingerprint())) {
             candidates.add(candidate.getFingerprint());
         }
-        LOG.debug("returning guard {}", candidate.getFingerprint().getHex());
+        logger.debug("returning guard {}", candidate.getFingerprint().getHex());
         return candidate;
     }
 
@@ -166,7 +166,7 @@ public class GuardList {
             if (guardEntry.firstDiscard > 0) {
                 if (System.currentTimeMillis() - guardEntry.firstDiscard > TIMEOUT_TILL_REMOVE) {
                     guardNodes.remove(guardEntry);
-                    LOG.debug("Guard {} has been removed because it was excluded for more than 30 days because of its status", guardEntry.fingerprint.getHex());
+                    logger.debug("Guard {} has been removed because it was excluded for more than 30 days because of its status", guardEntry.fingerprint.getHex());
                 }
             } else {
                 guardEntry.firstDiscard = System.currentTimeMillis();
@@ -208,7 +208,7 @@ public class GuardList {
         Map<Fingerprint, Router> guards = directory.getValidRoutersByFlags(flags);
         Router guard = directory.selectRandomNode(guards, excluded, prop.getRankingInfluenceIndex(), prop.isFastRoute(), prop.isStableRoute());
         routerList.add(guard);
-        LOG.debug("adding guard {} to list", guard.getFingerprint().getHex());
+        logger.debug("adding guard {} to list", guard.getFingerprint().getHex());
     }
 
     /**

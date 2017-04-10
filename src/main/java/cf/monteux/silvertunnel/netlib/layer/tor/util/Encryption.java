@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -50,7 +50,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-monteux Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2014 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -83,8 +83,8 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.util.encoders.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.crypto.Cipher;
 
@@ -113,7 +113,7 @@ import java.util.Arrays;
  */
 public class Encryption {
     /** */
-    private static final Logger LOG = LoggerFactory.getLogger(Encryption.class);
+    private static final Logger logger = LogManager.getLogger(Encryption.class);
 
     /**
      * digest algorithm used.
@@ -132,7 +132,7 @@ public class Encryption {
                 Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
             }
         } catch (final Throwable t) {
-            LOG.error("Cannot initialize class Encryption", t);
+            logger.error("Cannot initialize class Encryption", t);
         }
     }
 
@@ -226,9 +226,9 @@ public class Encryption {
             if (decryptedDigest != null && dataDigest != null && decryptedDigest.length > dataDigest.length) {
                 // try to fix bug in security calculation with OpenJDK-6 java
                 // web start (ticket #59)
-                LOG.warn("verifySignature(): try to fix bug in security calculation with OpenJDK-6 java web start (ticket #59)");
-                LOG.warn("verifySignature(): original decryptedDigest=" + Encoding.toHexString(decryptedDigest));
-                LOG.warn("verifySignature(): dataDigest              =" + Encoding.toHexString(dataDigest));
+                logger.warn("verifySignature(): try to fix bug in security calculation with OpenJDK-6 java web start (ticket #59)");
+                logger.warn("verifySignature(): original decryptedDigest=" + Encoding.toHexString(decryptedDigest));
+                logger.warn("verifySignature(): dataDigest              =" + Encoding.toHexString(dataDigest));
                 final byte[] fixedDecryptedDigest = new byte[dataDigest.length];
                 System.arraycopy(decryptedDigest, decryptedDigest.length - dataDigest.length, fixedDecryptedDigest, 0, dataDigest.length);
                 decryptedDigest = fixedDecryptedDigest;
@@ -236,8 +236,8 @@ public class Encryption {
 
             final boolean verificationSuccessful = Arrays.equals(decryptedDigest, dataDigest);
             if (!verificationSuccessful) {
-                LOG.info("verifySignature(): decryptedDigest=" + Encoding.toHexString(decryptedDigest));
-                LOG.info("verifySignature(): dataDigest     =" + Encoding.toHexString(dataDigest));
+                logger.info("verifySignature(): decryptedDigest=" + Encoding.toHexString(decryptedDigest));
+                logger.info("verifySignature(): dataDigest     =" + Encoding.toHexString(dataDigest));
             }
 
             return verificationSuccessful;
@@ -277,7 +277,7 @@ public class Encryption {
         try {
             theKey = new RSAKeyEncoder().parsePEMPublicKey(s);
         } catch (final Exception e) {
-            LOG.warn("Encryption.extractPublicRSAKey: Caught exception:" + e.getMessage(), e);
+            logger.warn("Encryption.extractPublicRSAKey: Caught exception:" + e.getMessage(), e);
             theKey = null;
         }
 
@@ -312,12 +312,12 @@ public class Encryption {
 
             // convert keys and pack them together into a key pair
             final RSAPrivateCrtKey privateKey = new TempJCERSAPrivateCrtKey(keyPair.getPrivateKeyInfo());
-            LOG.debug("JCEPrivateKey={}", privateKey);
+            logger.debug("JCEPrivateKey={}", privateKey);
             final RSAPublicKey publicKey = new TempJCERSAPublicKey(keyPair.getPublicKeyInfo());
             rsaKeyPair = new RSAKeyPair(publicKey, privateKey);
 
         } catch (final Exception e) {
-            LOG.warn("Encryption.extractPrivateRSAKey: Caught exception:" + e.getMessage());
+            logger.warn("Encryption.extractPrivateRSAKey: Caught exception:" + e.getMessage());
             rsaKeyPair = null;
         }
 
@@ -339,7 +339,7 @@ public class Encryption {
             pemWriter.close();
 
         } catch (final IOException e) {
-            LOG.warn("Caught exception:" + e.getMessage());
+            logger.warn("Caught exception:" + e.getMessage());
             return "";
         }
 
@@ -394,7 +394,7 @@ public class Encryption {
             theKey = getRSAPublicKey(tempKey.getModulus(), tempKey.getPublicExponent());
             ais.close();
         } catch (final IOException e) {
-            LOG.warn("Caught exception:" + e.getMessage());
+            logger.warn("Caught exception:" + e.getMessage());
             theKey = null;
         }
 
@@ -537,7 +537,7 @@ public class Encryption {
             return result;
 
         } catch (final InvalidCipherTextException e) {
-            LOG.error("Encryption.asymDecrypt(): can't decrypt cipher text:" + e.getMessage());
+            logger.error("Encryption.asymDecrypt(): can't decrypt cipher text:" + e.getMessage());
             throw new TorException("Encryption.asymDecrypt(): InvalidCipherTextException:" + e.getMessage());
         }
     }
@@ -562,7 +562,7 @@ public class Encryption {
             return new RSAKeyPair(publicKey, privateKey);
 
         } catch (final NoSuchAlgorithmException e) {
-            LOG.error("Could not create new key pair", e);
+            logger.error("Could not create new key pair", e);
             throw new RuntimeException(e);
         }
     }

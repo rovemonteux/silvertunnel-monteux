@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,7 +24,8 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetSocket of transparent NetLayer that logs input and output streams.

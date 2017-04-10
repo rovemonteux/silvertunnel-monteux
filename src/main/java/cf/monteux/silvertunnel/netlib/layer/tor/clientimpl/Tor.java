@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -85,8 +85,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.NetLayerStatusAdmin;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorNoAnswerException;
 import cf.monteux.silvertunnel.netlib.util.StringStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * MAIN CLASS. keeps track of circuits, tls-connections and the status of
@@ -106,7 +106,7 @@ import org.slf4j.LoggerFactory;
 public class Tor implements NetLayerStatusAdmin
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Tor.class);
+	private static final Logger logger = LogManager.getLogger(Tor.class);
 
 	private static final int TOR_CONNECT_MAX_RETRIES = 10;
 	private static final long TOR_CONNECT_MILLISECONDS_BETWEEN_RETRIES = 10;
@@ -163,7 +163,7 @@ public class Tor implements NetLayerStatusAdmin
 			// org.bouncycastle.jce.provider.BouncyCastleProvider(),2);
 		}
 		// logger and config
-		LOG.info("Tor implementation of silvertunnel-monteux.org is starting up");
+		logger.info("Tor implementation of silvertunnel-monteux.org is starting up");
 		// determine end of startup-Phase
 		startupPhaseWithoutConnects = System.currentTimeMillis() + TorConfig.getStartupDelay() * 1000L;
 		// init event-handler
@@ -236,14 +236,14 @@ public class Tor implements NetLayerStatusAdmin
 			final Circuit[] circuits = CircuitAdmin.provideSuitableCircuits(tlsConnectionAdmin, directory, sp, torEventService, false);
 			if (circuits == null || circuits.length < 1)
 			{
-				LOG.debug("no valid circuit found: wait for new one created by the TorBackgroundMgmtThread");
+				logger.debug("no valid circuit found: wait for new one created by the TorBackgroundMgmtThread");
 				try
 				{
 					Thread.sleep(TorBackgroundMgmtThread.INTERVAL_S * 1000L);
 				}
 				catch (final InterruptedException e)
 				{
-					LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+					logger.debug("got IterruptedException : {}", e.getMessage(), e);
 				}
 				continue;
 			}
@@ -295,7 +295,7 @@ public class Tor implements NetLayerStatusAdmin
 							}
 							catch (final InterruptedException e)
 							{
-								LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+								logger.debug("got IterruptedException : {}", e.getMessage(), e);
 							}
 
 							--waitingCounter;
@@ -310,7 +310,7 @@ public class Tor implements NetLayerStatusAdmin
 					}
 					catch (final Exception e)
 					{
-						LOG.warn("Tor.connect(): " + e.getMessage());
+						logger.warn("Tor.connect(): " + e.getMessage());
 						return null;
 					}
 				}
@@ -327,28 +327,28 @@ public class Tor implements NetLayerStatusAdmin
 					}
 					catch (final TorNoAnswerException e)
 					{
-						LOG.warn("Tor.connect: Timeout on circuit:" + e.getMessage());
+						logger.warn("Tor.connect: Timeout on circuit:" + e.getMessage());
 					}
 					catch (final TorException e)
 					{
-						LOG.warn("Tor.connect: TorException trying to reuse existing circuit:" + e.getMessage(), e);
+						logger.warn("Tor.connect: TorException trying to reuse existing circuit:" + e.getMessage(), e);
 					}
 					catch (final IOException e)
 					{
-						LOG.warn("Tor.connect: IOException " + e.getMessage());
+						logger.warn("Tor.connect: IOException " + e.getMessage());
 					}
 				}
 			}
 
 			hostnameAddress = (sp.getAddr() != null) ? "" + sp.getAddr() : sp.getHostname();
-			LOG.info("Tor.connect: not (yet) connected to " + hostnameAddress + ":" + sp.getPort() + ", full retry count=" + retry);
+			logger.info("Tor.connect: not (yet) connected to " + hostnameAddress + ":" + sp.getPort() + ", full retry count=" + retry);
 			try
 			{
 				Thread.sleep(TOR_CONNECT_MILLISECONDS_BETWEEN_RETRIES);
 			}
 			catch (final InterruptedException e)
 			{
-				LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+				logger.debug("got IterruptedException : {}", e.getMessage(), e);
 			}
 		}
 		hostnameAddress = (sp.getAddr() != null) ? "" + sp.getAddr() : sp.getHostname();
@@ -387,7 +387,7 @@ public class Tor implements NetLayerStatusAdmin
 	 */
 	public void close(final boolean force)
 	{
-		LOG.info("TorJava ist closing down");
+		logger.info("TorJava ist closing down");
 		// shutdown mgmt
 		torBackgroundMgmtThread.close();
 		// shut down connections
@@ -397,7 +397,7 @@ public class Tor implements NetLayerStatusAdmin
 		// close hidden services
 		// TODO close hidden services
 		// kill logger
-		LOG.info("Tor.close(): CLOSED");
+		logger.info("Tor.close(): CLOSED");
 	}
 
 	/** synonym for close(false). */
@@ -497,7 +497,7 @@ public class Tor implements NetLayerStatusAdmin
 					{
 						// in case of error, do nothing, but retry with the next
 						// circuit
-						LOG.debug("got Exception : {}", e.getMessage(), e);
+						logger.debug("got Exception : {}", e.getMessage(), e);
 					}
 				}
 			}
@@ -525,9 +525,9 @@ public class Tor implements NetLayerStatusAdmin
 	@Override
 	public void setStatus(final NetLayerStatus newStatus)
 	{
-		LOG.debug("TorNetLayer old status: {}", status);
+		logger.debug("TorNetLayer old status: {}", status);
 		status = newStatus;
-		LOG.info("TorNetLayer new status: {}", status);
+		logger.info("TorNetLayer new status: {}", status);
 	}
 
 	/**
@@ -576,8 +576,8 @@ public class Tor implements NetLayerStatusAdmin
 		if (!gaveMessage)
 		{
 			gaveMessage = true;
-			LOG.debug("Tor.checkStartup(): Tor is still in startup phase, sleeping for max. {} seconds",  sleep / 1000L);
-			LOG.debug("Tor not yet started - wait until torServers available");
+			logger.debug("Tor.checkStartup(): Tor is still in startup phase, sleeping for max. {} seconds",  sleep / 1000L);
+			logger.debug("Tor not yet started - wait until torServers available");
 		}
 		// try { Thread.sleep(sleep); }
 		// catch(Exception e) {}
@@ -590,9 +590,9 @@ public class Tor implements NetLayerStatusAdmin
 		}
 		catch (final Exception e)
 		{ /* ignore it */
-			LOG.debug("got Exception : {}", e.getMessage(), e);
+			logger.debug("got Exception : {}", e.getMessage(), e);
 		}
-		LOG.info("Tor start completed!!!");
+		logger.info("Tor start completed!!!");
 		startUpInProgress = false;
 	}
 
@@ -613,7 +613,7 @@ public class Tor implements NetLayerStatusAdmin
 			}
 			catch (final Exception e)
 			{ /* ignore it */
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 		}
 	}
@@ -671,9 +671,9 @@ public class Tor implements NetLayerStatusAdmin
 						++circuitsEstablished;
 					}
 				}
-//				if (LOG.isDebugEnabled())
+//				if (logger.isDebugEnabled())
 //				{
-//					LOG.debug("Tor.getCircuitsStatus(): " + flag + " rank " + c.getRanking() + " fails " + c.getStreamFails() + " of "
+//					logger.debug("Tor.getCircuitsStatus(): " + flag + " rank " + c.getRanking() + " fails " + c.getStreamFails() + " of "
 //							+ c.getStreamCounter() + " TLS " + tls.getRouter().getNickname() + "/" + c.toString());
 //				}
 			}

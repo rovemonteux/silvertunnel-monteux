@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -59,8 +59,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.directory.RouterFlags;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.NodeType;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorServerNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
 public class CircuitAdmin
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CircuitAdmin.class);
+	private static final Logger logger = LogManager.getLogger(CircuitAdmin.class);
 
 	// TODO test:
 	/** key=host name, value=circuit to this host. */
@@ -101,7 +101,7 @@ public class CircuitAdmin
 	                                         final Directory dir,
 	                                         final TCPStreamProperties sp, 
 	                                         final TorEventService torEventService) throws Throwable {
-		LOG.debug("provideSuitableNewCircuit called");
+		logger.debug("provideSuitableNewCircuit called");
 		final ExecutorService executor = Executors.newCachedThreadPool();
 		final Collection<Callable<Circuit>> allTasks = new ArrayList<Callable<Circuit>>();
 		for (int i = 0; i < TorConfig.getParallelCircuitBuilds(); i++)
@@ -112,7 +112,7 @@ public class CircuitAdmin
 				@Override
 				public Circuit call() throws TorServerNotFoundException, ExecutionException {
 					Circuit result = null;
-					LOG.debug("Callable Started..");
+					logger.debug("Callable Started..");
 					for (int retries = 0; retries < TorConfig.getRetriesConnect(); ++retries)
 					{
 						try
@@ -122,29 +122,29 @@ public class CircuitAdmin
 						catch (final InterruptedException e)
 						{
 							/* do nothing, continue trying */
-							LOG.debug("got InterruptedException : {}", e.getMessage(), e);
+							logger.debug("got InterruptedException : {}", e.getMessage(), e);
 						}
                         catch (final TorServerNotFoundException e)
                         {
                             if (e.getNodeType() == NodeType.EXIT && e.getFingerprint().equals(sp.getCustomExitpoint())) {
-                                    LOG.error("the chosen exit node could not be found", e);
+                                    logger.error("the chosen exit node could not be found", e);
                                     throw e;
                             }
-                            LOG.debug("got TorServerNotFoundException but ignoring it", e);
+                            logger.debug("got TorServerNotFoundException but ignoring it", e);
                         }
                         catch (final TorException e)
                         {
 							/* do nothing, continue trying */
-                            LOG.debug("got TorException : {}", e.getMessage(), e);
+                            logger.debug("got TorException : {}", e.getMessage(), e);
                         }
 						catch (final IOException e)
 						{
 							/* do nothing, continue trying */
-							LOG.debug("got IOException : {}", e.getMessage(), e);
+							logger.debug("got IOException : {}", e.getMessage(), e);
 						}
-						LOG.debug("provideSuitableNewCircuit retry {} from {}", new Object[] {retries + 1, TorConfig.getRetriesConnect()});
+						logger.debug("provideSuitableNewCircuit retry {} from {}", new Object[] {retries + 1, TorConfig.getRetriesConnect()});
 					}
-					LOG.debug("Callable Finished!");
+					logger.debug("Callable Finished!");
 					return result;
 				}
 			};
@@ -152,16 +152,16 @@ public class CircuitAdmin
 		}
 		try
 		{
-			LOG.debug("executing {} tasks", allTasks.size());
+			logger.debug("executing {} tasks", allTasks.size());
 			return executor.invokeAny(allTasks);
 		}
 		catch (InterruptedException exception)
 		{
-			LOG.debug("got Exception while executing tasks", exception);
+			logger.debug("got Exception while executing tasks", exception);
 		}
 		catch (ExecutionException exception)
 		{
-			LOG.debug("got Exception while executing tasks", exception);
+			logger.debug("got Exception while executing tasks", exception);
             throw exception.getCause();
 		}
 		return null;
@@ -192,14 +192,14 @@ public class CircuitAdmin
 						if (sp.getCustomExitpoint() == null)
 						{
 							circuit.setUnused(false);
-							LOG.debug("we successfully used an unused Circuit! Id : {}", circuit.getId());
+							logger.debug("we successfully used an unused Circuit! Id : {}", circuit.getId());
 							return circuit;
 						}
 						if (circuit.getRelayEarlyCellsRemaining() > 0) // is extendable?
 						{
 							circuit.extend(sp.getCustomExitpoint());
 							circuit.setUnused(false);
-							LOG.debug("we successfully extended and used an unused Circuit! Id : {}", circuit.getId());
+							logger.debug("we successfully extended and used an unused Circuit! Id : {}", circuit.getId());
 							return circuit;
 						}
 					}
@@ -208,7 +208,7 @@ public class CircuitAdmin
 		}
 		catch (Exception exception)
 		{
-			LOG.debug("we got an exception while finding a already established Circuit. using new one.", exception);
+			logger.debug("we got an exception while finding a already established Circuit. using new one.", exception);
 		}
 		Circuit result = provideSuitableNewCircuit(tlsConnectionAdmin, dir, sp, torEventService);
 		result.setUnused(false);
@@ -230,14 +230,14 @@ public class CircuitAdmin
 													final TCPStreamProperties sp, 
 													final TorEventService torEventService,
 													final boolean forHiddenService) throws Throwable {
-		LOG.debug("TLSConnectionAdmin.provideSuitableCircuits: called for {}", sp.getHostname());
+		logger.debug("TLSConnectionAdmin.provideSuitableCircuits: called for {}", sp.getHostname());
 
 		// TODO test: shortcut/cache
 		final Circuit[] cachedResults = suitableCircuitsCache.get(sp.getHostname());
 		if (cachedResults != null)
 		{
 			// TODO return cachedResults;
-			LOG.debug("return chachedResults");
+			logger.debug("return chachedResults");
 		}
 
 		// list all suiting circuits in a vector
@@ -261,7 +261,7 @@ public class CircuitAdmin
 				}
 				catch (final TorException e)
 				{ /* do nothing, just try next circuit */
-					LOG.debug("got TorException : {}", e.getMessage(), e);
+					logger.debug("got TorException : {}", e.getMessage(), e);
 				}
 			}
 		}
@@ -313,7 +313,7 @@ public class CircuitAdmin
 		{
 			// spawn new circuit IN BACKGROUND, unless maximum number of
 			// circuits reached
-			LOG.debug("TLSConnectionAdmin.provideSuitableCircuits: spawning circuit to {} in background", sp.getHostname());
+			logger.debug("TLSConnectionAdmin.provideSuitableCircuits: spawning circuit to {} in background", sp.getHostname());
 			final Thread spawnInBackground = new NewCircuitThread(tlsConnectionAdmin, dir, sp, torEventService);
 			spawnInBackground.setName("CuircuitAdmin.provideSuitableCircuits");
 			spawnInBackground.start();
@@ -321,7 +321,7 @@ public class CircuitAdmin
 		else if (returnValues == 0 && numberOfExistingCircuits < TorConfig.circuitsMaximumNumber)
 		{
 			// spawn new circuit, unless maximum number of circuits reached
-			LOG.debug("TLSConnectionAdmin.provideSuitableCircuits: spawning circuit to {}", sp.getHostname());
+			logger.debug("TLSConnectionAdmin.provideSuitableCircuits: spawning circuit to {}", sp.getHostname());
 			final Circuit single = provideSuitableNewCircuit(tlsConnectionAdmin, dir, sp, torEventService);
 			if (single != null)
 			{
@@ -334,9 +334,9 @@ public class CircuitAdmin
 		for (int i = 0; i < returnValues; ++i)
 		{
 			results[i] = allCircs.get(i);
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("TLSConnectionAdmin.provideSuitableCircuits: Choose Circuit ranking "
+				logger.debug("TLSConnectionAdmin.provideSuitableCircuits: Choose Circuit ranking "
 						+ results[i].getRanking() + ":" + results[i].toString());
 			}
 		}
@@ -349,7 +349,7 @@ public class CircuitAdmin
 
 	/**
 	 * returns a route through the network as specified in
-	 * @see com.rovemonteux.silvertunnel.netlib.layer.tor.common.TCPStreamProperties.
+	 * @see cf.monteux.silvertunnel.netlib.layer.tor.common.TCPStreamProperties.
 	 *
 	 * @param sp
 	 *            tcp stream properties
@@ -569,11 +569,11 @@ public class CircuitAdmin
 		// the end
 		if (result == null)
 		{
-			LOG.warn("result new route is null");
+			logger.warn("result new route is null");
 		}
 		else
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
 				final StringBuffer sb = new StringBuffer(50);
 				for (final Router server : result)
@@ -582,7 +582,7 @@ public class CircuitAdmin
 							+ server.getOrPort() + "(" + server.getNickname()
 							+ "), fp=" + server.getFingerprint() + ") ");
 				}
-				LOG.debug("result new route: {}", sb.toString());
+				logger.debug("result new route: {}", sb.toString());
 			}
 		}
 		return result;
@@ -649,7 +649,7 @@ public class CircuitAdmin
 		}
 		catch (final TorException te)
 		{
-			LOG.warn("Directory.restoreCircuit: failed");
+			logger.warn("Directory.restoreCircuit: failed");
 		}
 
 		return route;

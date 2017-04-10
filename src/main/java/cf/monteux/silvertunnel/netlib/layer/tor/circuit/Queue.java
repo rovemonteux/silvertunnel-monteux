@@ -24,8 +24,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.Cell;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelay;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorNoAnswerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * a helper class for queueing data (FIFO).
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public final class Queue
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Queue.class);
+	private static final Logger logger = LogManager.getLogger(Queue.class);
 
 	private static final int WAIT = 100;
 
@@ -93,13 +93,13 @@ public final class Queue
 				}
 				catch (final TorException te)
 				{ /* die silently */
-					LOG.debug("got TorException : {}", te.getMessage(), te);
+					logger.debug("got TorException : {}", te.getMessage(), te);
 				}
 			}
 		}
 		catch (final ClassCastException e)
 		{
-			LOG.debug("got ClassCastException : {}", e.getMessage(), e);
+			logger.debug("got ClassCastException : {}", e.getMessage(), e);
 		}
 
 		// otherwise add to queue
@@ -193,7 +193,7 @@ public final class Queue
 			}
 			catch (final InterruptedException e)
 			{
-				LOG.debug("got InterruptedException : {}", e.getMessage(), e);
+				logger.debug("got InterruptedException : {}", e.getMessage(), e);
 			}
 			--retries;
 		}
@@ -221,7 +221,7 @@ public final class Queue
 					+ Cell.type(type) + " received type " + cell.type());
 		}
 		// if (cell.command == Cell.CELL_RELAY)
-		// Tor.LOG.logCell(Logger.WARNING,"used from interface for receiving a
+		// Tor.logger.logCell(Logger.WARNING,"used from interface for receiving a
 		// cell");
 		return cell;
 	}
@@ -253,9 +253,9 @@ public final class Queue
 			{
 				if (relay.isTypeTruncated())
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("Queue.receiveRelayCell: expected relay-cell of type "
+						logger.debug("Queue.receiveRelayCell: expected relay-cell of type "
 							+ CellRelay.getRelayCommandAsString(type)
 							+ " received type "
 							+ relay.getRelayCommandAsString()
@@ -272,9 +272,9 @@ public final class Queue
 				}
 				else
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("Queue.receiveRelayCell: expected relay-cell of type "
+						logger.debug("Queue.receiveRelayCell: expected relay-cell of type "
 							+ CellRelay.getRelayCommandAsString(type)
 							+ " received type "
 							+ relay.getRelayCommandAsString());
@@ -289,7 +289,7 @@ public final class Queue
 		}
 		else
 		{
-			LOG.debug("got correct type.");
+			logger.debug("got correct type.");
 		}
 		return relay;
 	}

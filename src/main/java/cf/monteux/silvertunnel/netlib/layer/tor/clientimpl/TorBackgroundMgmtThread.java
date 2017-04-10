@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -49,8 +49,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.common.TCPStreamProperties;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
 import cf.monteux.silvertunnel.netlib.layer.tor.directory.DirectoryManagerThread;
 import cf.monteux.silvertunnel.netlib.layer.tor.stream.TCPStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Management thread.
@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 class TorBackgroundMgmtThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorBackgroundMgmtThread.class);
+	private static final Logger logger = LogManager.getLogger(TorBackgroundMgmtThread.class);
 
 	/** general factor seconds:milliseconds. */
 	private static final int MILLISEC = 1000;
@@ -113,12 +113,12 @@ class TorBackgroundMgmtThread extends Thread
 		{
 			if (amount > 0)
 			{
-				LOG.info("TorBackgroundMgmtThread.spawnIdleCircuits: Spawn {} new circuits", amount);
+				logger.info("TorBackgroundMgmtThread.spawnIdleCircuits: Spawn {} new circuits", amount);
 			}
 		}
 		else
 		{
-			LOG.debug("Not yet spawning circuits (too few routers known until now)");
+			logger.debug("Not yet spawning circuits (too few routers known until now)");
 			return;
 		}
 
@@ -158,11 +158,11 @@ class TorBackgroundMgmtThread extends Thread
 					}
 					catch (final Exception e)
 					{
-						LOG.debug("TorBackgroundMgmtThread.spawnIdleCircuits got Exception: {}"	, e.getMessage(), e);
+						logger.debug("TorBackgroundMgmtThread.spawnIdleCircuits got Exception: {}"	, e.getMessage(), e);
 					}
 				}
 			};
-			LOG.debug("TorBackgroundMgmtThread.spawnIdleCircuits: Circuit-Spawning thread started.");
+			logger.debug("TorBackgroundMgmtThread.spawnIdleCircuits: Circuit-Spawning thread started.");
 			brt.setName("Idle Thread " + idleThreadCounter++);
 			brt.start();
 			backgroundThreads.add(brt);
@@ -181,9 +181,9 @@ class TorBackgroundMgmtThread extends Thread
 				// check if this circuit needs a keep-alive-packet
 				if (c.isEstablished()	&& currentTimeMillis - c.getLastCell() > CIRCUITS_KEEP_ALIVE_INTERVAL_S * MILLISEC)
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("TorBackgroundMgmtThread.sendKeepAlivePackets(): Circuit " + c.toString());
+						logger.debug("TorBackgroundMgmtThread.sendKeepAlivePackets(): Circuit " + c.toString());
 					}
 					c.sendKeepAlive();
 				}
@@ -197,9 +197,9 @@ class TorBackgroundMgmtThread extends Thread
 									- stream.getLastCellSentDate() > STREAMS_KEEP_ALIVE_INTERVAL_S
 									* MILLISEC)
 					{
-						if (LOG.isDebugEnabled())
+						if (logger.isDebugEnabled())
 						{
-							LOG.debug("TorBackgroundMgmt.sendKeepAlivePackets(): Stream "
+							logger.debug("TorBackgroundMgmt.sendKeepAlivePackets(): Stream "
 									+ stream.toString());
 						}
 						stream.sendKeepAlive();
@@ -217,9 +217,9 @@ class TorBackgroundMgmtThread extends Thread
 	{
 		final CircuitsStatus circuitsStatus = tor.getCircuitsStatus();
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("TorBackgroundMgmt.manageIdleCircuits(): circuit counts: "
+			logger.debug("TorBackgroundMgmt.manageIdleCircuits(): circuit counts: "
 				+ (circuitsStatus.getCircuitsAlive() - circuitsStatus
 						.getCircuitsEstablished()) + " building, "
 				+ circuitsStatus.getCircuitsEstablished() + " established + "
@@ -234,9 +234,9 @@ class TorBackgroundMgmtThread extends Thread
 		else if (circuitsStatus.getCircuitsEstablished() > TorConfig.getMinimumIdleCircuits()	+ TorConfig.circuitsMaximumNumber)
 		{
 			// TODO: if for some reason there are too many established circuits. close the oldest ones
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("TorBackgroundMgmtThread.manageIdleCircuits(): kill "
+				logger.debug("TorBackgroundMgmtThread.manageIdleCircuits(): kill "
 					+ (TorConfig.getMinimumIdleCircuits() + TorConfig.circuitsMaximumNumber - circuitsStatus
 							.getCircuitsAlive()) + "new circuits (FIXME)");
 			}
@@ -251,10 +251,10 @@ class TorBackgroundMgmtThread extends Thread
 	{
 		for (final TLSConnection tls : tor.getTlsConnectionAdmin().getConnections())
 		{
-			LOG.debug("check tls={}", tls);
+			logger.debug("check tls={}", tls);
 			if (tls.isClosed())
 			{
-				LOG.debug("remove tls={}", tls);
+				logger.debug("remove tls={}", tls);
 				tor.getTlsConnectionAdmin().removeConnection(tls);
 			}
 			for (final Circuit c : tls.getCircuitMap().values())
@@ -269,19 +269,19 @@ class TorBackgroundMgmtThread extends Thread
 					{
 						if (diff > (2 * TorConfig.queueTimeoutStreamBuildup))
 						{
-							// LOG.info("close "+diff+" "+s.print());
-							LOG.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing stream (too long building) "
+							// logger.info("close "+diff+" "+s.print());
+							logger.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing stream (too long building) "
 									+ s.toString());
 							s.close(true);
 						}
 						else
 						{
-							LOG.debug("Checked {} {}", diff, s.getRoute());
+							logger.debug("Checked {} {}", diff, s.getRoute());
 						}
 					}
 					else
 					{
-						LOG.debug("OK {} {}", diff, s.getRoute());
+						logger.debug("OK {} {}", diff, s.getRoute());
 					}
 				}
 				// check if circuit is establishing but doesn't had any action
@@ -290,7 +290,7 @@ class TorBackgroundMgmtThread extends Thread
 				{
 					if ((currentTimeMillis - c.getLastAction()) / MILLISEC > (2 * TorConfig.queueTimeoutCircuit))
 					{
-						LOG.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing (too long building) "
+						logger.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing (too long building) "
 								+ c.toString());
 						c.close(false);
 					}
@@ -298,7 +298,7 @@ class TorBackgroundMgmtThread extends Thread
 				// check if this circuit should not accept more streams
 				if (c.getEstablishedStreams() > TorConfig.getStreamsPerCircuit())
 				{
-					LOG.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing (maximum streams) "
+					logger.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): closing (maximum streams) "
 							+ c.toString());
 					c.close(false);
 				}
@@ -311,7 +311,7 @@ class TorBackgroundMgmtThread extends Thread
 				// check if this circuit can be removed from the set of circuits
 				if (c.isDestruct())
 				{
-					LOG.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): destructing circuit " + c.toString());
+					logger.debug("TorBackgroundMgmtThread.tearDownClosedCircuits(): destructing circuit " + c.toString());
 					tls.removeCircuit(c.getId());
 				}
 			}
@@ -351,7 +351,7 @@ class TorBackgroundMgmtThread extends Thread
 		}
 		catch (final InterruptedException e)
 		{
-			LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+			logger.debug("got IterruptedException : {}", e.getMessage(), e);
 		}
 		// run until killed
 		outerWhile: while (!stopped)
@@ -373,12 +373,12 @@ class TorBackgroundMgmtThread extends Thread
 			}
 			catch (final InterruptedException e)
 			{
-				LOG.error("stop thread1", e);
+				logger.error("stop thread1", e);
 				break outerWhile;
 			}
 			catch (final Exception e)
 			{
-				LOG.error("stop thread2", e);
+				logger.error("stop thread2", e);
 				break outerWhile;
 			}
 		}

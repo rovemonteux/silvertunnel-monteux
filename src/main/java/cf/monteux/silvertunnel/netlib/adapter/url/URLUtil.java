@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -42,8 +42,8 @@ import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 
 import cf.monteux.silvertunnel.netlib.adapter.url.impl.net.http.HttpHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Support of URL handling.
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
 public class URLUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(URLUtil.class);
+	private static final Logger logger = LogManager.getLogger(URLUtil.class);
 
 	/**
 	 * Returns a {@link java.net.URLConnection URLConnection} instance that
@@ -72,10 +72,10 @@ public class URLUtil
 	 */
 	public static URLConnection openConnection(final URLStreamHandlerFactory factory, final URL url) throws IOException
 	{
-		LOG.info("openConnection start with url={}", url);
+		logger.info("openConnection start with url={}", url);
 		final URLStreamHandler handler = factory.createURLStreamHandler(url.getProtocol());
 		final URLConnection result = ((HttpHandler) handler).openConnection(url, null);
-		LOG.info("openConnection end with result={}", result);
+		logger.info("openConnection end with result={}", result);
 		return result;
 	}
 }

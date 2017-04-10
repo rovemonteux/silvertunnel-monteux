@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -38,8 +38,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Router;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -60,7 +60,7 @@ import java.util.*;
 public final class TLSConnectionAdmin
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TLSConnectionAdmin.class);
+	private static final Logger logger = LogManager.getLogger(TLSConnectionAdmin.class);
 
 	protected static final SecureRandom RANDOM = new SecureRandom();
 
@@ -114,7 +114,7 @@ public final class TLSConnectionAdmin
 		if (conn == null)
 		{
 			// not in cache: build new TLS connection
-			LOG.debug("TLSConnectionAdmin: TLS connection to {}", router.getNickname());
+			logger.debug("TLSConnectionAdmin: TLS connection to {}", router.getNickname());
 			conn = new TLSConnection(router, lowerTlsConnectionNetLayer);
 			weakConn = new WeakReference<TLSConnection>(conn);
 			connectionMap.put(router.getFingerprint(), weakConn);

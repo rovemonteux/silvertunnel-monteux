@@ -42,8 +42,8 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 import cf.monteux.silvertunnel.netlib.api.NetLayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Herb Jellinek
@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class HttpClient extends NetworkClient
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
+	private static final Logger logger = LogManager.getLogger(HttpClient.class);
 	/** whether this httpclient comes from the cache. */
 	protected boolean cachedHttpClient = false;
 
@@ -527,7 +527,7 @@ public class HttpClient extends NetworkClient
 				if (httpuc.getRequestMethod().equals("POST") && !retryPostProp)
 				{
 					// do not retry the request
-					LOG.debug("do not retry request");
+					logger.debug("do not retry request");
 				}
 				else
 				{
@@ -596,9 +596,9 @@ public class HttpClient extends NetworkClient
 			if (ret)
 			{ // is valid HTTP - response started w/ "HTTP/1."
 				responses.parseHeader(serverInput);
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("response header : {}", responses.toString());
+					logger.debug("response header : {}", responses.toString());
 				}
 				// we've finished parsing http headers
 				// check if there are any applicable cookies to set (in cache)
@@ -671,7 +671,7 @@ public class HttpClient extends NetworkClient
 							&& !retryPostProp)
 					{
 						// do not retry the request
-						LOG.debug("do not retry request");
+						logger.debug("do not retry request");
 					}
 					else
 					{
@@ -720,7 +720,7 @@ public class HttpClient extends NetworkClient
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("got Exception while trying to extract the status code : {}", e, e);
+			logger.debug("got Exception while trying to extract the status code : {}", e, e);
 		}
 
 		if (code == HTTP_CONTINUE)
@@ -743,7 +743,7 @@ public class HttpClient extends NetworkClient
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("got Exception while retrieving Transfer-Encoding value : {}", e, e);
+			logger.debug("got Exception while retrieving Transfer-Encoding value : {}", e, e);
 		}
 		if (te != null && te.equalsIgnoreCase("chunked"))
 		{
@@ -780,7 +780,7 @@ public class HttpClient extends NetworkClient
 			catch (final Exception e)
 			{
 				cl = -1;
-//				LOG.debug("got Exception while trying to retrieve content-length value: {}", e, e);
+//				logger.debug("got Exception while trying to retrieve content-length value: {}", e, e);
 			}
 
 			final String requestLine = requests.getKey(0);
@@ -924,7 +924,7 @@ public class HttpClient extends NetworkClient
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("got Exception trying to close the socket : {}", e, e);
+			logger.debug("got Exception trying to close the socket : {}", e, e);
 		}
 	}
 

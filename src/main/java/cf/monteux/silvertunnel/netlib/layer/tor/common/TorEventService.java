@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,8 +20,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.common;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Register TorEventHandler and fire TorEvents.
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class TorEventService
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorEventService.class);
+	private static final Logger logger = LogManager.getLogger(TorEventService.class);
 
 	private final Collection<TorEventHandler> eventHandlers = new ArrayList<TorEventHandler>();
 
@@ -60,7 +60,7 @@ public class TorEventService
 			}
 			catch (final Exception e)
 			{
-				LOG.warn("TorEventService.fireEvent()", e);
+				logger.warn("TorEventService.fireEvent()", e);
 			}
 		}
 	}

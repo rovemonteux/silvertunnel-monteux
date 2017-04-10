@@ -31,8 +31,8 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * AuthenticationInfo: Encapsulate the information needed to authenticate a user
@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 abstract class AuthenticationInfo extends AuthCacheValue implements Cloneable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(AuthCacheValue.class);
+	private static final Logger logger = LogManager.getLogger(AuthCacheValue.class);
 	private static final long serialVersionUID = 1L;
 
 	// Constants saying what kind of authorization this is. This determines
@@ -161,7 +161,7 @@ abstract class AuthenticationInfo extends AuthCacheValue implements Cloneable
 				}
 				catch (final InterruptedException e)
 				{
-					LOG.debug("got IterruptedException : ", e.getMessage(), e);
+					logger.debug("got IterruptedException : ", e.getMessage(), e);
 				}
 			}
 		}

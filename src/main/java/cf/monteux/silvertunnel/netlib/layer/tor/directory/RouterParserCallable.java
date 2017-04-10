@@ -1,5 +1,5 @@
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -22,8 +22,8 @@ import java.util.concurrent.Callable;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Router;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this Callable is used for running the Routerparsing in parallel.
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public final class RouterParserCallable implements Callable<Router>
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(RouterParserCallable.class);
+	private static final Logger logger = LogManager.getLogger(RouterParserCallable.class);
 	/** the router descriptor. */
 	private final transient String descriptor;
 	/**
@@ -56,7 +56,7 @@ public final class RouterParserCallable implements Callable<Router>
 		}
 		catch (final TorException e)
 		{
-			LOG.info("got TorException while parsing RouterDescriptor", e);
+			logger.info("got TorException while parsing RouterDescriptor", e);
 		}
 		return null;
 	}

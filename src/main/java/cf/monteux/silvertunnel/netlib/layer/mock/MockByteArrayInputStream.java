@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -20,8 +20,8 @@ package cf.monteux.silvertunnel.netlib.layer.mock;
 
 import java.io.ByteArrayInputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Same as ByteArrayInputStream, but wait (block) the specified time if the end
@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class MockByteArrayInputStream extends ByteArrayInputStream
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(MockByteArrayInputStream.class);
+	private static final Logger logger = LogManager.getLogger(MockByteArrayInputStream.class);
 	private static final long ENDLESS_MS = Long.MAX_VALUE;
 	private long waitAtTheEndMs;
 
@@ -70,7 +70,7 @@ public class MockByteArrayInputStream extends ByteArrayInputStream
 		}
 		catch (final InterruptedException e)
 		{
-			LOG.debug("got IterruptedException : {}", e.getMessage(), e);
+			logger.debug("got IterruptedException : {}", e.getMessage(), e);
 		}
 		sleepingThread = null;
 

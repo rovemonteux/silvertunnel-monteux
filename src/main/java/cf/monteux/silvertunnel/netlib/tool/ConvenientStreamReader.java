@@ -1,5 +1,5 @@
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2014 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
  */
 package cf.monteux.silvertunnel.netlib.tool;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +27,7 @@ import java.io.InputStream;
  * Provides convenient helper Methods for reading streams.
  */
 public class ConvenientStreamReader {
-    private static final Logger LOG = LoggerFactory.getLogger(ConvenientStreamReader.class);
+    private static final Logger logger = LogManager.getLogger(ConvenientStreamReader.class);
     private InputStream inputStream;
     public ConvenientStreamReader(final InputStream inputStream) throws IOException {
         this.inputStream = inputStream;

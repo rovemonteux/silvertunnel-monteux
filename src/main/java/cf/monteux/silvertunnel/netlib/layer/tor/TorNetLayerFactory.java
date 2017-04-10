@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-monteux Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2014 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -59,8 +59,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayerFactory;
 import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.layer.socks.SocksServerNetLayer;
 import cf.monteux.silvertunnel.netlib.util.TempfileStringStorage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Factory used to manage the default instance of the TorNetLayer. This factory
@@ -75,13 +75,13 @@ import org.slf4j.LoggerFactory;
 public class TorNetLayerFactory implements NetLayerFactory
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorNetLayerFactory.class);
+	private static final Logger logger = LogManager.getLogger(TorNetLayerFactory.class);
 
 	private NetLayer torNetLayer;
 	private NetLayer socksOverTorNetLayer;
 
 	/**
-	 * @see NetLayerFactory#getNetLayerById(com.rovemonteux.silvertunnel.netlib.api.NetLayerIDs)
+	 * @see NetLayerFactory#getNetLayerById(cf.monteux.silvertunnel.netlib.api.NetLayerIDs)
 	 * 
 	 * @param netLayerId valid netLayerId (check {@link NetLayerIDs})
 	 * @return the requested NetLayer if found; null if not found; it is not
@@ -92,7 +92,7 @@ public class TorNetLayerFactory implements NetLayerFactory
 	{
 		try
 		{
-			LOG.info("Get net layer by id "+netLayerId.getValue());
+			logger.info("Get net layer by id "+netLayerId.getValue());
 			if (netLayerId == NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP || netLayerId == NetLayerIDs.TOR)
 			{
 				if (torNetLayer == null)
@@ -106,7 +106,7 @@ public class TorNetLayerFactory implements NetLayerFactory
 					torNetLayer = new TorNetLayer(tlsNetLayer, tcpipNetLayer,
 							TempfileStringStorage.getInstance());
 				}
-				LOG.info("Created layer "+netLayerId.getValue()+" with status "+torNetLayer.getStatus());
+				logger.info("Created layer "+netLayerId.getValue()+" with status "+torNetLayer.getStatus());
 				return torNetLayer;
 
 			}
@@ -123,17 +123,17 @@ public class TorNetLayerFactory implements NetLayerFactory
 
 					socksOverTorNetLayer = new SocksServerNetLayer(torNetLayer);
 				}
-				LOG.info("Created layer "+netLayerId.getValue()+" with status "+socksOverTorNetLayer.getStatus());
+				logger.info("Created layer "+netLayerId.getValue()+" with status "+socksOverTorNetLayer.getStatus());
 				return socksOverTorNetLayer;
 			}
 
-			LOG.error("Unsupported netLayerId " + netLayerId.getValue());
+			logger.error("Unsupported netLayerId " + netLayerId.getValue());
 			return null;
 
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not create " + netLayerId, e);
+			logger.error("could not create " + netLayerId, e);
 			return null;
 		}
 	}

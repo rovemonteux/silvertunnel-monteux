@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,8 +19,8 @@ package cf.monteux.silvertunnel.netlib.layer.tor.common;
 
 import java.net.InetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.maxmind.geoip.LookupService;
 
@@ -32,7 +32,7 @@ import com.maxmind.geoip.LookupService;
 public class LookupServiceUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(LookupServiceUtil.class);
+	private static final Logger logger = LogManager.getLogger(LookupServiceUtil.class);
 
 	private static LookupService lookupService;
 
@@ -45,7 +45,7 @@ public class LookupServiceUtil
 		}
 		catch (final Exception e)
 		{
-			LOG.error("LookupService could not be initialized", e);
+			logger.error("LookupService could not be initialized", e);
 		}
 	}
 

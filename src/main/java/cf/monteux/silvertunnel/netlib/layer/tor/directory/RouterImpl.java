@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -66,8 +66,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
 import cf.monteux.silvertunnel.netlib.tool.ConvenientStreamReader;
 import cf.monteux.silvertunnel.netlib.tool.ConvenientStreamWriter;
 import cf.monteux.silvertunnel.netlib.tool.DynByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * a compound data structure that keeps track of the static informations we have
@@ -82,7 +82,7 @@ import org.slf4j.LoggerFactory;
 public final class RouterImpl implements Router, Cloneable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(RouterImpl.class);
+	private static final Logger logger = LogManager.getLogger(RouterImpl.class);
 
 	/** Information extracted from the Router descriptor. */
 	private String nickname;
@@ -457,9 +457,9 @@ public final class RouterImpl implements Router, Cloneable
 			++nr;
 			epList.add(new RouterExitPolicyImpl(epAccept, epIp, epNetmask, epLoPort, epHiPort));
 		}
-		if (LOG.isDebugEnabled() && nr >= MAX_EXITPOLICY_ITEMS)
+		if (logger.isDebugEnabled() && nr >= MAX_EXITPOLICY_ITEMS)
 		{
-			LOG.debug("Router has more than {} exitpolicy items", MAX_EXITPOLICY_ITEMS);
+			logger.debug("Router has more than {} exitpolicy items", MAX_EXITPOLICY_ITEMS);
 		}
 		return (epList.toArray(new RouterExitPolicy[epList.size()]));
 	}
@@ -537,7 +537,7 @@ public final class RouterImpl implements Router, Cloneable
 							}
 							catch (final Exception e)
 							{
-								LOG.debug("got Exception while parsing fingerprint : {}", e, e);
+								logger.debug("got Exception while parsing fingerprint : {}", e, e);
 								throw new TorException("Server " + nickname + " skipped as router", e);
 							}
 							break;
@@ -565,7 +565,7 @@ public final class RouterImpl implements Router, Cloneable
 								}
 								else
 								{
-									LOG.debug("skipping family member {}", tmpElements[n]);
+									logger.debug("skipping family member {}", tmpElements[n]);
 									//TODO : implement family members without fingerprint
 								}
 							}
@@ -641,7 +641,7 @@ public final class RouterImpl implements Router, Cloneable
 							// TODO : implement
 							break;
 						default:
-							LOG.debug("it seems that we are not reading the following key : {}", key.getValue());
+							logger.debug("it seems that we are not reading the following key : {}", key.getValue());
 							break;
 					}
 				}
@@ -673,7 +673,7 @@ public final class RouterImpl implements Router, Cloneable
 		final byte[] sha1Digest = mdMessage.digest();
 		if (!Encryption.verifySignatureWithHash(routerSignature, signingKey, sha1Digest))
 		{
-			LOG.info("Server -> router-signature check failed for " + nickname);
+			logger.info("Server -> router-signature check failed for " + nickname);
 			throw new TorException("Server " + nickname + ": description signature verification failed");
 		}
 
@@ -689,9 +689,9 @@ public final class RouterImpl implements Router, Cloneable
 		{
 			throw new TorException("Server.ParseRouterDescriptor: Unresolvable hostname " + hostname);
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("RouterImpl.parseRouterDescriptor took " + (System.currentTimeMillis() - timeStart) + " ms");
+			logger.debug("RouterImpl.parseRouterDescriptor took " + (System.currentTimeMillis() - timeStart) + " ms");
 		}
 	}
 
@@ -746,9 +746,9 @@ public final class RouterImpl implements Router, Cloneable
 	 */
 	public void punishRanking()
 	{
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Punishing " + toLongString());
+			logger.debug("Punishing " + toLongString());
 		}
 		rankingIndex *= punishmentFactor;
 	}

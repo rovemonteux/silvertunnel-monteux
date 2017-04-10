@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -47,8 +47,8 @@ import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.cache.CachingNetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.inetaddressimpl.DefaultIpNetAddressNameService;
 import cf.monteux.silvertunnel.netlib.nameservice.mock.NopNetAddressNameService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import sun.net.spi.nameservice.NameService;
 
@@ -66,7 +66,7 @@ import sun.net.spi.nameservice.NameService;
 public class NameServiceGlobalUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NameServiceGlobalUtil.class);
+	private static final Logger logger = LogManager.getLogger(NameServiceGlobalUtil.class);
 
 	private static boolean initialized = false;
 	private static boolean initializedWithSuccess = false;
@@ -122,7 +122,7 @@ public class NameServiceGlobalUtil
 			{
 				setIpNetAddressNameService(NopNetAddressNameService.getInstance());
 			}
-			LOG.debug("initialized");
+			logger.debug("initialized");
 			
 		}
 		else
@@ -151,20 +151,20 @@ public class NameServiceGlobalUtil
 			 * Currently, we do NOT specify which NetAddressNameService will be
 			 * used first (class must have default constructor without
 			 * arguments), Example would be:
-			 * System.setProperty("com.rovemonteux.silvertunnel.netlib.nameservice",
-			 * "com.rovemonteux.silvertunnel.netlib.nameservice.inetaddressimpl.DefaultIpNetAddressNameService"
+			 * System.setProperty("cf.monteux.silvertunnel.netlib.nameservice",
+			 * "cf.monteux.silvertunnel.netlib.nameservice.inetaddressimpl.DefaultIpNetAddressNameService"
 			 * );
 			 * 
 			 * Instead, we omit this system property and use
-			 * com.rovemonteux.silvertunnel.
+			 * cf.monteux.silvertunnel.
 			 * netlib.nameservice.mock.NopNetAddressNameService
 			 */
 			//System.setProperty(
-			//		"com.rovemonteux.silvertunnel.netlib.nameservice",
-			//		"com.rovemonteux.silvertunnel.netlib.nameservice.inetaddressimpl.DefaultIpNetAddressNameService");
+			//		"cf.monteux.silvertunnel.netlib.nameservice",
+			//		"cf.monteux.silvertunnel.netlib.nameservice.inetaddressimpl.DefaultIpNetAddressNameService");
 			System.setProperty(
-					"com.rovemonteux.silvertunnel.netlib.nameservice",
-					"com.rovemonteux.silvertunnel.netlib.nameservice.mock.NopNetAddressNameService");
+					"cf.monteux.silvertunnel.netlib.nameservice",
+					"cf.monteux.silvertunnel.netlib.nameservice.mock.NopNetAddressNameService");
 			// update status
 			initialized = true;
 		}
@@ -175,7 +175,7 @@ public class NameServiceGlobalUtil
 		if (initializedWithSuccess)
 		{
 			// success
-			LOG.info("Installation of NameService adapter with NopNetAddressNameService was successful");
+			logger.info("Installation of NameService adapter with NopNetAddressNameService was successful");
 		}
 		else
 		{
@@ -185,7 +185,7 @@ public class NameServiceGlobalUtil
 			if (initializedWithSuccess)
 			{
 				// success
-				LOG.info("Installation of NameService adapter with NopNetAddressNameService was successful (hard way)");
+				logger.info("Installation of NameService adapter with NopNetAddressNameService was successful (hard way)");
 			}
 			else
 			{
@@ -193,7 +193,7 @@ public class NameServiceGlobalUtil
 				final String msg = "Installation of NameService adapter with NopNetAddressNameService failed: "
 						+ "probably the method NameServiceGlobalUtil.initNameService() is called too late, "
 						+ "i.e. after first usage of java.net.InetAddress";
-				LOG.error(msg);
+				logger.error(msg);
 				throw new IllegalStateException(msg);
 			}
 		}
@@ -255,7 +255,7 @@ public class NameServiceGlobalUtil
 		}
 		catch (Exception exception)
 		{
-			LOG.debug("Hardway init doesnt work. got Exception : {}", exception, exception);
+			logger.debug("Hardway init doesnt work. got Exception : {}", exception, exception);
 		}
 	}
 	/**
@@ -273,7 +273,7 @@ public class NameServiceGlobalUtil
 			}
 			catch (Exception exception)
 			{
-				LOG.warn("Could not reset InetAddress due to exception", exception);
+				logger.warn("Could not reset InetAddress due to exception", exception);
 			}
 		}
 	}
@@ -303,12 +303,12 @@ public class NameServiceGlobalUtil
 			// check the expected result
 			if (address == null)
 			{
-				LOG.error("InetAddress.getAllByName() returned null as address (but this is wrong)");
+				logger.error("InetAddress.getAllByName() returned null as address (but this is wrong)");
 				return false;
 			}
 			else if (address.length != 1)
 			{
-				LOG.error("InetAddress.getAllByName() returned array of wrong size={}", address.length);
+				logger.error("InetAddress.getAllByName() returned array of wrong size={}", address.length);
 				return false;
 			}
 			else if (Arrays.equals(address[0].getAddress(), NopNetAddressNameService.CHECKER_IP[0].getIpaddress()))
@@ -318,13 +318,13 @@ public class NameServiceGlobalUtil
 			}
 			else
 			{
-				LOG.error("InetAddress.getAllByName() returned wrong IP address={}", Arrays.toString(address[0].getAddress()));
+				logger.error("InetAddress.getAllByName() returned wrong IP address={}", Arrays.toString(address[0].getAddress()));
 				return false;
 			}
 		}
 		catch (final Exception e)
 		{
-			LOG.error("InetAddress.getAllByName() throwed unexpected excpetion={}", e, e);
+			logger.error("InetAddress.getAllByName() throwed unexpected excpetion={}", e, e);
 			return false;
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cf.monteux.silvertunnel.netlib.tool.DynByteBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Extra thread that received data from an input stream.
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public final class HttpUtilResponseReceiverThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HttpUtilResponseReceiverThread.class);
+	private static final Logger logger = LogManager.getLogger(HttpUtilResponseReceiverThread.class);
 
 	/** What is the max chunk size? */
 	private static final int DEFAULT_CHUNK_SIZE = 100000;
@@ -89,7 +89,7 @@ public final class HttpUtilResponseReceiverThread extends Thread
 		}
 		catch (final IOException e)
 		{
-			LOG.error("receiving data interupted by exception", e);
+			logger.error("receiving data interupted by exception", e);
 		}
 
 		finished = true;

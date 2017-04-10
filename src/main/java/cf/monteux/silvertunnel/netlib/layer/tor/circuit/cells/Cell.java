@@ -22,8 +22,8 @@ import java.io.InputStream;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * most general form of the cells in the Tor protocol. Should not be used on its
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class Cell
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Cell.class);
+	private static final Logger logger = LogManager.getLogger(Cell.class);
 
 	/** Padding cell. */
 	public static final int CELL_PADDING = 0;
@@ -148,9 +148,9 @@ public class Cell
 		this.command = data[Cell.CELL_COMMAND_POS];
 		System.arraycopy(data, Cell.CELL_PAYLOAD_POS, this.payload, 0, payload.length);
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Cell.initFromData: " + toString("Received "));
+			logger.debug("Cell.initFromData: " + toString("Received "));
 		}
 	}
 
@@ -162,9 +162,9 @@ public class Cell
 	{
 		final byte[] buff = new byte[Cell.CELL_TOTAL_SIZE];
 
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("Cell.toByteArray(): " + toString("Sending "));
+			logger.debug("Cell.toByteArray(): " + toString("Sending "));
 		}
 
 		System.arraycopy(

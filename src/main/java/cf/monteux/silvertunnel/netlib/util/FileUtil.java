@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -40,7 +40,7 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
 public final class FileUtil
 {
 	/** */
-//	private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
+//	private static final Logger logger = LogManager.getLogger(FileUtil.class);
 
 	private static final String FILE_CHARSET_NAME = Util.UTF8;
 

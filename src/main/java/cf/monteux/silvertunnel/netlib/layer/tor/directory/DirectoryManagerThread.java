@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -18,8 +18,8 @@
 package cf.monteux.silvertunnel.netlib.layer.tor.directory;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Directory-Manager Class. This class is done in a separate thread to avoid
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public final class DirectoryManagerThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(DirectoryManagerThread.class);
+	private static final Logger logger = LogManager.getLogger(DirectoryManagerThread.class);
 
 	/** general factor seconds:milliseconds. */
 	private static final int MILLISEC = 1000;
@@ -62,7 +62,7 @@ public final class DirectoryManagerThread extends Thread
 		currentTimeMillis = System.currentTimeMillis();
 		if (currentTimeMillis > dirNextUpdateTimeMillis || directory.getValidRoutersByFingerprint().isEmpty())
 		{
-			LOG.debug("DirectoryManagerThread.updateDirectory: updating directory");
+			logger.debug("DirectoryManagerThread.updateDirectory: updating directory");
 			dirNextUpdateTimeMillis = currentTimeMillis + TorConfig.getIntervalDirectoryRefresh() * 60 * MILLISEC;
 			directory.refreshListOfServers();
 		}
@@ -89,7 +89,7 @@ public final class DirectoryManagerThread extends Thread
 			catch (final Exception e)
 			{
 				stopped = true;
-				LOG.debug("got Exception : {}", e.getMessage(), e);
+				logger.debug("got Exception : {}", e.getMessage(), e);
 			}
 		}
 	}

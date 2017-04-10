@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -27,8 +27,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayer;
 import cf.monteux.silvertunnel.netlib.api.NetLayerStatus;
 import cf.monteux.silvertunnel.netlib.api.NetServerSocket;
 import cf.monteux.silvertunnel.netlib.api.NetSocket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Transparent NetLayer that enforces time(out) and throughput limits of a
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class ControlNetLayer implements NetLayer
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(ControlNetLayer.class);
+	private static final Logger logger = LogManager.getLogger(ControlNetLayer.class);
 
 	private final NetLayer lowerNetLayer;
 	private final ControlParameters controlParameters;

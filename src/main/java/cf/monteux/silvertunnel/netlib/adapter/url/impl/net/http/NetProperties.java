@@ -32,8 +32,8 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * This class allows for centralized access to Networking properties.
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class NetProperties
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(NetProperties.class);
+	private static final Logger logger = LogManager.getLogger(NetProperties.class);
 	private static Properties props = new Properties();
 	static
 	{
@@ -91,7 +91,7 @@ public class NetProperties
 		{
 			// Do nothing. We couldn't find or access the file
 			// so we won't have default properties...
-			LOG.debug("got Exception : {}", e.getMessage(), e);
+			logger.debug("got Exception : {}", e.getMessage(), e);
 		}
 	}
 
@@ -118,11 +118,11 @@ public class NetProperties
 		}
 		catch (final IllegalArgumentException e)
 		{
-			LOG.debug("got IllegalArgumentException : {}", e.getMessage(), e);
+			logger.debug("got IllegalArgumentException : {}", e.getMessage(), e);
 		}
 		catch (final NullPointerException e)
 		{
-			LOG.debug("got NullPointerException : {}", e.getMessage(), e);
+			logger.debug("got NullPointerException : {}", e.getMessage(), e);
 		}
 		return null;
 	}
@@ -153,11 +153,11 @@ public class NetProperties
 		}
 		catch (final IllegalArgumentException e)
 		{
-			LOG.debug("got IllegalArgumentException : {}", e.getMessage(), e);
+			logger.debug("got IllegalArgumentException : {}", e.getMessage(), e);
 		}
 		catch (final NullPointerException e)
 		{
-			LOG.debug("got NullPointerException : {}", e.getMessage(), e);
+			logger.debug("got NullPointerException : {}", e.getMessage(), e);
 		}
 
 		if (val != null)
@@ -168,7 +168,7 @@ public class NetProperties
 			}
 			catch (final NumberFormatException ex)
 			{
-				LOG.debug("got NumberFormatException : {}", ex.getMessage(), ex);
+				logger.debug("got NumberFormatException : {}", ex.getMessage(), ex);
 			}
 		}
 		return Integer.valueOf(defval);
@@ -198,11 +198,11 @@ public class NetProperties
 		}
 		catch (final IllegalArgumentException e)
 		{
-			LOG.debug("got IllegalArgumentException : {}", e.getMessage(), e);
+			logger.debug("got IllegalArgumentException : {}", e.getMessage(), e);
 		}
 		catch (final NullPointerException e)
 		{
-			LOG.debug("got NullPointerException : {}", e.getMessage(), e);
+			logger.debug("got NullPointerException : {}", e.getMessage(), e);
 		}
 
 		if (val != null)
@@ -213,7 +213,7 @@ public class NetProperties
 			}
 			catch (final NumberFormatException ex)
 			{
-				LOG.debug("got NumberFormatException : {}", ex.getMessage(), ex);
+				logger.debug("got NumberFormatException : {}", ex.getMessage(), ex);
 			}
 		}
 		return null;

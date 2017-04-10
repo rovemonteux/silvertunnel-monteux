@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -56,8 +56,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.api.Router;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.Cell;
 import cf.monteux.silvertunnel.netlib.layer.tor.common.TorX509TrustManager;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * functionality for the TLS connections bridging the gap to the first nodes in
@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 public class TLSConnection
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TLSConnection.class);
+	private static final Logger logger = LogManager.getLogger(TLSConnection.class);
 
 	private static final String enabledSuitesStr = "SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA";
 
@@ -136,14 +136,14 @@ public class TLSConnection
 		 * // for debugging purposes javax.net.ssl.HandshakeCompletedListener
 		 * hscl = new javax.net.ssl.HandshakeCompletedListener() { public void
 		 * handshakeCompleted(HandshakeCompletedEvent e) { try {
-		 * LOG.info("Cipher: "+e.getCipherSuite());
+		 * logger.info("Cipher: "+e.getCipherSuite());
 		 * java.security.cert.Certificate[] chain = e.getLocalCertificates();
-		 * LOG.info("Send cert-chain of length "+chain.length); for(int
+		 * logger.info("Send cert-chain of length "+chain.length); for(int
 		 * i=0;i<chain.length;++i)
-		 * LOG.info(" cert "+i+": "+chain[i].toString()); chain =
-		 * e.getPeerCertificates(); LOG.info("Received cert-chain of length
+		 * logger.info(" cert "+i+": "+chain[i].toString()); chain =
+		 * e.getPeerCertificates(); logger.info("Received cert-chain of length
 		 * "+chain.length); for(int i=0;i<chain.length;++i)
-		 * LOG.info(" cert "+i+": "+chain[i].toString()); } catch(Exception ex)
+		 * logger.info(" cert "+i+": "+chain[i].toString()); } catch(Exception ex)
 		 * {} } }; tls.addHandshakeCompletedListener(hscl);
 		 */
 
@@ -170,7 +170,7 @@ public class TLSConnection
 		}
 		catch (final IOException exception)
 		{
-			LOG.debug("error while sending data Exception : {}", exception, exception);
+			logger.debug("error while sending data Exception : {}", exception, exception);
 			// force to close the connection
 			close(true);
 			// rethrow error
@@ -241,7 +241,7 @@ public class TLSConnection
 	 */
 	void close(final boolean force)
 	{
-		LOG.debug("Closing TLS to {}", router.getNickname());
+		logger.debug("Closing TLS to {}", router.getNickname());
 
 		closed = true;
 		// FIXME: a problem with (!force) is, that circuits, that are currently
@@ -261,19 +261,19 @@ public class TLSConnection
 			}
 		}
 
-		LOG.debug("Fast exit while closing TLS to {}?", router.getNickname());
+		logger.debug("Fast exit while closing TLS to {}?", router.getNickname());
 		if (!(force || circuitMap.isEmpty()))
 		{
-			LOG.debug("Fast exit while closing TLS to {}!", router.getNickname());
+			logger.debug("Fast exit while closing TLS to {}!", router.getNickname());
 			return;
 		}
 
 		// kill dispatcher
-		LOG.debug("Closing dispatcher of TLS to {}", router.getNickname());
+		logger.debug("Closing dispatcher of TLS to {}", router.getNickname());
 		dispatcher.close();
 
 		// close TLS connection
-		LOG.debug("Closing TLS connection to {}", router.getNickname());
+		logger.debug("Closing TLS connection to {}", router.getNickname());
 		try
 		{
 			sout.close();
@@ -281,9 +281,9 @@ public class TLSConnection
 		}
 		catch (final IOException e)
 		{
-			LOG.debug("got IOException : {}", e.getMessage(), e);
+			logger.debug("got IOException : {}", e.getMessage(), e);
 		}
-		LOG.debug("Closing TLS to {} done", router.getNickname());
+		logger.debug("Closing TLS to {} done", router.getNickname());
 	}
 
 	@Override
@@ -338,7 +338,7 @@ public class TLSConnection
 	 */
 	public boolean removeCircuit(final Integer circuitId)
 	{
-		LOG.debug("remove circuit with circuitId={} from {}", circuitId, toString());
+		logger.debug("remove circuit with circuitId={} from {}", circuitId, toString());
 
 		// remove Circuit
 		boolean result;
@@ -353,9 +353,9 @@ public class TLSConnection
 		if (doClose)
 		{
 			// yes
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("close TLSConnection from {} because last Circuit is removed", toString());
+				logger.debug("close TLSConnection from {} because last Circuit is removed", toString());
 			}
 			close(true);
 		}
@@ -364,16 +364,16 @@ public class TLSConnection
 			// no
 			synchronized (circuitMap)
 			{
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("cannot close TLSConnection from " + toString()
+					logger.debug("cannot close TLSConnection from " + toString()
 						+ " because of additional circuits: " + circuitMap);
 				}
 			}
 		}
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("remove circuit from " + toString() + " done with result="
+			logger.debug("remove circuit from " + toString() + " done with result="
 				+ result);
 		}
 		return result;

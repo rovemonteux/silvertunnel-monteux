@@ -17,7 +17,7 @@
  */
 
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -52,8 +52,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * class that represents the Service Descriptor of a hidden service.
@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
 public final class RendezvousServiceDescriptor implements Serializable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(RendezvousServiceDescriptor.class);
+	private static final Logger logger = LogManager.getLogger(RendezvousServiceDescriptor.class);
 
 	/** pattern of a RendezvousServiceDescriptor String. */
 	private static Pattern serviceDescriptorStringPattern;
@@ -122,7 +122,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not initialze class RendezvousServiceDescriptor", e);
+			logger.error("could not initialze class RendezvousServiceDescriptor", e);
 		}
 	}
 
@@ -151,7 +151,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.debug("got UnsupportedEncodingException : {}", e.getMessage(), e);
+			logger.debug("got UnsupportedEncodingException : {}", e.getMessage(), e);
 		}
 		final int BASE64_COLUMN_WITH = 64;
 		final String introductionPointsBase64 = Encoding.toBase64(introductionPointsBytes, BASE64_COLUMN_WITH);
@@ -175,7 +175,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 			}
 			catch (final UnsupportedEncodingException e)
 			{
-				LOG.warn("unexpected", e);
+				logger.warn("unexpected", e);
 			}
 			final byte[] signature = Encryption.signData(dataToSign, privateKey);
 			signatureStr = Encoding.toBase64(signature, BASE64_COLUMN_WITH);
@@ -315,9 +315,9 @@ public final class RendezvousServiceDescriptor implements Serializable
 			final byte[] introductionPointsBytes = DatatypeConverter.parseBase64Binary(introductionPointsBase64);
 			final String introductionPointsStr = new String(introductionPointsBytes, Util.UTF8);
 			introductionPoints = SDIntroductionPoint.parseMultipleIntroductionPoints(introductionPointsStr);
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("ips = " + introductionPoints);
+				logger.debug("ips = " + introductionPoints);
 			}
 
 			// read and check signature
@@ -335,7 +335,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 			}
 			catch (final UnsupportedEncodingException e)
 			{
-				LOG.warn("unexpected", e);
+				logger.warn("unexpected", e);
 			}
 			if (checkSignature && !Encryption.verifySignature(signature, permanentPublicKey, signedData))
 			{
@@ -351,7 +351,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 		catch (final Exception e)
 		{
 			// convert the exception
-			LOG.info("long log", e);
+			logger.info("long log", e);
 			throw new TorException("could not parse service descriptor:" + e);
 		}
 	}
@@ -379,7 +379,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOG.warn("may not occur", e);
+			logger.warn("may not occur", e);
 			return null;
 		}
 	}
@@ -399,7 +399,7 @@ public final class RendezvousServiceDescriptor implements Serializable
 		}
 		catch (final Exception e)
 		{
-			LOG.error("ServiceDescriptor.updateURL(): " + e.getMessage(), e);
+			logger.error("ServiceDescriptor.updateURL(): " + e.getMessage(), e);
 			this.url = null;
 		}
 	}

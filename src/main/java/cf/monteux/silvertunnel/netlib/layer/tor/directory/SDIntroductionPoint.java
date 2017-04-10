@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -28,8 +28,8 @@ import cf.monteux.silvertunnel.netlib.api.util.TcpipNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * An object of this class represents a single introduction point of a
@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class SDIntroductionPoint implements Serializable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SDIntroductionPoint.class);
+	private static final Logger logger = LogManager.getLogger(SDIntroductionPoint.class);
 
 	/** pattern of one introduction-point. */
 	private static Pattern patternSingle;
@@ -83,7 +83,7 @@ public class SDIntroductionPoint implements Serializable
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not initialze class "
+			logger.error("could not initialze class "
 					+ SDIntroductionPoint.class.getName(), e);
 		}
 	}
@@ -111,7 +111,7 @@ public class SDIntroductionPoint implements Serializable
 			}
 			catch (final Exception e)
 			{
-				LOG.debug("invalid introduction-point i={} skipped", i, e);
+				logger.debug("invalid introduction-point i={} skipped", i, e);
 			}
 		}
 

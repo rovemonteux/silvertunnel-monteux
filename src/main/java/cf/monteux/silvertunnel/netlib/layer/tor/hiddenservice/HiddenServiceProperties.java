@@ -27,8 +27,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.directory.SDIntroductionPoint;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encryption;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.RSAKeyPair;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * contains all properties for a hidden service.
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class HiddenServiceProperties
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(HiddenServiceProperties.class);
+	private static final Logger logger = LogManager.getLogger(HiddenServiceProperties.class);
 
 	private RSAPublicKey pub;
 	private RSAPrivateKey priv;
@@ -74,9 +74,9 @@ public class HiddenServiceProperties
 	 * Encryption.getDigest(Encryption.getPKCS1EncodingFromRSAPublicKey(pub));
 	 * 
 	 * } catch (NoSuchProviderException e) {
-	 * LOG.error("HiddenServiceProperties: Caught exception: " +
+	 * logger.error("HiddenServiceProperties: Caught exception: " +
 	 * e.getMessage()); } catch (NoSuchAlgorithmException e) {
-	 * LOG.error("HiddenServiceProperties: Caught exception: " +
+	 * logger.error("HiddenServiceProperties: Caught exception: " +
 	 * e.getMessage()); } }
 	 */
 

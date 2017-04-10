@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -25,8 +25,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Background thread of class SocketTimeoutInputStream.
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 class SocketTimeoutInputStreamThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SocketTimeoutInputStreamThread.class);
+	private static final Logger logger = LogManager.getLogger(SocketTimeoutInputStreamThread.class);
 
 	private final SocketTimeoutInputStream stis;
 	private final InputStream wrappedInputStream;

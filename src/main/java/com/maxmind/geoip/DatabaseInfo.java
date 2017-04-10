@@ -44,7 +44,7 @@ package com.maxmind.geoip;
 public final class DatabaseInfo
 {
 	/** */
-//	private static final Logger LOG = LoggerFactory.getLogger(DatabaseInfo.class);
+//	private static final Logger logger = LogManager.getLogger(DatabaseInfo.class);
 	public static final int COUNTRY_EDITION = 1;
 	public static final int REGION_EDITION_REV0 = 7;
 	public static final int REGION_EDITION_REV1 = 3;

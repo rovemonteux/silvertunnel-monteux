@@ -31,8 +31,8 @@ import java.security.PrivilegedAction;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class is used to cleanup any remaining data that may be on a
@@ -51,7 +51,7 @@ public class KeepAliveStreamCleaner extends
 		LinkedBlockingQueue<MyKeepAliveCleanerEntry> implements Runnable
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(KeepAliveStreamCleaner.class);
+	private static final Logger logger = LogManager.getLogger(KeepAliveStreamCleaner.class);
 	// maximum amount of remaining data that we will try to cleanup
 	protected static int MAX_DATA_REMAINING = 512;
 
@@ -162,7 +162,7 @@ public class KeepAliveStreamCleaner extends
 						catch (final IOException ioe)
 						{
 							hc.closeServer();
-							LOG.debug("got IOException : {}", ioe.getMessage(), ioe);
+							logger.debug("got IOException : {}", ioe.getMessage(), ioe);
 						}
 						finally
 						{
@@ -173,7 +173,7 @@ public class KeepAliveStreamCleaner extends
 			}
 			catch (final InterruptedException ie)
 			{
-				LOG.debug("got IterruptedException : {}", ie.getMessage(), ie);
+				logger.debug("got IterruptedException : {}", ie.getMessage(), ie);
 			}
 		}
 		while (kace != null);

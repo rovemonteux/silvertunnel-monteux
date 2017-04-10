@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -27,8 +27,8 @@ import java.util.regex.Pattern;
 
 import cf.monteux.silvertunnel.netlib.layer.tor.api.Fingerprint;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * An object holds all authority dir server keys.
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class AuthorityKeyCertificates
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(AuthorityKeyCertificates.class);
+	private static final Logger logger = LogManager.getLogger(AuthorityKeyCertificates.class);
 
 	/** all certificates, accessible by their fingerprints. */
 	private final Map<Fingerprint, AuthorityKeyCertificate> authorityKeyCertificates = new HashMap<Fingerprint, AuthorityKeyCertificate>();
@@ -74,7 +74,7 @@ public class AuthorityKeyCertificates
 		}
 		catch (final Exception e)
 		{
-			LOG.error("could not initialze class AuthorityKeyCertificates", e);
+			logger.error("could not initialze class AuthorityKeyCertificates", e);
 		}
 	}
 
@@ -127,9 +127,9 @@ public class AuthorityKeyCertificates
 				// check certificate
 				if (!oneCert.getDirKeyExpires().after(minValidUntil))
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("skip authorityKeyCertificate because expired with fingerprint="
+						logger.debug("skip authorityKeyCertificate because expired with fingerprint="
 							+ oneCert.getDirIdentityKeyDigest()
 							+ ", dirKeyExpires=" + oneCert.getDirKeyExpires());
 					}
@@ -138,9 +138,9 @@ public class AuthorityKeyCertificates
 				if (!allowedAuthorityKeyIdentFingerprints.contains(oneCert
 						.getDirIdentityKeyDigest()))
 				{
-					if (LOG.isDebugEnabled())
+					if (logger.isDebugEnabled())
 					{
-						LOG.debug("skip authorityKeyCertificate because unauthorized fingerprint="
+						logger.debug("skip authorityKeyCertificate because unauthorized fingerprint="
 							+ oneCert.getDirIdentityKeyDigest());
 					}
 					continue;
@@ -153,7 +153,7 @@ public class AuthorityKeyCertificates
 			}
 			catch (final Exception e)
 			{
-				LOG.info("skip authorityKeyCertificate because of error while parsing oneCertStr="
+				logger.info("skip authorityKeyCertificate because of error while parsing oneCertStr="
 								+ oneCertStr, e);
 			}
 		}
@@ -194,9 +194,9 @@ public class AuthorityKeyCertificates
 
 		// calculate result
 		final boolean result = (certValidCount >= MIN_CERT_VALID_COUNT && certOutdatedCount <= MAX_CERT_OUTDATED_COUNT);
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("isValid(): result=" + result + ", certValidCount="
+			logger.debug("isValid(): result=" + result + ", certValidCount="
 				+ certValidCount + ", certOutdatedCount=" + certOutdatedCount); // TODO
 		}
 		return result;

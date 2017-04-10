@@ -27,8 +27,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.QueueHandler;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.Cell;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelay;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * used to be TCPStreamThreadTor2Java.
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 class QueueTor2JavaHandler implements QueueHandler
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(QueueTor2JavaHandler.class);
+	private static final Logger logger = LogManager.getLogger(QueueTor2JavaHandler.class);
 
 	private final TCPStream stream;
 	/** read from tor and output to this stream. */
@@ -56,7 +56,7 @@ class QueueTor2JavaHandler implements QueueHandler
 		}
 		catch (final IOException e)
 		{
-			LOG.error("QueueTor2JavaHandler: caught IOException " + e.getMessage(), e);
+			logger.error("QueueTor2JavaHandler: caught IOException " + e.getMessage(), e);
 		}
 	}
 
@@ -72,7 +72,7 @@ class QueueTor2JavaHandler implements QueueHandler
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("got Exception : {}", e.getMessage(), e);
+			logger.debug("got Exception : {}", e.getMessage(), e);
 		}
 	}
 
@@ -96,22 +96,22 @@ class QueueTor2JavaHandler implements QueueHandler
 		final CellRelay relay = (CellRelay) cell;
 		if (relay.isTypeData())
 		{
-			LOG.debug("QueueTor2JavaHandler.handleCell(): stream {} received data", stream.getId());
+			logger.debug("QueueTor2JavaHandler.handleCell(): stream {} received data", stream.getId());
 			try
 			{
 				fromtor.write(relay.getData(), 0, relay.getLength());
 			}
 			catch (final IOException e)
 			{
-				LOG.error("QueueTor2JavaHandler.handleCell(): caught IOException " + e.getMessage(), e);
+				logger.error("QueueTor2JavaHandler.handleCell(): caught IOException " + e.getMessage(), e);
 			}
 			return true;
 		}
 		else if (relay.isTypeEnd())
 		{
-			if (LOG.isDebugEnabled())
+			if (logger.isDebugEnabled())
 			{
-				LOG.debug("QueueTor2JavaHandler.handleCell(): stream "
+				logger.debug("QueueTor2JavaHandler.handleCell(): stream "
 					+ stream.getId() + " is closed: "
 					+ relay.getReasonForClosing());
 			}

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -26,8 +26,8 @@ import cf.monteux.silvertunnel.netlib.api.NetAddress;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
 import cf.monteux.silvertunnel.netlib.api.util.IpNetAddress;
 import cf.monteux.silvertunnel.netlib.layer.tor.clientimpl.Tor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetAddressNameService that resolves queries through the Tor anonymity
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 public class TorNetAddressNameService implements NetAddressNameService
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TorNetAddressNameService.class);
+	private static final Logger logger = LogManager.getLogger(TorNetAddressNameService.class);
 
 	/** {@link Tor} instance used for communications. */
 	private final Tor tor;
@@ -89,7 +89,7 @@ public class TorNetAddressNameService implements NetAddressNameService
 			throw e2;
 		}
         catch (final Throwable throwable) {
-            LOG.warn("got Exception",throwable);
+            logger.warn("got Exception",throwable);
             return null;
         }
 	}
@@ -134,7 +134,7 @@ public class TorNetAddressNameService implements NetAddressNameService
 		}
         catch (final Throwable throwable)
         {
-            LOG.warn("got Exception", throwable);
+            logger.warn("got Exception", throwable);
             return null;
         }
 	}
@@ -152,17 +152,17 @@ public class TorNetAddressNameService implements NetAddressNameService
 		final UnknownHostException e = new UnknownHostException("Netlib Tor call cycle / dead lock prevented");
 		for (final StackTraceElement ste : e.getStackTrace())
 		{
-			if (ste.getClassName().startsWith("com.rovemonteux.silvertunnel.netlib.layer.tor."))
+			if (ste.getClassName().startsWith("cf.monteux.silvertunnel.netlib.layer.tor."))
 			{
 				// this is a loop / call cycle / dead lock - stop here and throw
 				// the exception to avoid blocking
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("Netlib Tor call cycle / dead lock prevented - right now", e);
+					logger.debug("Netlib Tor call cycle / dead lock prevented - right now", e);
 				}
 				else
 				{
-					LOG.info("Netlib Tor call cycle / dead lock prevented - right now; use FINE logging to see the call stack");
+					logger.info("Netlib Tor call cycle / dead lock prevented - right now; use FINE logging to see the call stack");
 				}
 				throw e;
 			}

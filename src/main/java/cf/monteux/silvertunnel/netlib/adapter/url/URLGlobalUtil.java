@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -16,7 +16,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -44,8 +44,8 @@ import cf.monteux.silvertunnel.netlib.api.NetLayerIDs;
 import cf.monteux.silvertunnel.netlib.layer.mock.NopNetLayer;
 import cf.monteux.silvertunnel.netlib.layer.tcpip.TcpipNetLayer;
 import cf.monteux.silvertunnel.netlib.layer.tls.TLSNetLayer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class allows modification of the JVM global URL handling.
@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
 public class URLGlobalUtil
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(URLGlobalUtil.class);
+	private static final Logger logger = LogManager.getLogger(URLGlobalUtil.class);
 
 	private static NetlibURLStreamHandlerFactory netlibURLStreamHandlerFactory;
 
@@ -120,7 +120,7 @@ public class URLGlobalUtil
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("Can be ignored be ignored", e);
+			logger.debug("Can be ignored be ignored", e);
 		}
 
 		//
@@ -138,7 +138,7 @@ public class URLGlobalUtil
 			{
 				final String msg = "URL.setURLStreamHandlerFactory() was already called before,"
 						+ " but not from UrlUtil, i.e. maybe the wrong factory is set";
-				LOG.warn(msg, e);
+				logger.warn(msg, e);
 			}
 		}
 	}

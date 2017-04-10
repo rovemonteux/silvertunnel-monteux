@@ -5,7 +5,8 @@ package cf.monteux.silvertunnel.netlib.util;
 
 import java.util.logging.Level;
 
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helper class for Logging purposes.

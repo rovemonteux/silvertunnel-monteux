@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -23,8 +23,8 @@ import java.util.Map;
 
 import cf.monteux.silvertunnel.netlib.api.NetAddress;
 import cf.monteux.silvertunnel.netlib.api.NetAddressNameService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * NetAddressNameService that transparently forwards all traffic to
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class SwitchingNetAddressNameService implements NetAddressNameService
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(SwitchingNetAddressNameService.class);
+	private static final Logger logger = LogManager.getLogger(SwitchingNetAddressNameService.class);
 
 	/** Currently used lower NetAddressNameService. */
 	private volatile NetAddressNameService lowerNetAddressNameService;

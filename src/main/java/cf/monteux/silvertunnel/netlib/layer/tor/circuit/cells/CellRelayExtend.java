@@ -23,8 +23,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Circuit;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.Node;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.Encoding;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * this cell helps extending existing circuits.
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class CellRelayExtend extends CellRelayEarly
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(CellRelayExtend.class);
+	private static final Logger logger = LogManager.getLogger(CellRelayExtend.class);
 
 	/**
 	 * build an EXTEND-cell.<br>
@@ -74,19 +74,19 @@ public class CellRelayExtend extends CellRelayEarly
 		System.arraycopy(orPort, 0, data, 4, orPort.length);
 		System.arraycopy(onionSkin, 0, data, 6, onionSkin.length);
 		System.arraycopy(keyHash, 0, data, 192, keyHash.length);
-		if (LOG.isDebugEnabled())
+		if (logger.isDebugEnabled())
 		{
-			LOG.debug("CellRelayExtend Router :\n"
+			logger.debug("CellRelayExtend Router :\n"
 					+ nextNode.getRouter().toLongString());
-			LOG.debug("CellRelayExtend address :\n"
+			logger.debug("CellRelayExtend address :\n"
 					+ Encoding.toHexString(address, 100));
-			LOG.debug("CellRelayExtend orPort :\n"
+			logger.debug("CellRelayExtend orPort :\n"
 					+ Encoding.toHexString(orPort, 100));
-			LOG.debug("CellRelayExtend onionSkin :\n"
+			logger.debug("CellRelayExtend onionSkin :\n"
 					+ Encoding.toHexString(onionSkin, 100));
-			LOG.debug("CellRelayExtend keyhash :\n"
+			logger.debug("CellRelayExtend keyhash :\n"
 					+ Encoding.toHexString(keyHash, 100));
-			LOG.debug("CellRelayExtend data :\n"
+			logger.debug("CellRelayExtend data :\n"
 					+ Encoding.toHexString(data, 100));
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -24,8 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Helper method for Tor.
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public final class Util
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(Util.class);
+	private static final Logger logger = LogManager.getLogger(Util.class);
 
 	public static final String MYNAME = "silvertunnel-ng-org-Netlib";
 
@@ -117,7 +117,7 @@ public final class Util
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("Exception while formatting timestamp={}", timestamp, e);
+			logger.debug("Exception while formatting timestamp={}", timestamp, e);
 			return null;
 		}
 	}
@@ -143,7 +143,7 @@ public final class Util
 		}
 		catch (final Exception e)
 		{
-			LOG.debug("Exception while formatting timestamp={}", timestamp, e);
+			logger.debug("Exception while formatting timestamp={}", timestamp, e);
 			return null;
 		}
 	}

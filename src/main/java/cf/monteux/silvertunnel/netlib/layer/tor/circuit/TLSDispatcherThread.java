@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 /*
- * silvertunnel.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -33,7 +33,7 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 /*
- * silvertunnel-ng.org Netlib - Java library to easily access anonymity networks
+ * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2013 silvertunnel-ng.org
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -60,8 +60,8 @@ import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.Cell;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellDestroy;
 import cf.monteux.silvertunnel.netlib.layer.tor.circuit.cells.CellRelay;
 import cf.monteux.silvertunnel.netlib.layer.tor.util.TorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * reads data arriving at the TLS connection and dispatches it to the
@@ -74,7 +74,7 @@ import org.slf4j.LoggerFactory;
 class TLSDispatcherThread extends Thread
 {
 	/** */
-	private static final Logger LOG = LoggerFactory.getLogger(TLSDispatcherThread.class);
+	private static final Logger logger = LogManager.getLogger(TLSDispatcherThread.class);
 
 	private final DataInputStream sin;
 	private final TLSConnection tls;
@@ -111,12 +111,12 @@ class TLSDispatcherThread extends Thread
 			{
 				if (e instanceof SocketTimeoutException)
 				{
-					LOG.debug("TLSDispatcher.run: {} connection error: socket timeout", this.getName(), e);
+					logger.debug("TLSDispatcher.run: {} connection error: socket timeout", this.getName(), e);
 					continue; // SocketTimeout should not be a showstopper here
 				}
 				else
 				{
-					LOG.info("TLSDispatcher.run: connection error: " + e.getMessage(), e);
+					logger.info("TLSDispatcher.run: connection error: " + e.getMessage(), e);
 				}
 				stopped = true;
 				break;
@@ -124,9 +124,9 @@ class TLSDispatcherThread extends Thread
 			// padding cell?
 			if (cell.isTypePadding())
 			{
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("TLSDispatcher.run: padding cell from {}", tls.getRouter().getNickname());
+					logger.debug("TLSDispatcher.run: padding cell from {}", tls.getRouter().getNickname());
 				}
 			}
 			else
@@ -146,9 +146,9 @@ class TLSDispatcherThread extends Thread
 							// found a relay-cell! Try to strip off
 							// symmetric encryption and check the content
 							relay = new CellRelay(circ, cell);
-							if (LOG.isDebugEnabled())
+							if (logger.isDebugEnabled())
 							{
-								LOG.debug("relay.getRelayCommandAsString()="
+								logger.debug("relay.getRelayCommandAsString()="
 										+ relay.getRelayCommandAsString());
 							}
 
@@ -157,17 +157,17 @@ class TLSDispatcherThread extends Thread
 							if (streamId != 0)
 							{
 								final Stream stream = circ.getStreams().get(streamId);
-								if (LOG.isDebugEnabled())
+								if (logger.isDebugEnabled())
 								{
-									LOG.debug("dispatch to stream with streamId="
+									logger.debug("dispatch to stream with streamId="
 											+ streamId + ", stream=" + stream);
 								}
 								if (stream != null)
 								{
 									dispatched = true;
-									if (LOG.isDebugEnabled())
+									if (logger.isDebugEnabled())
 									{
-										LOG.debug("TLSDispatcher.run: data from "
+										logger.debug("TLSDispatcher.run: data from "
 												+ tls.getRouter().getNickname()
 												+ " dispatched to circuit "
 												+ circ.getId()
@@ -189,9 +189,9 @@ class TLSDispatcherThread extends Thread
 								else
 								{
 									// do nothing
-									if (LOG.isDebugEnabled())
+									if (logger.isDebugEnabled())
 									{
-										LOG.debug("else: circ.isUsedByHiddenServiceToConnectToRendezvousPoint()="
+										logger.debug("else: circ.isUsedByHiddenServiceToConnectToRendezvousPoint()="
 												+ circ.isUsedByHiddenServiceToConnectToRendezvousPoint()
 												+ ", relay.getRelayCommand()="
 												+ relay.getRelayCommand());
@@ -206,9 +206,9 @@ class TLSDispatcherThread extends Thread
 								{
 									if (circ.isUsedByHiddenServiceToConnectToIntroductionPoint())
 									{
-										if (LOG.isDebugEnabled())
+										if (logger.isDebugEnabled())
 										{
-											LOG.debug("TLSDispatcher.run: introduce2 from "
+											logger.debug("TLSDispatcher.run: introduce2 from "
 													+ tls.getRouter()
 															.getNickname()
 													+ " dispatched to circuit "
@@ -221,16 +221,16 @@ class TLSDispatcherThread extends Thread
 										}
 										catch (final IOException e)
 										{
-											LOG.info("TLSDispatcher.run: error handling intro2-cell: "
+											logger.info("TLSDispatcher.run: error handling intro2-cell: "
 													+ e.getMessage());
 										}
 									}
 									else
 									{
 										// do nothing
-										if (LOG.isDebugEnabled())
+										if (logger.isDebugEnabled())
 										{
-											LOG.debug("else isTypeIntroduce2: from "
+											logger.debug("else isTypeIntroduce2: from "
 													+ tls.getRouter()
 															.getNickname()
 													+ " dispatched to circuit "
@@ -241,9 +241,9 @@ class TLSDispatcherThread extends Thread
 								}
 								else
 								{
-									if (LOG.isDebugEnabled())
+									if (logger.isDebugEnabled())
 									{
-										LOG.debug("TLSDispatcher.run: data from "
+										logger.debug("TLSDispatcher.run: data from "
 												+ tls.getRouter().getNickname()
 												+ " dispatched to circuit "
 												+ circ.getId()
@@ -256,13 +256,13 @@ class TLSDispatcherThread extends Thread
 						}
 						catch (final TorException e)
 						{
-							LOG.warn("TLSDispatcher.run: TorException "
+							logger.warn("TLSDispatcher.run: TorException "
 									+ e.getMessage()
 									+ " during dispatching cell");
 						}
 						catch (final Exception e)
 						{
-							LOG.warn(
+							logger.warn(
 									"TLSDispatcher.run: Exception "
 											+ e.getMessage()
 											+ " during dispatching cell", e);
@@ -273,11 +273,11 @@ class TLSDispatcherThread extends Thread
 						// no relay cell: cell is there to control circuit
 						if (cell.isTypeDestroy())
 						{
-							if (LOG.isDebugEnabled())
+							if (logger.isDebugEnabled())
 							{
 								try
 								{
-									LOG.debug("TLSDispatcher.run: received DESTROY-cell from "
+									logger.debug("TLSDispatcher.run: received DESTROY-cell from "
 											+ tls.getRouter().getNickname()
 											+ " for circuit "
 											+ circ.getId()
@@ -286,7 +286,7 @@ class TLSDispatcherThread extends Thread
 								}
 								catch (ClassCastException exception)
 								{
-									LOG.debug("TLSDispatcher.run: received DESTROY-cell from "
+									logger.debug("TLSDispatcher.run: received DESTROY-cell from "
 											+ tls.getRouter().getNickname()
 											+ " for circuit "
 											+ circ.getId()
@@ -295,16 +295,16 @@ class TLSDispatcherThread extends Thread
 							}
 							if (cell.getPayload()[0] == CellDestroy.REASON_END_CIRC_TOR_PROTOCOL)
 							{
-								LOG.warn("got a DestroyCell with Reason protocol violation from " + circ);
+								logger.warn("got a DestroyCell with Reason protocol violation from " + circ);
 							}
 							dispatched = true;
 							circ.close(true);
 						}
 						else
 						{
-							if (LOG.isDebugEnabled())
+							if (logger.isDebugEnabled())
 							{
-								LOG.debug("TLSDispatcher.run: data from "
+								logger.debug("TLSDispatcher.run: data from "
 										+ tls.getRouter().getNickname()
 										+ " dispatched to circuit "
 										+ circ.getId());
@@ -316,14 +316,14 @@ class TLSDispatcherThread extends Thread
 							}
 							catch (TorException exception)
 							{
-								LOG.warn("got Exception while processing cell", exception);
+								logger.warn("got Exception while processing cell", exception);
 							}
 						}
 					}
 				}
 				else
 				{
-					LOG.info("TLSDispatcher.run: received cell for circuit "
+					logger.info("TLSDispatcher.run: received cell for circuit "
 							+ cellCircId + " from "
 							+ tls.getRouter().getNickname()
 							+ ". But no such circuit exists.");
@@ -333,15 +333,15 @@ class TLSDispatcherThread extends Thread
 			{
 				// used to be WARNING, but is given too often to be of $REAL
 				// value, like a warning should
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("TLSDispatcher.run: data from "
+					logger.debug("TLSDispatcher.run: data from "
 							+ tls.getRouter().getNickname()
 							+ " could not get dispatched");
 				}
-				if (LOG.isDebugEnabled())
+				if (logger.isDebugEnabled())
 				{
-					LOG.debug("TLSDispatcher.run: " + cell.toString());
+					logger.debug("TLSDispatcher.run: " + cell.toString());
 				}
 			}
 		}
