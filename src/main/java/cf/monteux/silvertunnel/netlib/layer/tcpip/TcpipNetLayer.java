@@ -1,6 +1,7 @@
 /*
  * SilverTunnel-Monteux Netlib - Java library to easily access anonymity networks
  * Copyright (c) 2009-2012 silvertunnel.org
+ * Copyright (c) 2017 Rove Monteux
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -49,6 +50,7 @@ import cf.monteux.silvertunnel.netlib.adapter.socket.SocketGlobalUtil;
  * 
  * @author hapke
  * @author Tobias Boese
+ * @author Rove Monteux
  */
 public class TcpipNetLayer implements NetLayer
 {
